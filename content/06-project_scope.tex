@@ -1,0 +1,43 @@
+\section{Project Scope}
+
+\subsection{Inclusions}
+
+This section details the specific features, deliverables, and technologies that are part of the project.
+
+\subsubsection{Functionality}
+
+The project will deliver a fully functional web application that automates the collection, processing, analysis, and visualization of data from YouTube. The core functionalities include:
+
+\begin{itemize}
+	\item Data collection module: a configurable module will be implemented to collect video and associated comment data directly from the YouTube Data API v3 using specified query filters.
+
+	\item Data Processing pipeline: the application will feature a processing pipeline designed to clean, normalize, validate, and structure the raw data retrieved from the API. This will transform the data into a standardized schema that links videos, comments, and replies.
+
+	\item Presentation layer: a user-facing presentation layer will be built, featuring interactive dashboards and charts to visualize the analyzed data and key metrics.
+\end{itemize}
+
+\subsubsection{Technology}
+
+The technical stack for the application is explicitly defined and will consist of the following components:
+
+\begin{itemize}
+	\item Backend service: the core application logic and API will be developed using the Django framework, with a PostgreSQL database for data storage.
+
+	\item Frontend service: a lightweight Nginx web server will be used to serve the static frontend assets (HTML, CSS, and JavaScript) from a React application build to the user's browser.
+
+	\item Containerization: all services (Nginx, Django, PostgreSQL) will be containerized using Docker to ensure a consistent and reproducible deployment environment.
+\end{itemize}
+
+\subsection{Exclusions}
+
+To maintain a clear focus and ensure the project is achievable within the defined timeframe, the following features and functionalities are explicitly out of scope:
+
+\begin{itemize}
+	\item Support for other platforms: data collection and analysis will be limited exclusively to YouTube. The application will not support any other social media or video platforms (e.g., Facebook, Twitter, TikTok).
+
+	\item Development of NLP models: while the project includes sentiment analysis, it will rely on existing, pre-trained models or established libraries. The scope does not include the research or development of new or custom natural language processing or machine learning models from scratch.
+
+	\item Real-time data streaming: the data collection process is designed to be on-demand based on user queries. The project will not implement real-time or live-streaming data analysis.
+
+	\item Native mobile application: the final deliverable is a web application accessible through standard desktop browsers. The development of native mobile applications for iOS or Android is not included.
+\end{itemize}

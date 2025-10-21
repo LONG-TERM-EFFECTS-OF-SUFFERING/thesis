@@ -1,0 +1,38 @@
+\documentclass[12pt, english]{report}
+\input{preamble.tex}
+
+\begin{document}
+
+\input{front_page.tex}
+
+% ------------------------------- FRONT MATTER ------------------------------- %
+
+\pagenumbering{roman} % Page numbers in Roman numerals for this section
+
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+
+% ------------------------------- MAIN CONTENT ------------------------------- %
+
+\pagenumbering{arabic} % Page numbers in Arabic numerals for the main content
+
+\include{content/01-abstract}
+%\include{content/02-introduction}
+\include{content/03-problem_statement}
+\include{content/04-problem_justification}
+\include{content/05-objectives}
+\include{content/06-project_scope}
+\include{content/07-reference_framework}
+\include{content/08-methodology}
+%\include{content/09-project_development_and_implementation}
+\include{content/10-budget}
+
+% -------------------------------- BACK MATTER ------------------------------- %
+
+\printbibliography[title={References}] % The title option renames the section
+
+\end{document}
