@@ -1,17 +1,32 @@
 \section{Objectives}
+\label{chap:objectives}
 
 \subsection{General objective}
 
-To implement a web application that automates the collection, processing, analysis, and visualization of data from YouTube videos to quantify engagement and public sentiment on specified topics with reproducible documented methods.
+\textbf{To develop} a web application that automates the collection, processing, analysis and visualization of data from YouTube videos.
 
 \subsection{Specific objectives}
 
-\begin{itemize}
-	\item Implement a configurable data collecting module that collects videos and associated comments via the YouTube Data API v3 using query filter. % Natural language description to queries
+\begin{enumerate}
+	\item \label{obj:design} \textbf{To design} a web application architecture comprising four integrated components:
 
-	\item Create a processing pipeline that cleans, normalizes, validates, and structures raw API responses into a schema linking videos, comments, and replies with standardized timestamps and language fields.
+		\begin{enumerate}
+			\item A configurable data collection module for querying the YouTube Data API with customizable filters.
 
-	\item Build a presentation layer with interactive dashboards and charts.
+			\item A natural language processing interface leveraging existing LLM models to translate informal user requests into valid API query parameters.
 
-	% \item Publish the full codebase, documentation, under an open-source license, ensuring verifiability and reuse by researchers.
-\end{itemize}
+			\item A data processing pipeline for cleaning, normalizing, and structuring raw API responses into a standardized schema linking videos, comments, and replies.
+
+			\item An presentation layer with dashboards and charts.
+		\end{enumerate}
+
+	\item \label{obj:implement} \textbf{To implement} the designed architecture using modern web development technologies and following the best software engineering practices.
+
+	\item \label{obj:test} \textbf{To test} the implemented system through:
+
+		\begin{enumerate}
+			\item Functional testing of each module (data collection, LLM integration, processing pipeline, visualization).
+
+			\item Integration testing of the complete workflow from user query to visual output.
+		\end{enumerate}
+\end{enumerate}

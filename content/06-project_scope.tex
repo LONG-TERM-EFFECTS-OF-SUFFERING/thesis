@@ -9,23 +9,25 @@ This section details the specific features, deliverables, and technologies that 
 The project will deliver a fully functional web application that automates the collection, processing, analysis, and visualization of data from YouTube. The core functionalities include:
 
 \begin{itemize}
-	\item Data collection module: a configurable module will be implemented to collect video and associated comment data directly from the YouTube Data API v3 using specified query filters.
+	\item \textbf{Data collection module}: a configurable module will be implemented to collect video and associated comment data directly from the YouTube Data API using specified query filters.
 
-	\item Data Processing pipeline: the application will feature a processing pipeline designed to clean, normalize, validate, and structure the raw data retrieved from the API. This will transform the data into a standardized schema that links videos, comments, and replies.
+	\item \textbf{AI query module}: a natural language interface that integrates with a pre-trained AI model to translate informal user requests into valid YouTube Data API queries.
 
-	\item Presentation layer: a user-facing presentation layer will be built, featuring interactive dashboards and charts to visualize the analyzed data and key metrics.
+	\item \textbf{Data processing pipeline}: the application will feature a processing pipeline designed to clean, normalize, validate, and structure the raw data retrieved from the API.
+
+	\item \textbf{Presentation layer}: a user-facing presentation layer will be built, featuring interactive dashboards and charts to visualize the analyzed data.
 \end{itemize}
 
 \subsubsection{Technology}
 
-The technical stack for the application is explicitly defined and will consist of the following components:
+\textbf{The specific technology stack for the application will be selected and justified as part of the implementation phase}. However, the architecture will adhere to the following principles:
 
 \begin{itemize}
-	\item Backend service: the core application logic and API will be developed using the Django framework, with a PostgreSQL database for data storage.
+	\item \textbf{Backend service}: the core application logic and API will be developed using a modern web framework, with a relational database for data storage.
 
-	\item Frontend service: a lightweight Nginx web server will be used to serve the static frontend assets (HTML, CSS, and JavaScript) from a React application build to the user's browser.
+	\item \textbf{Frontend service}: a lightweight web server (e.g., Nginx) will be used to serve the static frontend assets (HTML, CSS, and JavaScript) built from a modern JavaScript framework (e.g., React, Vue).
 
-	\item Containerization: all services (Nginx, Django, PostgreSQL) will be containerized using Docker to ensure a consistent and reproducible deployment environment.
+	\item \textbf{Containerization}: all services (web server, backend application, database) will be containerized using Docker to ensure a consistent and reproducible deployment environment.
 \end{itemize}
 
 \subsection{Exclusions}
@@ -33,11 +35,11 @@ The technical stack for the application is explicitly defined and will consist o
 To maintain a clear focus and ensure the project is achievable within the defined timeframe, the following features and functionalities are explicitly out of scope:
 
 \begin{itemize}
-	\item Support for other platforms: data collection and analysis will be limited exclusively to YouTube. The application will not support any other social media or video platforms (e.g., Facebook, Twitter, TikTok).
+	\item \textbf{Support for other platforms}: data collection and analysis will be limited exclusively to YouTube. The application will not support any other social media or video platforms (e.g., Facebook, Twitter, TikTok).
 
-	\item Development of NLP models: while the project includes sentiment analysis, it will rely on existing, pre-trained models or established libraries. The scope does not include the research or development of new or custom natural language processing or machine learning models from scratch.
+	\item \textbf{Training of NLP models}: the project will \textbf{integrate} existing, pre-trained models (for sentiment analysis and query translation). The scope does not include the \textbf{training or fine-tuning} of new or custom natural language processing or machine learning models from scratch.
 
-	\item Real-time data streaming: the data collection process is designed to be on-demand based on user queries. The project will not implement real-time or live-streaming data analysis.
+	\item \textbf{Real-time data streaming}: the data collection process is designed to be on-demand based on user queries. The project will not implement real-time or live-streaming data analysis.
 
-	\item Native mobile application: the final deliverable is a web application accessible through standard desktop browsers. The development of native mobile applications for iOS or Android is not included.
+	\item \textbf{Native mobile application}: the final deliverable is a web application accessible through standard desktop browsers. The development of native mobile applications for iOS or Android is not included.
 \end{itemize}

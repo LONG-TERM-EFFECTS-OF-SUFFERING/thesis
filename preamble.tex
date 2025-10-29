@@ -1,6 +1,6 @@
 % ----------------------------- ENCODING AND FONT ---------------------------- %
 
-\usepackage[utf8]{inputenc} % For encoding [cite: 1]
+\usepackage[utf8]{inputenc} % For encoding
 \usepackage[T1]{fontenc}    % Use 8-bit T1 fonts to improve character copying and hyphenation
 \usepackage{lmodern}        % Use a modern, scalable version of the default Computer Modern font
 \usepackage{microtype}      % Improves typography with subtle adjustments
@@ -39,6 +39,8 @@
 	citecolor=red
 ]{hyperref}
 \usepackage{cleveref}
+\usepackage{setspace}
+\doublespacing
 
 % ---------------------------- ALGORITHMS AND CODE --------------------------- %
 
@@ -66,7 +68,19 @@
 
 % ------------------------- GRAPHICS AND ASSETS PATH ------------------------- %
 
+\usepackage{pgfgantt}
 \graphicspath{{assets/}}
+
+% ---------------------------------- COLORS ---------------------------------- %
+
+\definecolor{my_black}{HTML}{1C1C1C}
+\definecolor{my_red}{HTML}{AF5F5F}
+\definecolor{my_green}{HTML}{5F875F}
+\definecolor{my_yellow}{HTML}{87875F}
+\definecolor{my_blue}{HTML}{5F87AF}
+\definecolor{my_magenta}{HTML}{5F5F87}
+\definecolor{my_cyan}{HTML}{5F8787}
+\definecolor{my_white}{HTML}{6C6C6C}
 
 % ------------------------------ CUSTOM COMMANDS ----------------------------- %
 
