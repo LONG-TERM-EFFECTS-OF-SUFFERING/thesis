@@ -8,25 +8,11 @@
 \subsection{Specific objectives}
 
 \begin{enumerate}
-	\item \label{obj:design} \textbf{To design} a web application architecture comprising four integrated components:
+	\item \label{obj:design} \textbf{To design} the system architecture for a web application comprising three integrated components: data collection from YouTube Data API, data processing and analysis, and data visualization through charts.
 
-		\begin{enumerate}
-			\item A configurable data collection module for querying the YouTube Data API with customizable filters.
+	\item \label{obj:implement_collection} \textbf{To implement} a data collection component with a configurable interface for querying the YouTube Data API and a natural language processing feature that leverages existing LLM models to translate informal user requests into valid API query parameters.
 
-			\item A natural language processing interface leveraging existing LLM models to translate informal user requests into valid API query parameters.
+	\item \label{obj:implement_processing_and_visualization} \textbf{To implement} data processing and visualization components responsible for cleaning, normalizing, visualizing and structuring raw API responses into a standardized schema.
 
-			\item A data processing pipeline for cleaning, normalizing, and structuring raw API responses into a standardized schema linking videos, comments, and replies.
-
-			\item An presentation layer with dashboards and charts.
-		\end{enumerate}
-
-	\item \label{obj:implement} \textbf{To implement} the designed architecture using modern web development technologies and following the best software engineering practices.
-
-	\item \label{obj:test} \textbf{To test} the implemented system through:
-
-		\begin{enumerate}
-			\item Functional testing of each module (data collection, LLM integration, processing pipeline, visualization).
-
-			\item Integration testing of the complete workflow from user query to visual output.
-		\end{enumerate}
+	\item \label{obj:test} \textbf{To test} the implemented system through functional testing of each component and integration testing of the complete workflow from user query to visual output.
 \end{enumerate}

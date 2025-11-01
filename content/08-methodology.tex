@@ -1,6 +1,6 @@
 \section{Methodology}
 
-This project adopts an adapted Scrum framework to guide the software development process. While Scrum is traditionally designed for team-based development, this thesis leverages specific Scrum artifacts and events that provide particular value for individual academic software projects, especially in maintaining transparency and systematic progress tracking.
+This project adopts an adapted Scrum framework to guide the software development process. While Scrum is traditionally designed for team-based development, this thesis applies specific Scrum artifacts and events that provide particular value for individual academic software projects, especially in maintaining transparency and systematic progress tracking.
 
 The choice of Scrum is motivated by two primary factors: its \textbf{flexibility} through iterative development and its emphasis on \textbf{structured documentation} through artifacts. This aligns well with the exploratory nature of thesis development, where requirements may evolve as the research progresses.
 
@@ -8,7 +8,7 @@ The choice of Scrum is motivated by two primary factors: its \textbf{flexibility
 
 \subsubsection{Product backlog}
 
-The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \parencite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements, and improvements for the web application. Each  \textbf{product backlog} item will be explicitly linked to the specific thesis objectives it addresses (as defined in \cref{chap:objectives}), ensuring clear traceability between development activities and research goals. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
+The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \parencite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements, and improvements for the web application. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
 
 \subsubsection{Sprint backlog}
 
@@ -30,19 +30,68 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 
 \subsection{Activities to be carried out}
 
+\subsubsection{Specific objective 1 \ref{obj:implement_collection}}
+
 \begin{table}[htbp]
 	\centering
-	\caption{Activities to be carried out}
-	\label{tab:activities}
-	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}XX}
+	\small
+	\caption{Activities to be carried out for the specific objective 1}
+	\label{tab:activities_specific_objective_1}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}X}
 		\toprule
-		\textbf{Specific objective} & \textbf{Expected result} & \textbf{Activity} \\
+		\textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		Objective \ref{obj:design}: Design a modular web application architecture. & Complete technical design documentation including system architecture diagrams, component specifications and data models. & Row 1 Col 3 \\
+		Evaluate and select the technology stack for the software development project, including frontend framework, backend framework, database management system, and LLM API integration approach. & Technical report documenting the selected technology stack with justification based on project requirements. \\
 		\midrule
-		Objective \ref{obj:implement}: Implement the designed architecture. & Delivery of the complete web application source code implementing all four components with documentation. & Row 2 Col 3 \\
+		Design the system architecture defining the three integrated components (data collection, data processing, presentation layer) and their interactions. & System architecture diagram showing component relationships, data flow, and integration points between modules. \\
 		\midrule
-		Objective \ref{obj:test}: Test the implemented system. & Test reports documenting functional and integration testing results for the complete system. & Row 3 Col 3 \\
+		Conduct a literature review on YouTube Data API functionality, parameters, available endpoints, quota management, and documented limitations. & Technical document describing YouTube Data API capabilities, constraints, and best practices for research-oriented data collection. \\
+		\midrule
+		Design the database schema for storing collected YouTube data (videos, comments, replies), user projects, API queries, and processing metadata. & Database entity-relationship diagram with table specifications, relationships, and data types. \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+\subsubsection{Specific objective 2 \ref{obj:implement_processing_and_visualization}}
+
+\begin{table}[htbp]
+	\centering
+	\small
+	\caption{Activities to be carried out for the specific objective 2}
+	\label{tab:activities_specific_objective_2}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}X}
+		\toprule
+		\textbf{Activity} & \textbf{Expected result} \\
+		\midrule
+		Implement the backend data collection component with YouTube Data API integration, including authentication, query configuration, quota management, and error handling. & Source code for the data collection component with API integration, request handling, and response processing functionality. \\
+		\midrule
+		Implement the LLM integration module that processes natural language user requests and generates valid YouTube API query parameters using an existing LLM model via API. & Source code for the NLP interface component that translates user queries into structured API parameters with validation mechanisms. \\
+		\midrule
+		Implement the data processing pipeline for cleaning, normalizing, and structuring raw API responses. & Source code for the processing pipeline with data transformation, validation, and schema mapping functionality. \\
+		\midrule
+		Implement the database layer with the designed schema for storing videos, comments, replies, and associated metadata. & Database implementation with tables, relationships, and indexes following the designed schema. \\
+		\midrule
+		Implement user project management functionality allowing users to create, save, and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+\subsubsection{Specific objective 3 \ref{obj:test}}
+
+\begin{table}[htbp]
+	\centering
+	\small
+	\caption{Activities to be carried out for the specific objective 3}
+	\label{tab:activities_specific_objective_3}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}X}
+		\toprule
+		\textbf{Activity} & \textbf{Expected result} \\
+		\midrule
+		Conduct functional testing of each component (data collection, LLM integration, processing pipeline, presentation layer) using synthetic data. & Test report documenting test cases, procedures, and results for each individual component with evidence of functional correctness. \\
+		\midrule
+		Conduct integration testing of the complete workflow from natural language input through data collection, processing, and visualization output. & Test report documenting end-to-end integration tests with evidence that all components work together correctly. \\
+		\midrule
+		Validate system functionality using synthetic data from two YouTube topics, ensuring all requirements meet the general objective. & Validation report with evidence of system operation using real test cases and documentation of results against requirements. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
