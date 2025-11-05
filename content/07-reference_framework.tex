@@ -1,6 +1,6 @@
-\section{Reference framework}
+\chapter{Reference framework}
 
-\subsection{Glossary}
+\section{Glossary}
 
 \begin{itemize}
 	\item \textbf{Methodological transparency (new term)}: a practice in research where the methods, procedures, and analysis techniques are documented and shared in sufficient detail to allow other researchers to understand exactly how the study was conducted.
@@ -23,7 +23,7 @@
 
 \section{State of art}
 
-\subsubsection{Commercial social listening tools}
+\subsection{Commercial social listening tools}
 
 Commercial social listening tools represent the closest existing solutions to the proposed system in terms of core functionality, offering capabilities such as multi-platform monitoring, sentiment analysis, and trend detection. Prominent platforms like Hootsuite (with Talkwalker) and Meltwater are optimized for business intelligence, brand monitoring, marketing analytics, and customer experience management across multiple social media platforms simultaneously, including Facebook, X (formerly Twitter), Instagram, TikTok, LinkedIn, YouTube, and Reddit, processing millions to hundreds of millions of data sources daily.
 
@@ -31,11 +31,11 @@ However, despite functional similarities, these commercial solutions operate und
 
 Furthermore, enterprise pricing models (often ranging from thousands to tens of thousands of dollars annually) create significant accessibility barriers for individual researchers, small research teams, and academic institutions with limited budgets. While these platforms offer sophisticated AI-powered analytics and visualization capabilities suitable for corporate decision-making, they are inherently unsuitable for transparent, reproducible scientific research where methodological clarity, open access to data processing methods, and cost-effective accessibility are fundamental requirements. This gap between commercial enterprise tools and academic research needs establishes the motivation for developing a research-focused \enquote{social listening platform} that maintains methodological transparency while providing the analytical capabilities required for scientific study.
 
-\subsubsection{Existing open-source and academic tools}
+\subsection{Existing open-source and academic tools}
 
 The landscape of open-source YouTube analysis tools presents a fundamentally fragmented ecosystem where individual components exist in isolation, but no comprehensive, integrated solution addresses the complete workflow required for reproducible academic research focused on YouTube data analysis. This fragmentation represents a critical gap in the available infrastructure for transparent YouTube-based social media research.
 
-While numerous open-source tools provide specific functionalities for YouTube data analysis, such as comment extraction libraries (e.g., YouTube Data API wrappers in Python like \texttt{youtube-search-python}\footnote{\url{https://github.com/alexmercerind/youtube-search-python}}), sentiment analysis packages (e.g., VADER with 4.5K GitHub stars, TextBlob with 9K stars, spaCy with 30K stars), and data visualization frameworks (e.g., Matplotlib, Plotly, D3.js), none combine data collection, processing, analysis, and visualization into a unified, documented, and methodologically transparent platform designed specifically for academic research purposes. Examples of fragmented tools include standalone projects like \texttt{youtube-comments-sentiment-analyzer}\footnote{\url{https://github.com/coskundeniz/youtube-comments-sentiment-analyzer}} and \texttt{YouTube Data Tools}\footnote{\url{https://ytdt.digitalmethods.net/index.php}}, each addressing isolated components but requiring manual integration, custom scripting, and technical expertise to create a complete research pipeline.
+While numerous open-source tools provide specific functionalities for YouTube data analysis, such as comment extraction libraries (e.g., YouTube Data API wrappers in Python like \texttt{youtube-search-python} \cite{youtube_search_python}), sentiment analysis packages (e.g., VADER with 4.5K GitHub stars, TextBlob with 9K stars, spaCy with 30K stars), and data visualization frameworks (e.g., Matplotlib, Plotly, D3.js), none combine data collection, processing, analysis, and visualization into a unified, documented, and methodologically transparent platform designed specifically for academic research purposes. Examples of fragmented tools include standalone projects like \texttt{youtube-comments-sentiment-analyzer} \cite{youtube_comments_sentiment} and \texttt{YouTube Data Tools} \cite{youtube_data_tools}, each addressing isolated components but requiring manual integration, custom scripting, and technical expertise to create a complete research pipeline.
 
 This modular approach requires researchers to manually integrate disparate tools, each with different installation requirements, documentation standards, data formats, and API authentication methods, creating substantial technical barriers and introducing potential points of failure in reproducibility. Furthermore, existing tools typically lack the methodological documentation frameworks essential for academic research: documented workflows and processing pipelines that enable independent verification of research findings.
 
@@ -53,13 +53,13 @@ Most importantly, such a tool must explicitly acknowledge and document its depen
 
 This gap between fragmented, component-level tools and comprehensive, methodologically transparent research platforms, combined with the inherent fragility of API-dependent data collection, establishes the primary motivation for developing an integrated free \enquote{YouTube social listening system} designed specifically to meet academic research standards for transparency, reproducibility, and methodological rigor, while explicitly addressing the constraints and limitations imposed by platform API dependencies.
 
-\subsubsection{Key academic studies}
+\subsection{Key academic studies}
 
 The academic community has increasingly utilized YouTube as a significant data source for social science research. This research is diverse: some studies focus on video content (such as education, health information, or politics); others investigate the recommendation algorithm (examining its relation to news, misinformation, or radicalization); and a significant portion specifically analyzes user comments to understand topics like hate speech, political ideology, gender differences, or sentiment \parencite{deubel2024overview}.
 
-\subsection{Theoretical framework}
+\section{Theoretical framework}
 
-\subsubsection{Interactions in the YouTube social network}
+\subsection{Interactions in the YouTube social network}
 
 Understanding the structure of interactions within YouTube as a social network is fundamental to designing a social listening tool that captures meaningful data for research purposes.
 
@@ -101,7 +101,7 @@ Building upon the framework proposed by \textcite{giglietto2012open}, \textcite{
 	\item \textbf{Visual data}: image and video content elements including the videos themselves (analyzable as complete recordings or extracted screenshots), video thumbnails, visual banners and annotations, environmental settings, camera angles, and visual representations of creators themselves (enabling analysis of demographic characteristics such as ethnicity, age, and gender presentation). Visual data facilitates ethnographic research, visual rhetoric analysis, and examination of multimodal communication strategies.
 \end{itemize}
 
-\subsubsection{YouTube Data API limitations and computational reproducibility challenges}
+\subsection{YouTube Data API limitations and computational reproducibility challenges}
 
 Beyond the diversity of methodological approaches employed by researchers, the YouTube Data API itself presents inherent technical limitations that must be carefully considered to ensure research reproducibility. Crucially, all YouTube data collection tools, whether open-source or commercial, depend entirely on the YouTube Data API, which is controlled by Google and subject to unilateral modifications without academic input. The discontinuation of the \mintinline{text}{relatedToVideoId} parameter in August 2023, which was previously essential for expanding datasets through recommendation networks, exemplifies how platform decisions can retroactively invalidate established research methodologies and prevent replication of earlier studies.
 
@@ -109,6 +109,6 @@ Recent empirical investigations reveal that the API's Search endpoint exhibits s
 
 These limitations underscore the critical importance of rigorous methodological practices in YouTube-based research. While the API's temporal inconsistency and platform dependency cannot be fully eliminated, researchers can mitigate its impact through transparent documentation of collection timestamps and API parameters and explicit acknowledgment of these platform-imposed constraints in their methodology sections. Tools and frameworks that systematically document API dependencies, timestamp data collection, and maintain transparent records of all methodological decisions are essential for conducting replicable YouTube research within these known limitations.
 
-\subsubsection{Scrum}
+\subsection{Scrum}
 
 Scrum is an agile project management framework that facilitates team collaboration through iterative and incremental development \parencite{schwaber2020scrum}. The framework prescribes for teams to break work into goals completed within time-boxed iterations called sprints, typically lasting two to four weeks \parencite{schwaber2020scrum}. Scrum is based on three pillars (transparency, inspection, and adaptation) and emphasizes self-organization, continuous feedback, and flexibility in response to changing requirements \parencite{schwaber2020scrum}. Originally developed for software development, Scrum has since been successfully applied to various complex projects requiring iterative progress and stakeholder collaboration \parencite{schwaber2020scrum}.

@@ -1,99 +1,174 @@
-\section{Methodology}
+\chapter{Methodology}
 
 This project adopts an adapted Scrum framework to guide the software development process. While Scrum is traditionally designed for team-based development, this thesis applies specific Scrum artifacts and events that provide particular value for individual academic software projects, especially in maintaining transparency and systematic progress tracking.
 
 The choice of Scrum is motivated by two primary factors: its \textbf{flexibility} through iterative development and its emphasis on \textbf{structured documentation} through artifacts. This aligns well with the exploratory nature of thesis development, where requirements may evolve as the research progresses.
 
-\subsection{Scrum artifacts adapted for this project}
+\section{Scrum artifacts adapted for this project}
 
-\subsubsection{Product backlog}
+\subsection{Product backlog}
 
 The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \parencite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements, and improvements for the web application. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
 
-\subsubsection{Sprint backlog}
+\subsection{Sprint backlog}
 
-Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items, and an actionable plan for delivering an increment \parencite{schwaber2020scrum}, the \textbf{sprint backlog}  will serve as the operational plan for each development iteration. For this individual project, sprints will be two weeks periods during which specific functionality will be developed and integrated into the application.
+Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items, and an actionable plan for delivering an increment \parencite{schwaber2020scrum}, the \textbf{sprint backlog} will serve as the operational plan for each development iteration. For this individual project, sprints will be two weeks periods during which specific functionality will be developed and integrated into the application.
 
-\subsection{Scrum events adapted for this project}
+\section{Scrum events adapted for this project}
 
 While Scrum events are designed for team collaboration, certain events will be adapted to provide structure and facilitate self-reflection.
 
-\subsubsection{Sprint planning}
+\subsection{Sprint planning}
 
 At the beginning of each sprint, sprint planning will determine what can be delivered in the upcoming sprint and how that work will be achieved \parencite{schwaber2020scrum}. This will involve selecting \textbf{product backlog} items and defining a clear \textbf{sprint goal}.
 
-\subsubsection{Sprint retrospective}
+\subsection{Sprint retrospective}
 
 The sprint Retrospective provides an opportunity to plan ways to increase quality and effectiveness \parencite{schwaber2020scrum}. For this individual project, retrospectives will be conducted at the end of each sprint to reflect on what went well, what challenges were encountered, and what adjustments should be made for subsequent sprints. This practice supports continuous improvement and systematic documentation of the development process.
 
 Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner}, and \textbf{developers} \parencite{schwaber2020scrum}, this project adapts its core principles to the context of individual thesis development. The emphasis remains on the empirical pillars of \textbf{transparency}, \textbf{inspection}, and \textbf{adaptation} \parencite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
 
-\subsection{Activities to be carried out}
+\section{Activities to be carried out}
 
-\subsubsection{Specific objective 1 \ref{obj:implement_collection}}
+\subsection{Specific objective 1 \ref{obj:design}}
 
-\begin{table}[htbp]
+\begin{table}[H]
 	\centering
 	\small
 	\caption{Activities to be carried out for the specific objective 1}
 	\label{tab:activities_specific_objective_1}
-	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}X}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{4cm}X}
 		\toprule
-		\textbf{Activity} & \textbf{Expected result} \\
+		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		Evaluate and select the technology stack for the software development project, including frontend framework, backend framework, database management system, and LLM API integration approach. & Technical report documenting the selected technology stack with justification based on project requirements. \\
+		A1.1 & Evaluate and select the technology stack for the software development project, including frontend framework, backend framework, database management system, and LLM API integration approach. & Technical report documenting the selected technology stack with justification based on project requirements. \\
 		\midrule
-		Design the system architecture defining the three integrated components (data collection, data processing, presentation layer) and their interactions. & System architecture diagram showing component relationships, data flow, and integration points between modules. \\
+		A1.2 & Conduct a literature review on YouTube Data API functionality, parameters, available endpoints, quota management, and documented limitations. & Technical document describing YouTube Data API capabilities, constraints, and best practices for research-oriented data collection. \\
 		\midrule
-		Conduct a literature review on YouTube Data API functionality, parameters, available endpoints, quota management, and documented limitations. & Technical document describing YouTube Data API capabilities, constraints, and best practices for research-oriented data collection. \\
-		\midrule
-		Design the database schema for storing collected YouTube data (videos, comments, replies), user projects, API queries, and processing metadata. & Database entity-relationship diagram with table specifications, relationships, and data types. \\
+		A1.3 & Design the database schema for storing collected YouTube data (videos, comments, replies), user projects, API queries, and processing metadata. & Database entity-relationship diagram with table specifications, relationships, and data types. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
 
-\subsubsection{Specific objective 2 \ref{obj:implement_processing_and_visualization}}
+\subsection{Specific objective 2 \ref{obj:implement_collection}}
 
-\begin{table}[htbp]
+\begin{table}[H]
 	\centering
 	\small
 	\caption{Activities to be carried out for the specific objective 2}
 	\label{tab:activities_specific_objective_2}
-	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}X}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{4cm}X}
 		\toprule
-		\textbf{Activity} & \textbf{Expected result} \\
+		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		Implement the backend data collection component with YouTube Data API integration, including authentication, query configuration, quota management, and error handling. & Source code for the data collection component with API integration, request handling, and response processing functionality. \\
+		A2.1 & Implement the backend data collection component with YouTube Data API integration, including authentication, query configuration, quota management, and error handling. & Source code for the data collection component with API integration, request handling, and response processing functionality. \\
 		\midrule
-		Implement the LLM integration module that processes natural language user requests and generates valid YouTube API query parameters using an existing LLM model via API. & Source code for the NLP interface component that translates user queries into structured API parameters with validation mechanisms. \\
-		\midrule
-		Implement the data processing pipeline for cleaning, normalizing, and structuring raw API responses. & Source code for the processing pipeline with data transformation, validation, and schema mapping functionality. \\
-		\midrule
-		Implement the database layer with the designed schema for storing videos, comments, replies, and associated metadata. & Database implementation with tables, relationships, and indexes following the designed schema. \\
-		\midrule
-		Implement user project management functionality allowing users to create, save, and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
+		A2.2 & Implement the LLM integration module that processes natural language user requests and generates valid YouTube API query parameters using an existing LLM model via API. & Source code for the NLP interface component that translates user queries into structured API parameters with validation mechanisms. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
 
-\subsubsection{Specific objective 3 \ref{obj:test}}
+\subsection{Specific objective 3 \ref{obj:implement_processing_and_visualization}}
 
-\begin{table}[htbp]
+\begin{table}[H]
 	\centering
 	\small
 	\caption{Activities to be carried out for the specific objective 3}
 	\label{tab:activities_specific_objective_3}
-	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}X}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{4cm}X}
 		\toprule
-		\textbf{Activity} & \textbf{Expected result} \\
+		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		Conduct functional testing of each component (data collection, LLM integration, processing pipeline, presentation layer) using synthetic data. & Test report documenting test cases, procedures, and results for each individual component with evidence of functional correctness. \\
+		A3.1 & Implement the data processing pipeline for cleaning, normalizing, and structuring raw API responses. & Source code for the processing pipeline with data transformation, validation, and schema mapping functionality. \\
 		\midrule
-		Conduct integration testing of the complete workflow from natural language input through data collection, processing, and visualization output. & Test report documenting end-to-end integration tests with evidence that all components work together correctly. \\
+		A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies, and associated metadata. & Database implementation with tables, relationships, and indexes following the designed schema. \\
 		\midrule
-		Validate system functionality using synthetic data from two YouTube topics, ensuring all requirements meet the general objective. & Validation report with evidence of system operation using real test cases and documentation of results against requirements. \\
+		A3.3 & Implement data visualization components with charts. & Source code for visualization features. \\
+		\midrule
+		A3.4 & Implement user project management functionality allowing users to create, save, and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
 
-\subsection{Schedule of activities}
+\subsection{Specific objective 4 \ref{obj:test}}
+
+\begin{table}[H]
+	\centering
+	\small
+	\caption{Activities to be carried out for the specific objective 4}
+	\label{tab:activities_specific_objective_4}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{4cm}X}
+		\toprule
+		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
+		\midrule
+		A4.1 & Conduct functional testing of each component (data collection, LLM integration, processing pipeline, presentation layer) using synthetic data. & Test report documenting test cases, procedures, and results for each individual component with evidence of functional correctness. \\
+		\midrule
+		A4.2 & Conduct integration testing of the complete workflow from natural language input through data collection, processing, and visualization output. & Test report documenting end-to-end integration tests with evidence that all components work together correctly. \\
+		\midrule
+		A4.3 & Validate system functionality using synthetic data from two YouTube topics, ensuring all requirements meet the general objective. & Validation report with evidence of system operation using real test cases and documentation of results against requirements. \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+\section{Schedule of activities}
+
+The following Gantt chart (Figure~\ref{fig:gantt_schedule}) illustrates the temporal distribution of all activities across the project timeline from February to October. Activities are organized according to their corresponding specific objectives, with dependencies and overlaps clearly indicated to ensure efficient resource allocation and logical progression of the development process.
+
+\begin{figure}[H]
+	\centering
+	\begin{ganttchart}[
+		y unit title=0.5cm,
+		y unit chart=0.7cm,
+		vgrid,
+		hgrid,
+		bar/.append style={fill=my_blue},
+		group height=.3,
+		group peaks height=.2,
+		group/.append style={fill=my_magenta},
+		milestone/.append style={fill=my_red, rounded corners=2pt},
+		link/.style={->, thick, my_blue}
+	]{1}{18}
+		\gantttitle{2026}{18} \\
+		\gantttitle{Feb}{2}
+		\gantttitle{Mar}{2}
+		\gantttitle{Apr}{2}
+		\gantttitle{May}{2}
+		\gantttitle{Jun}{2}
+		\gantttitle{Jul}{2}
+		\gantttitle{Aug}{2}
+		\gantttitle{Sep}{2}
+		\gantttitle{Oct}{2} \\
+
+		% Objective 1 activities (Design and planning phase: Feb-Mar)
+		\ganttgroup{Objective 1}{1}{4} \\
+		\ganttbar{A1.1}{1}{2} \\ % Technology stack
+		\ganttbar{A1.2}{1}{2} \\ % API literature review (parallel)
+		\ganttbar{A1.3}{2}{4} \\ % Database schema
+
+		% Objective 2 activities (Data collection implementation: Apr-May)
+		\ganttgroup{Objective 2}{5}{7} \\
+		\ganttbar{A2.1}{5}{6} \\ % Data collection backend
+		\ganttbar{A2.2}{6}{7} \\ % LLM integration
+
+		% Objective 3 activities (Visualization implementation: Jun-Aug)
+		\ganttgroup{Objective 3}{8}{13} \\
+		\ganttbar{A3.1}{8}{9} \\ % Data processing pipeline
+		\ganttbar{A3.2}{10}{10} \\ % Database layer
+		\ganttbar{A3.3}{11}{12} \\ % Data visualization
+		\ganttbar{A3.4}{12}{13} \\ % Project management
+
+		% Objective 4 activities (Testing and validation: Sep-Oct)
+		\ganttgroup{Objective 4}{14}{17} \\
+		\ganttbar{A4.1}{14}{15} \\ % Functional testing
+		\ganttbar{A4.2}{15}{16} \\ % Integration testing
+		\ganttbar{A4.3}{16}{17} \\ % System validation
+
+		% Milestones
+		\ganttmilestone{Design complete}{4} \\
+		\ganttmilestone{Collection complete}{7} \\
+		\ganttmilestone{Visualization complete}{13} \\
+		\ganttmilestone{Testing complete}{17}
+	\end{ganttchart}
+	\caption{Gantt chart showing the schedule of activities from February to October, organized by specific objectives with dependencies indicated by connecting arrows.}
+	\label{fig:gantt_schedule}
+\end{figure}
