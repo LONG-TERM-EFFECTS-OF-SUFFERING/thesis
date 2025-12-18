@@ -23,6 +23,14 @@
 
 \section{State of art}
 
+\subsection{LLM-based query generation}
+
+Recent advancements in natural language processing have demonstrated the efficacy of Large Language Models (LLMs) in translating informal user intent into structured technical commands. A prominent application of this capability is Text-to-SQL generation, which lowers the barrier to entry for interacting with complex database systems by allowing users to query data using natural language. The reliability of this translation process has improved significantly with modern models; as noted by \textcite{zhu2024largelanguagemodelenhanced}, the enhanced inference and generalization capabilities of current LLMs allow them to generate correct SQL queries with a high degree of accuracy. For instance, models such as GPT-4 have achieved state-of-the-art performance on benchmarks like Spider, outperforming previous rule-based approaches in natural language understanding.
+
+Beyond database querying, this capability extends to API integration, which can be achieved effectively when clear documentation is available. Recent work demonstrates that LLMs can generate accurate API calls directly from natural language instructions \parencite{tesfagiorgis2023large}. This application validates the proposed strategy of using pre-trained LLMs as semantic translation layers between user intent and technical system interfaces, proving that effective integration is achievable without the need for resource-intensive model training or domain-specific fine-tuning.
+
+This established precedent supports the proposed architecture of using a pre-trained LLM as a natural language interface for the YouTube Data API, where user queries are translated into valid API parameters through semantic understanding of intent and systematic mapping to API specifications.
+
 \subsection{Commercial social listening tools}
 
 Commercial social listening tools represent the closest existing solutions to the proposed system in terms of core functionality, offering capabilities such as multi-platform monitoring, sentiment analysis, and trend detection. Prominent platforms like Hootsuite (with Talkwalker) and Meltwater are optimized for business intelligence, brand monitoring, marketing analytics, and customer experience management across multiple social media platforms simultaneously, including Facebook, X (formerly Twitter), Instagram, TikTok, LinkedIn, YouTube, and Reddit, processing millions to hundreds of millions of data sources daily.
