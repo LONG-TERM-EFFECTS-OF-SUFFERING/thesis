@@ -1,0 +1,65 @@
+\subsubsection{Requirements that guide the selection}
+
+The application must automate the \textbf{collection}, \textbf{processing}, \textbf{analysis} and \textbf{visualization} of YouTube data. The scope includes (1) a \textbf{data collection module} that retrieves video comment data from YouTube Data API, (2) an \textbf{AI query model} (Natural Language Interface) that translates informal user requests into valid YouTube Data API queries using a \textbf{pre-trained AI model}, (3) a \textbf{data processing pipeline} to clean, normalize, validate and structure raw API responses, and (4) a \textbf{presentation layer} with charts for visualization.
+
+From an architectural point of view, thl system must follow these principles: a backend built with a \textbf{modern web framework} and a \textbf{relational database}, a frontend served as static assets by a lightweight \textbf{web server}, and full \textbf{containerization} for reproducible deployment.
+
+Finally, the project explicitly excludes training or fine-tuning NLP models; it will integrate \textbf{existing}, \textbf{pre-trained models} for query translation.
+
+\subsubsection{Selected technology stack}
+
+Based on the requirements above, the selected stack is:
+
+\begin{itemize}
+	\item Backend framework: Django REST Framework (DRF).
+
+	\item Database management: PostgreSQL.
+
+	\item Frontend framework: React.
+
+	\item Frontend tooling: Vite (build tool and development server).
+
+	\item Web server / reverse proxy: Nginx.
+
+	\item Application server: Gunicorn or Uvicorn. % TODO: search more about this
+
+	\item Containerization: Docker.
+\end{itemize}
+
+\subsubsection{Justificafion of the selection}
+
+\paragraph{Backend (Django + DRF)}
+
+Django supports rapid development of the backend logic and provides a clear structure for implementing the main modules required by the scope (data collection, AI query module, processing pipeline and API pipeline endpoints for the frontend). DRF is selected specifically to implement a clean REST API (it adds several improvements over plain Django) which fits the planned separation between frontend and backend services. In addition, the Python ecosystem has existing YouTube-related libraries, which reduces development time for the data collection layer.
+
+\paragraph{Database (PostgreSQL)}
+
+The scope \ref{chap:project_scope} requires a relational database for data storage. PostgreSQL is selected because it is a widely used relational database with strong support for structured schemas and relationships (useful for videos, comments, replies and saved queries).
+
+\paragraph{Frontend (React + Vite)}
+
+The scope \ref{chap:project_scope} expects a frontend built with a modern JavaScript framework and explicitly lists React as an example option. React is selected to implement the presentation layer with charts, which is part of the required functionality. Vite is used to simplify the development and create optimized static frontend builds for deployment.
+
+\paragraph{Web server and deployment}
+
+The scope \ref{chap:project_scope} states the use of a lightweight server such as \textbf{Nginx} to serve static frontend assets. Nginx is also suitable as a reverse proxy in front of the backend application server.
+
+All services must be containerized with \textbf{Docker} to ensure consistent and reproducible deployment.
+
+\paragraph{LLM API integration approach}
+
+% % TODO: Add exact LLM model
+
+To support transparency and reproducibility, the backend should also store the generated query parameters and timestamps, because API-based data collection can vary over time and requires consistent documentation of conditions.
+
+\paragraph{Practical considerations and alternative stacks}
+
+This application could be developed using many mainstream stacks (for example, Node.js, Java Spring, or FastAPI, with different frontend frameworks). However, this specific stack is selected for practical reasons:
+
+\begin{enumerate}
+	\item It matches the architecture principles defined in the project scope (modern backend framework, relational database, Nginx serving static assets and Docker containerization).
+
+	\item It facilitates the maintenance because the AVISPA group already maintains another application built with Django and React.
+
+	\item I am familiar with this stack.
+\end{enumerate}

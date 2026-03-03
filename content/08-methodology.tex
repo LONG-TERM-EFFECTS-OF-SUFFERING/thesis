@@ -41,11 +41,11 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		A1.1 & Evaluate and select the technology stack for the software development project, including frontend framework, backend framework, database management system, and LLM API integration approach. & Technical report documenting the selected technology stack with justification based on project requirements. \\
+		\label{act:1.1} A1.1 & Evaluate and select the technology stack for the software development project, including frontend framework, backend framework, database management system, and LLM API integration approach. & Technical report documenting the selected technology stack with justification based on project requirements. \\
 		\midrule
-		A1.2 & Conduct a literature review on YouTube Data API functionality, parameters, available endpoints, quota management, and documented limitations. & Technical document describing YouTube Data API capabilities, constraints, and best practices for research-oriented data collection. \\
+		\label{act:1.2} A1.2 & Conduct a literature review on YouTube Data API functionality, parameters, available endpoints, quota management, and documented limitations. & Technical document describing YouTube Data API capabilities, constraints, and best practices for research-oriented data collection. \\
 		\midrule
-		A1.3 & Design the database schema for storing collected YouTube data (videos, comments, replies), user projects, API queries, and processing metadata. & Database entity-relationship diagram with table specifications, relationships, and data types. \\
+		\label{act:1.3} A1.3 & Design the database schema for storing collected YouTube data (videos, comments, replies), user projects, API queries, and processing metadata. & Database entity-relationship diagram with table specifications, relationships, and data types. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
@@ -61,9 +61,9 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		A2.1 & Implement the backend data collection component with YouTube Data API integration, including authentication, query configuration, quota management, and error handling. & Source code for the data collection component with API integration, request handling, and response processing functionality. \\
+		\label{act:2.1} A2.1 & Implement the backend data collection component with YouTube Data API integration, including authentication, query configuration, quota management, and error handling. & Source code for the data collection component with API integration, request handling, and response processing functionality. \\
 		\midrule
-		A2.2 & Implement the LLM integration module that processes natural language user requests and generates valid YouTube API query parameters using an existing LLM model via API. & Source code for the NLP interface component that translates user queries into structured API parameters with validation mechanisms. \\
+		\label{act:2.2} A2.2 & Implement the LLM integration module that processes natural language user requests and generates valid YouTube API query parameters using an existing LLM model via API. & Source code for the NLP interface component that translates user queries into structured API parameters with validation mechanisms. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
@@ -79,13 +79,13 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		A3.1 & Implement the data processing pipeline for cleaning, normalizing, and structuring raw API responses. & Source code for the processing pipeline with data transformation, validation, and schema mapping functionality. \\
+		\label{act:3.1} A3.1 & Implement the data processing pipeline for cleaning, normalizing, and structuring raw API responses. & Source code for the processing pipeline with data transformation, validation, and schema mapping functionality. \\
 		\midrule
-		A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies, and associated metadata. & Database implementation with tables, relationships, and indexes following the designed schema. \\
+		\label{act:3.2} A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies, and associated metadata. & Database implementation with tables, relationships, and indexes following the designed schema. \\
 		\midrule
-		A3.3 & Implement data visualization components with charts. & Source code for visualization features. \\
+		\label{act:3.3} A3.3 Implement data visualization components with charts. & Source code for visualization features. \\
 		\midrule
-		A3.4 & Implement user project management functionality allowing users to create, save, and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
+		\label{act:3.4} A3.4 & Implement user project management functionality allowing users to create, save, and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
