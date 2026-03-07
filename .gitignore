@@ -9,6 +9,7 @@
 *.blg
 *.xml
 
+/_minted/
 /build/
 
 /sources.md
