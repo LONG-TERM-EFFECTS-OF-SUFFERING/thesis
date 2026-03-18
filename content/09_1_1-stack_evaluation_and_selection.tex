@@ -21,7 +21,7 @@ Based on the requirements above, the selected stack is:
 
 	\item Web server / reverse proxy: Nginx.
 
-	\item Application server: Gunicorn or Uvicorn. % TODO: search more about this
+	\item Application server: Gunicorn, a production application server for a WSGI-based Django deployment.
 
 	\item Containerization: Docker.
 \end{itemize}
@@ -30,21 +30,19 @@ Based on the requirements above, the selected stack is:
 
 \paragraph{Backend (Django + DRF)}
 
-Django supports rapid development of the backend logic and provides a clear structure for implementing the main modules required by the scope (data collection, AI query module, processing pipeline and API pipeline endpoints for the frontend). DRF is selected specifically to implement a clean REST API (it adds several improvements over plain Django) which fits the planned separation between frontend and backend services. In addition, the Python ecosystem has existing YouTube-related libraries, which reduces development time for the data collection layer.
+\textcite{django_framework} describes Django as a \enquote{thigh-level Python web framework focused on rapid development and pragmatic design}, which aligns with the need to implement the system's core modules in an organized way. In turn, Django REST Framework is a toolkit for building Web APIs and provides features such as request handling, authentication, serialization and API documentation support, making it suitable for the separation between frontend and backend services \cite{drf_framework,drf_requests,drf_authentication,drf_documenting_api}. In addition, Google provides official Python support for the YouTube Data API through documentation and client libraries, which supports the use of Python in the data collection layer \cite{youtube_api_python_quickstart,google_api_python_client_docs}.
 
 \paragraph{Database (PostgreSQL)}
 
-The scope \ref{chap:project_scope} requires a relational database for data storage. PostgreSQL is selected because it is a widely used relational database with strong support for structured schemas and relationships (useful for videos, comments, replies and saved queries).
+The scope \ref{chap:project_scope} requires a relational database for data storage. PostgreSQL is selected because it is an open-source object-relational database system with strong support for structured schemas and relationships, which is useful storing comments, replies, projects and saved queries \cite{postgresql_about}.
 
 \paragraph{Frontend (React + Vite)}
 
-The scope \ref{chap:project_scope} expects a frontend built with a modern JavaScript framework and explicitly lists React as an example option. React is selected to implement the presentation layer with charts, which is part of the required functionality. Vite is used to simplify the development and create optimized static frontend builds for deployment.
+The scope \ref{chap:project_scope} expects a frontend built with a modern JavaScript framework and explicitly lists React as an example option. React is selected for the presentation layer because it is based on reusable UI components, which fits the development of an interactive web interface with charts \cite{react_describing_ui}. Vite complements this choice because it is a build tool designed to provide a faster and leaner development experience and to generate optimized static assets for production deployment \cite{vite_getting_started}.
 
 \paragraph{Web server and deployment}
 
-The scope \ref{chap:project_scope} states the use of a lightweight server such as \textbf{Nginx} to serve static frontend assets. Nginx is also suitable as a reverse proxy in front of the backend application server.
-
-All services must be containerized with \textbf{Docker} to ensure consistent and reproducible deployment.
+The scope \ref{chap:project_scope} states the use of a lightweight server such as \textbf{Nginx} to serve static frontend assets. Nginx is also suitable as a reverse proxy in front of the backend application server. Nginx is suitable for this architecture because it can serve static content and operate as a reverse proxy in front of the backend service \cite{nginx_serving_static_content,nginx_reverse_proxy}. For the backend deployment, Gunicorn is selected as the application server because it is a Python WSGI HTTP server and Django projects already provide a WSGI entry point for this deployment model \cite{gunicorn_homepage,gunicorn_quickstart}. Finally, Docker is used to containerize all services in order to support consistent and reproducible deployment across environments \cite{docker_overview}.
 
 \paragraph{LLM API integration approach}
 
@@ -54,12 +52,4 @@ To support transparency and reproducibility, the backend should also store the g
 
 \paragraph{Practical considerations and alternative stacks}
 
-This application could be developed using many mainstream stacks (for example, Node.js, Java Spring, or FastAPI, with different frontend frameworks). However, this specific stack is selected for practical reasons:
-
-\begin{enumerate}
-	\item It matches the architecture principles defined in the project scope (modern backend framework, relational database, Nginx serving static assets and Docker containerization).
-
-	\item It facilitates the maintenance because the AVISPA group already maintains another application built with Django and React.
-
-	\item I am familiar with this stack.
-\end{enumerate}
+This application could also be implemented with other mainstream stacks. However, this specific stack is selected because it matches the architecture principles defined in the project scope, supports maintainability in the institutional context and reduces implementation risk due to prior familiarity with the selected technologies.
