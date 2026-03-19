@@ -1,4 +1,4 @@
-\subsubsection{Requirements that guide the selection}
+\subsection{Requirements that guide the selection}
 
 The application must automate the \textbf{collection}, \textbf{processing}, \textbf{analysis} and \textbf{visualization} of YouTube data. The scope includes (1) a \textbf{data collection module} that retrieves video comment data from YouTube Data API, (2) an \textbf{AI query model} (Natural Language Interface) that translates informal user requests into valid YouTube Data API queries using a \textbf{pre-trained AI model}, (3) a \textbf{data processing pipeline} to clean, normalize, validate and structure raw API responses, and (4) a \textbf{presentation layer} with charts for visualization.
 
@@ -6,7 +6,7 @@ From an architectural point of view, thl system must follow these principles: a 
 
 Finally, the project explicitly excludes training or fine-tuning NLP models; it will integrate \textbf{existing}, \textbf{pre-trained models} for query translation.
 
-\subsubsection{Selected technology stack}
+\subsection{Selected technology stack}
 
 Based on the requirements above, the selected stack is:
 
@@ -26,30 +26,30 @@ Based on the requirements above, the selected stack is:
 	\item Containerization: Docker.
 \end{itemize}
 
-\subsubsection{Justificafion of the selection}
+\subsection{Justificafion of the selection}
 
-\paragraph{Backend (Django + DRF)}
+\subsubsection{Backend (Django + DRF)}
 
 \textcite{django_framework} describes Django as a \enquote{thigh-level Python web framework focused on rapid development and pragmatic design}, which aligns with the need to implement the system's core modules in an organized way. In turn, Django REST Framework is a toolkit for building Web APIs and provides features such as request handling, authentication, serialization and API documentation support, making it suitable for the separation between frontend and backend services \cite{drf_framework,drf_requests,drf_authentication,drf_documenting_api}. In addition, Google provides official Python support for the YouTube Data API through documentation and client libraries, which supports the use of Python in the data collection layer \cite{youtube_api_python_quickstart,google_api_python_client_docs}.
 
-\paragraph{Database (PostgreSQL)}
+\subsubsection{Database (PostgreSQL)}
 
 The scope \ref{chap:project_scope} requires a relational database for data storage. PostgreSQL is selected because it is an open-source object-relational database system with strong support for structured schemas and relationships, which is useful storing comments, replies, projects and saved queries \cite{postgresql_about}.
 
-\paragraph{Frontend (React + Vite)}
+\subsubsection{Frontend (React + Vite)}
 
 The scope \ref{chap:project_scope} expects a frontend built with a modern JavaScript framework and explicitly lists React as an example option. React is selected for the presentation layer because it is based on reusable UI components, which fits the development of an interactive web interface with charts \cite{react_describing_ui}. Vite complements this choice because it is a build tool designed to provide a faster and leaner development experience and to generate optimized static assets for production deployment \cite{vite_getting_started}.
 
-\paragraph{Web server and deployment}
+\subsubsection{Web server and deployment}
 
 The scope \ref{chap:project_scope} states the use of a lightweight server such as \textbf{Nginx} to serve static frontend assets. Nginx is also suitable as a reverse proxy in front of the backend application server. Nginx is suitable for this architecture because it can serve static content and operate as a reverse proxy in front of the backend service \cite{nginx_serving_static_content,nginx_reverse_proxy}. For the backend deployment, Gunicorn is selected as the application server because it is a Python WSGI HTTP server and Django projects already provide a WSGI entry point for this deployment model \cite{gunicorn_homepage,gunicorn_quickstart}. Finally, Docker is used to containerize all services in order to support consistent and reproducible deployment across environments \cite{docker_overview}.
 
-\paragraph{LLM API integration approach}
+\subsubsection{LLM API integration approach}
 
 % % TODO: Add exact LLM model
 
 To support transparency and reproducibility, the backend should also store the generated query parameters and timestamps, because API-based data collection can vary over time and requires consistent documentation of conditions.
 
-\paragraph{Practical considerations and alternative stacks}
+\subsubsection{Practical considerations and alternative stacks}
 
 This application could also be implemented with other mainstream stacks. However, this specific stack is selected because it matches the architecture principles defined in the project scope, supports maintainability in the institutional context and reduces implementation risk due to prior familiarity with the selected technologies.

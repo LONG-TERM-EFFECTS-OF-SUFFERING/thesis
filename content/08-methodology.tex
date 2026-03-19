@@ -83,7 +83,7 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\midrule
 		\label{act:3.2} A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies, and associated metadata. & Database implementation with tables, relationships, and indexes following the designed schema. \\
 		\midrule
-		\label{act:3.3} A3.3 Implement data visualization components with charts. & Source code for visualization features. \\
+		\label{act:3.3} A3.3 & Implement data visualization components to present key metrics and insights from processed YouTube data through charts and summary views. & Source code for visualization components that render processed metrics and support interpretation of collected data. \\
 		\midrule
 		\label{act:3.4} A3.4 & Implement user project management functionality allowing users to create, save, and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
 		\bottomrule
@@ -101,11 +101,11 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		A4.1 & Conduct functional testing of each component (data collection, LLM integration, processing pipeline, presentation layer) using synthetic data. & Test report documenting test cases, procedures, and results for each individual component with evidence of functional correctness. \\
+		\label{act:4.1} A4.1 & Conduct functional testing of each component (data collection, LLM integration, processing pipeline, presentation layer) using synthetic data. & Test report documenting test cases, procedures, and results for each individual component with evidence of functional correctness. \\
 		\midrule
-		A4.2 & Conduct integration testing of the complete workflow from natural language input through data collection, processing, and visualization output. & Test report documenting end-to-end integration tests with evidence that all components work together correctly. \\
+		\label{act:4.2} A4.2 & Conduct integration testing of the complete workflow from natural language input through data collection, processing, and visualization output. & Test report documenting end-to-end integration tests with evidence that all components work together correctly. \\
 		\midrule
-		A4.3 & Validate system functionality using synthetic data from two YouTube topics, ensuring all requirements meet the general objective. & Validation report with evidence of system operation using real test cases and documentation of results against requirements. \\
+		\label{act:4.3} A4.3 & Validate system functionality using synthetic data from two YouTube topics, ensuring all requirements meet the general objective. & Validation report with evidence of system operation using real test cases and documentation of results against requirements. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}

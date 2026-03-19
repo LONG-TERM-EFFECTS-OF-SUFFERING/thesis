@@ -1,12 +1,12 @@
 This section is based primarily on the official YouTube Data API documentation provided by Google for developers \cite{youtube_data_api_docs}. The documentation is used as the main source to describe the API functionality, available endpoints, request parameters, quota management and documented limitations.
 
-\subsubsection{Functionality and general overview}
+\subsection{Functionality and general overview}
 
 The YouTube Data API v3 is the official interface provided by Google for accessing and, in some cases, managing YouTube data from external applications. It allows developers to interact with structured resources represented in JSON format, including channels, videos, playlists, search results, comments and comment threads. These resources are exposed through resource-specific methods such as \texttt{list}, \texttt{insert}, \texttt{update}, and \texttt{delete}, depending on the type of resource and the permissions required \cite{youtube_data_api_docs}.
 
 To use the API, developers must create a Google project, enable the YouTube Data API, and provide valid credentials with each request. In general, requests for public data can often be made with an API key, while requests that modify data or access private user information require OAuth 2.0 authorization. Another important characteristic of the API is its support for partial resource retrieval. The \texttt{part} parameter is required to specify which top-level sections of a resource should be returned, and the \texttt{fields} parameter can be used to reduce the response further by selecting only the nested properties needed by the application. This design improves efficiency by reducing unnecessary data transfer and processing. In addition, the API operates under a quota system, so requests must be designed carefully, especially in research-oriented data collection workflows \cite{youtube_data_api_docs}.
 
-\subsubsection{Available endpoints and methods}
+\subsection{Available endpoints and methods}
 
 The YouTube Data API v3 is organized by resource type rather than as a single generic endpoint. Each resource exposes one or more methods according to the operations supported for that entity. In general, the API provides methods such as \texttt{list}, \texttt{insert}, \texttt{update}, and \texttt{delete}, although not all resources support all of these operations. This resource-oriented structure makes it possible to separate data retrieval, content creation, modification and administrative actions according to the needs of each application \cite{youtube_data_api_docs}.
 
@@ -20,8 +20,8 @@ The API also includes playlist-related resources that can be useful when data co
 
 Although the API provides several write and management methods, this thesis is focused on data retrieval and analysis. Therefore, the implementation centers on read-oriented methods, especially \texttt{search.list}, \texttt{videos.list}, \texttt{channels.list}, \texttt{commentThreads.list}, \texttt{comments.list}, and, when necessary, \texttt{playlistItems.list} \cite{youtube_data_api_docs}.
 
-\subsubsection{Parameters and fields}
+\subsection{Parameters and fields}
 
-\subsubsection{Quota management}
+\subsection{Quota management}
 
-\subsubsection{Documented limitations}
+\subsection{Documented limitations}
