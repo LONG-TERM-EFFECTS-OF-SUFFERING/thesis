@@ -8,11 +8,11 @@ The choice of Scrum is motivated by two primary factors: its \textbf{flexibility
 
 \subsection{Product backlog}
 
-The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \parencite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements, and improvements for the web application. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
+The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \parencite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements and improvements for the web application. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
 
 \subsection{Sprint backlog}
 
-Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items, and an actionable plan for delivering an increment \parencite{schwaber2020scrum}, the \textbf{sprint backlog} will serve as the operational plan for each development iteration. For this individual project, sprints will be two weeks periods during which specific functionality will be developed and integrated into the application.
+Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items and an actionable plan for delivering an increment \parencite{schwaber2020scrum}, the \textbf{sprint backlog} will serve as the operational plan for each development iteration. For this individual project, sprints will be two weeks periods during which specific functionality will be developed and integrated into the application.
 
 \section{Scrum events adapted for this project}
 
@@ -24,9 +24,9 @@ At the beginning of each sprint, sprint planning will determine what can be deli
 
 \subsection{Sprint retrospective}
 
-The sprint Retrospective provides an opportunity to plan ways to increase quality and effectiveness \parencite{schwaber2020scrum}. For this individual project, retrospectives will be conducted at the end of each sprint to reflect on what went well, what challenges were encountered, and what adjustments should be made for subsequent sprints. This practice supports continuous improvement and systematic documentation of the development process.
+The sprint Retrospective provides an opportunity to plan ways to increase quality and effectiveness \parencite{schwaber2020scrum}. For this individual project, retrospectives will be conducted at the end of each sprint to reflect on what went well, what challenges were encountered and what adjustments should be made for subsequent sprints. This practice supports continuous improvement and systematic documentation of the development process.
 
-Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner}, and \textbf{developers} \parencite{schwaber2020scrum}, this project adapts its core principles to the context of individual thesis development. The emphasis remains on the empirical pillars of \textbf{transparency}, \textbf{inspection}, and \textbf{adaptation} \parencite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
+Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner} and \textbf{developers} \parencite{schwaber2020scrum}, this project adapts its core principles to the context of individual thesis development. The emphasis remains on the empirical pillars of \textbf{transparency}, \textbf{inspection} and \textbf{adaptation} \parencite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
 
 \section{Activities to be carried out}
 
@@ -41,11 +41,11 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		\label{act:1.1} A1.1 & Evaluate and select the technology stack for the software development project, including frontend framework, backend framework, database management system, and LLM API integration approach. & Technical report documenting the selected technology stack with justification based on project requirements. \\
+		\label{act:1.1} A1.1 & Evaluate and select the technology stack for the software development project, including frontend framework, backend framework, database management system and LLM API integration approach. & Technical report documenting the selected technology stack with justification based on project requirements. \\
 		\midrule
-		\label{act:1.2} A1.2 & Conduct a literature review on YouTube Data API functionality, parameters, available endpoints, quota management, and documented limitations. & Technical document describing YouTube Data API capabilities, constraints, and best practices for research-oriented data collection. \\
+		\label{act:1.2} A1.2 & Conduct a literature review on YouTube Data API functionality, parameters, available endpoints, quota management and documented limitations. & Technical document describing YouTube Data API capabilities, constraints and best practices for research-oriented data collection. \\
 		\midrule
-		\label{act:1.3} A1.3 & Design the database schema for storing collected YouTube data (videos, comments, replies), user projects, API queries, and processing metadata. & Database entity-relationship diagram with table specifications, relationships, and data types. \\
+		\label{act:1.3} A1.3 & Design the database schema for storing collected YouTube data (videos, comments, replies), user projects, API queries and processing metadata. & Database entity-relationship diagram with table specifications, relationships and data types. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
@@ -61,7 +61,7 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		\label{act:2.1} A2.1 & Implement the backend data collection component with YouTube Data API integration, including authentication, query configuration, quota management, and error handling.     & Source code for the data collection component with API integration, request handling, and response processing functionality. \\
+		\label{act:2.1} A2.1 & Implement the backend data collection component with YouTube Data API integration, including authentication, query configuration, quota management and error handling.     & Source code for the data collection component with API integration, request handling and response processing functionality. \\
 		\midrule
 		\label{act:2.2} A2.2 & Implement the LLM integration component that processes natural language user requests and generates valid YouTube API query parameters using an existing LLM model via API. & Source code for the NLP interface component that translates user queries into structured API parameters with validation mechanisms. \\
 		\bottomrule
@@ -79,13 +79,13 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		\label{act:3.1} A3.1 & Implement the data processing pipeline for cleaning, normalizing, and structuring raw API responses. & Source code for the processing pipeline with data transformation, validation, and schema mapping functionality. \\
+		\label{act:3.1} A3.1 & Implement the data processing pipeline for cleaning, normalizing and structuring raw API responses. & Source code for the processing pipeline with data transformation, validation and schema mapping functionality. \\
 		\midrule
-		\label{act:3.2} A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies, and associated metadata. & Database implementation with tables, relationships, and indexes following the designed schema. \\
+		\label{act:3.2} A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies and associated metadata. & Database implementation with tables, relationships and indexes following the designed schema. \\
 		\midrule
 		\label{act:3.3} A3.3 & Implement data visualization components to present key metrics and insights from processed YouTube data through charts and summary views. & Source code for visualization components that render processed metrics and support interpretation of collected data. \\
 		\midrule
-		\label{act:3.4} A3.4 & Implement user project management functionality allowing users to create, save, and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
+		\label{act:3.4} A3.4 & Implement user project management functionality allowing users to create, save and manage multiple data collection projects. & Source code for project management features including CRUD operations for user projects and saved queries. \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
@@ -101,9 +101,9 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
 		\toprule
 		\textbf{ID} & \textbf{Activity} & \textbf{Expected result} \\
 		\midrule
-		\label{act:4.1} A4.1 & Conduct functional testing of each component (data collection, LLM integration, processing pipeline, presentation layer) using synthetic data. & Test report documenting test cases, procedures, and results for each individual component with evidence of functional correctness. \\
+		\label{act:4.1} A4.1 & Conduct functional testing of each component (data collection, LLM integration, processing pipeline, presentation layer) using synthetic data. & Test report documenting test cases, procedures and results for each individual component with evidence of functional correctness. \\
 		\midrule
-		\label{act:4.2} A4.2 & Conduct integration testing of the complete workflow from natural language input through data collection, processing, and visualization output. & Test report documenting end-to-end integration tests with evidence that all components work together correctly. \\
+		\label{act:4.2} A4.2 & Conduct integration testing of the complete workflow from natural language input through data collection, processing and visualization output. & Test report documenting end-to-end integration tests with evidence that all components work together correctly. \\
 		\midrule
 		\label{act:4.3} A4.3 & Validate system functionality using synthetic data from two YouTube topics, ensuring all requirements meet the general objective. & Validation report with evidence of system operation using real test cases and documentation of results against requirements. \\
 		\bottomrule

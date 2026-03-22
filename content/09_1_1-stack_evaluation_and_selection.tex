@@ -1,8 +1,8 @@
 \subsection{Requirements that guide the selection}
 
-The application must automate the \textbf{collection}, \textbf{processing}, \textbf{analysis} and \textbf{visualization} of YouTube data. The scope includes (1) a \textbf{data collection module} that retrieves video comment data from YouTube Data API, (2) an \textbf{AI query model} (Natural Language Interface) that translates informal user requests into valid YouTube Data API queries using a \textbf{pre-trained AI model}, (3) a \textbf{data processing pipeline} to clean, normalize, validate and structure raw API responses, and (4) a \textbf{presentation layer} with charts for visualization.
+The application must automate the \textbf{collection}, \textbf{processing}, \textbf{analysis} and \textbf{visualization} of YouTube data. The scope includes (1) a \textbf{data collection module} that retrieves video comment data from YouTube Data API, (2) an \textbf{AI query model} (Natural Language Interface) that translates informal user requests into valid YouTube Data API queries using a \textbf{pre-trained AI model}, (3) a \textbf{data processing pipeline} to clean, normalize, validate and structure raw API responses and (4) a \textbf{presentation layer} with charts for visualization.
 
-From an architectural point of view, thl system must follow these principles: a backend built with a \textbf{modern web framework} and a \textbf{relational database}, a frontend served as static assets by a lightweight \textbf{web server}, and full \textbf{containerization} for reproducible deployment.
+From an architectural point of view, thl system must follow these principles: a backend built with a \textbf{modern web framework} and a \textbf{relational database}, a frontend served as static assets by a lightweight \textbf{web server} and full \textbf{containerization} for reproducible deployment.
 
 Finally, the project explicitly excludes training or fine-tuning NLP models; it will integrate \textbf{existing}, \textbf{pre-trained models} for query translation.
 

@@ -2,26 +2,123 @@ This section is based primarily on the official YouTube Data API documentation p
 
 \subsection{Functionality and general overview}
 
-The YouTube Data API v3 is the official interface provided by Google for accessing and, in some cases, managing YouTube data from external applications. It allows developers to interact with structured resources represented in JSON format, including channels, videos, playlists, search results, comments and comment threads. These resources are exposed through resource-specific methods such as \texttt{list}, \texttt{insert}, \texttt{update}, and \texttt{delete}, depending on the type of resource and the permissions required \cite{youtube_data_api_docs}.
+The YouTube Data API v3 is the official interface provided by Google for accessing and, in some cases, managing YouTube data from external applications. It allows developers to interact with structured resources represented in JSON format. These resources are exposed through resource-specific methods such as \texttt{list}, \texttt{insert}, \texttt{update} and \texttt{delete}, depending on the type of resource and the permissions required \cite{youtube_data_api_docs}.
 
-To use the API, developers must create a Google project, enable the YouTube Data API, and provide valid credentials with each request. In general, requests for public data can often be made with an API key, while requests that modify data or access private user information require OAuth 2.0 authorization. Another important characteristic of the API is its support for partial resource retrieval. The \texttt{part} parameter is required to specify which top-level sections of a resource should be returned, and the \texttt{fields} parameter can be used to reduce the response further by selecting only the nested properties needed by the application. This design improves efficiency by reducing unnecessary data transfer and processing. In addition, the API operates under a quota system, so requests must be designed carefully, especially in research-oriented data collection workflows \cite{youtube_data_api_docs}.
+To use the API, developers must create a Google project, enable the YouTube Data API and provide valid credentials with each request. In general, requests for public data can often be made with an API key, while requests that modify data or access private user information require OAuth 2.0 authorization. Another important characteristic of the API is its support for partial resource retrieval. The \texttt{part} parameter is required to specify which top-level sections of a resource should be returned and the \texttt{fields} parameter can be used to reduce the response further by selecting only the nested properties needed by the application. This design improves efficiency by reducing unnecessary data transfer and processing. In addition, the API operates under a quota system, so requests must be designed carefully, especially in research-oriented data collection workflows \cite{youtube_data_api_docs}.
 
 \subsection{Available endpoints and methods}
 
-The YouTube Data API v3 is organized by resource type rather than as a single generic endpoint. Each resource exposes one or more methods according to the operations supported for that entity. In general, the API provides methods such as \texttt{list}, \texttt{insert}, \texttt{update}, and \texttt{delete}, although not all resources support all of these operations. This resource-oriented structure makes it possible to separate data retrieval, content creation, modification and administrative actions according to the needs of each application \cite{youtube_data_api_docs}.
+The YouTube Data API v3 is organized by resource type rather than as a single generic endpoint. Each resource exposes one or more methods according to the operations supported for that entity. For the scope of this project, the most relevant resources are those used to discover videos, retrieve video metadata, collect top-level comments and retrieve replies. Table~\ref{tab:youtube_api_core_resources} summarizes the main resources planned for use in the application.
 
-For the purposes of this project, the most relevant resources are \texttt{search}, \texttt{videos}, \texttt{channels}, \texttt{commentThreads}, \texttt{comments}, \texttt{playlists}, and \texttt{playlistItems}. The \texttt{search} resource supports the \texttt{search.list} method, which returns search results that ma~tch the specified criteria. However, these results do not represent persistent resources themselves; instead, they point to videos, channels, or playlists that should later be queried through their corresponding resource-specific methods in order to obtain more detailed metadata \cite{youtube_data_api_docs}.
+\begin{table}[htbp]
+	\centering
+	\small
+	\caption{Main YouTube Data API resources planned for use in the application}
+	\label{tab:youtube_api_core_resources}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}p{3.2cm}X}
+		\toprule
+		\textbf{Resource}               & \textbf{Main method used}    & \textbf{Description and relevance for the project} \\
+		\midrule
+		\texttt{search} (search result) & \texttt{search.\allowbreak list}         & Returns search results that identify videos, channels or playlists matching the request criteria. In this project, it is used mainly to discover candidate videos from user-defined search terms. A search result points to an identifiable resource, but it does not contain persistent resource data by itself. \\
+		\midrule
+		\texttt{video}                  & \texttt{videos.\allowbreak list}         & Represents a single YouTube video. This resource is used to retrieve structured metadata for each selected video, such as title, description, publication date and engagement statistics, which are later processed and stored by the application. \\
+		\midrule
+		\texttt{commentThread}          & \texttt{commentThreads.\allowbreak list} & Represents a video comment thread, including a top-level comment and any replies returned within the thread response. In this project, it is used to collect top-level comments and the initial reply structure associated with each video. \\
+		\midrule
+		\texttt{comment}               & \texttt{comments.\allowbreak list}       & Represents an individual YouTube comment. In this project, it is especially relevant for retrieving replies completely when the \texttt{commentThread} response does not include all of them. It can also provide comment-level metadata needed for downstream processing. \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
 
-The \texttt{videos} resource provides methods such as \texttt{videos.list}, \texttt{videos.insert}, \texttt{videos.update}, and \texttt{videos.delete}, in addition to other video-related operations. The \texttt{channels} resource supports \texttt{channels.list} and \texttt{channels.update}. In the context of this thesis, \texttt{videos.list} is especially important because it allows the retrieval of structured metadata for one or more videos, while \texttt{channels.list} can be used to obtain channel-level information and related playlist identifiers \cite{youtube_data_api_docs}.
+The descriptions in Table~\ref{tab:youtube_api_core_resources} are based on the official resource definitions provided in the YouTube Data API reference \cite{youtube_data_api_docs}.
 
-For comment collection, two resources are especially important. The \texttt{commentThreads} resource supports \texttt{commentThreads.list} and \texttt{commentThreads.insert}. The \texttt{commentThreads.list} method is used to retrieve the comment threads associated with a video, including top-level comments and, in some cases, replies. However, the documentation states that a \texttt{commentThread} does not necessarily contain all replies. For that reason, the \texttt{comments} resource is also relevant. It supports methods such as \texttt{comments.list}, \texttt{comments.insert}, \texttt{comments.update}, \texttt{comments.delete}, and \texttt{comments.setModerationStatus}. In practice, \texttt{comments.list} is required when the system needs to retrieve replies completely rather than relying only on the partial reply information returned within a thread \cite{youtube_data_api_docs}.
+Although the API also provides a \texttt{channel} resource, channel-level audience segmentation is outside the scope of this thesis. For the purposes of this project, channels are treated mainly as contextual metadata associated with videos rather than as a separate analytical unit. A channel-centered collection strategy could support more specialized studies, but it would also increase collection complexity. For this reason, that line of analysis is left for future work.
 
-The API also includes playlist-related resources that can be useful when data collection begins from a channel instead of a single video. The \texttt{playlists} resource represents playlists and the \texttt{playlistItems} resource represents the items contained within them. In particular, \texttt{playlistItems.list} can be used to enumerate the videos associated with a playlist, including special channel-related playlists such as the uploaded videos list. This can support alternative collection workflows in which videos are first identified from a channel and then analyzed individually \cite{youtube_data_api_docs}.
+Accordingly, the implementation focuses on read-oriented methods, especially \texttt{search.\allowbreak list}, \texttt{videos.\allowbreak list}, \texttt{commentThreads.\allowbreak list} and \texttt{comments.\allowbreak list} \cite{youtube_data_api_docs}.
 
-Although the API provides several write and management methods, this thesis is focused on data retrieval and analysis. Therefore, the implementation centers on read-oriented methods, especially \texttt{search.list}, \texttt{videos.list}, \texttt{channels.list}, \texttt{commentThreads.list}, \texttt{comments.list}, and, when necessary, \texttt{playlistItems.list} \cite{youtube_data_api_docs}.
+\subsection{Parameters}
 
-\subsection{Parameters and fields}
+The YouTube Data API v3 relies on query parameters to define both the subset of resources to retrieve and the amount of information returned in each response. For this reason, understanding the request parameters is essential for designing an efficient collection workflow. In particular, the API requires partial resource retrieval. The \texttt{part} parameter is mandatory in requests that retrieve YouTube resources and specifies which top-level sections of a resource must be included in the response. The \texttt{fields} parameter can further restrict the response to only the nested properties required by the application, which reduces network transfer, parsing and storage overhead \cite{youtube_data_api_docs}.
+
+For this thesis, the most relevant parameters are those associated with search, metadata retrieval, comment collection and pagination. Some parameters act as filters that identify the target resource set, such as \texttt{q}, \texttt{id}, \texttt{videoId} and \texttt{parentId}. Others control the number, order and temporal range of returned items, such as \texttt{maxResults}, \texttt{pageToken}, \texttt{order}, \texttt{publishedAfter} and \texttt{publishedBefore}. In practice, these parameters determine which videos are discovered, which metadata are stored and how comment and reply collection is performed across multiple pages of results \cite{youtube_data_api_docs}.
+
+Moreover, some methods impose exclusive filter rules. For example, \texttt{commentThreads.\allowbreak list} requires exactly one filter such as \texttt{videoId}, \texttt{id} or \texttt{allThreadsRelatedTo\-ChannelId}, while \texttt{comments.\allowbreak list} requires either \texttt{id} or \texttt{parentId}. This is important for the application design because it constrains how requests can be generated automatically from user input \cite{youtube_data_api_docs}.
+
+\begingroup
+\setstretch{1.0}
+\begin{table}[htbp]
+	\centering
+	\footnotesize
+	\caption{Main request parameters relevant to the application}
+	\label{tab:youtube_api_parameters}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{3.3cm}X}
+		\toprule
+		\textbf{Parameter}                                & \textbf{Typical method(s)}                                                  & \textbf{Description and relevance for the project} \\
+		\midrule
+		\texttt{part}                                     & All resource retrieval methods                                              & Required parameter used to indicate which top-level resource sections should be returned. In this project, typical values include \texttt{snippet} for \texttt{search.\allowbreak list}, \texttt{snippet,statistics,contentDetails} for \texttt{videos.\allowbreak list}, \texttt{snippet,replies} for \texttt{commentThreads.\allowbreak list} and \texttt{snippet} for \texttt{comments.\allowbreak list}. \\
+		\midrule
+		\texttt{fields}                                   & Optional in many methods                                                    & Filters the response further by selecting only specific nested properties within the parts already requested. It is useful for reducing unnecessary data transfer when only a limited subset of the response is needed. \\
+		\midrule
+		\texttt{q}                                        & \texttt{search.\allowbreak list}                                            & Specifies the search query term \\
+		\midrule
+		\texttt{type}                                     & \texttt{search.\allowbreak list}                                                                                                   & Restricts search results to a specific resource type. For this project, \texttt{type=video} is particularly relevant because the collection workflow begins with video discovery rather than channel or playlist discovery. \\
+		\midrule
+		\texttt{order}                                    & \texttt{search.\allowbreak list}, \texttt{commentThreads.\allowbreak list}  & Defines the ordering of results. In \texttt{search.\allowbreak list}, common values include \texttt{relevance}, \texttt{date} and \texttt{viewCount}. In \texttt{commentThreads.\allowbreak list}, valid values include \texttt{time} and \texttt{relevance}. This parameter is relevant for documenting the exact collection criteria used in each request. \\
+		\midrule
+		\texttt{publishedAfter}, \texttt{publishedBefore} & \texttt{search.\allowbreak list}                                            & Restrict search results to a specific publication interval. These parameters are useful when the collection process must focus on videos from a defined time period. \\
+		\midrule
+		\texttt{id}                                       & \texttt{videos.\allowbreak list}, \texttt{comments.\allowbreak list}        & Retrieves specific resources by their identifiers. In the application workflow, this parameter is used after a previous request has already produced the identifiers that must be queried in detail. \\
+		\midrule
+		\texttt{videoId}                                  & \texttt{commentThreads.\allowbreak list}                                    & Requests the comment threads associated with a specific video. It is the main parameter used to start comment collection once a target video has been selected. \\
+		\midrule
+		\texttt{parentId}                                 & \texttt{comments.\allowbreak list}                                          & Requests the replies associated with a top-level comment. This parameter is necessary because a \texttt{commentThread} response does not necessarily contain all replies. \\
+		\midrule
+		\texttt{maxResults}                               & Most \texttt{list} methods                                                  & Specifies the maximum number of items returned per page. Its accepted range depends on the method, so it must be configured carefully to balance completeness, performance and quota usage. \\
+		\midrule
+		\texttt{pageToken}                               & Most \texttt{list} methods                                                   & Identifies a specific page of results. It is used together with the \texttt{nextPageToken} value returned by the API to retrieve additional pages during iterative collection. \\
+		\midrule
+		\texttt{textFormat}                              & \texttt{commentThreads.\allowbreak list}, \texttt{comments.\allowbreak list} & Determines whether comment text is returned as HTML or plain text. For downstream processing, \texttt{plainText} is more convenient because it avoids HTML markup in the collected textual data. \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+\endgroup
 
 \subsection{Quota management}
 
+The YouTube Data API v3 uses a quota system to regulate service usage and protect platform resources. Projects that enable the API receive a default allocation of 10,000 quota units per day. Every API request consumes quota, including invalid requests, which still cost at least one unit. In addition, if a request returns multiple pages of results, each additional page request consumes the quota cost associated with that method. Therefore, quota management is not only a technical concern, but also a methodological consideration for research-oriented data collection workflows \cite{youtube_data_api_docs}.
+
+For this thesis, quota management is especially important because the application depends on repeated discovery and retrieval operations. Although most read-oriented methods relevant to the project have a low quota cost, the \texttt{search.list} method is considerably more expensive than the other core methods used in the collection workflow. As a result, repeated exploratory searches can exhaust the daily quota much faster than metadata retrieval or comment collection. Table~\ref{tab:youtube_api_quota_costs} summarizes the quota cost of the main methods relevant to this project \cite{youtube_data_api_docs}.
+
+\begin{table}[htbp]
+	\centering
+	\small
+	\caption{Quota cost of the main YouTube Data API methods used in the application}
+	\label{tab:youtube_api_quota_costs}
+	\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{2.2cm}X}
+		\toprule
+		\textbf{Method}              & \textbf{Quota cost} & \textbf{Main use in the application} \\
+		\midrule
+		\texttt{search.\allowbreak list}         & 100 units           & Discovery of candidate videos from user-defined search terms. \\
+		\midrule
+		\texttt{videos.\allowbreak list}         & 1 unit               & Retrieval of detailed metadata for selected videos. \\
+		\midrule
+		\texttt{commentThreads.\allowbreak list} & 1 unit               & Collection of top-level comments and partial reply information for a video. \\
+		\midrule
+		\texttt{comments.\allowbreak list}       & 1 unit               & Retrieval of replies associated with a parent comment. \\
+		\midrule
+		\texttt{channels.\allowbreak list}      & 1 unit                & Retrieval of channel metadata when channel-level context is required. \\
+		\midrule
+		\texttt{playlistItems.\allowbreak list} & 1 unit                & Enumeration of videos contained in a playlist, including uploaded videos playlists. \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+From a practical perspective, the main quota risk lies in broad search requests and excessive pagination. For that reason, the collection workflow should minimize redundant \texttt{search.\allowbreak list} calls, store previously retrieved identifiers when possible and use lower-cost methods such as \texttt{videos.\allowbreak list}, \texttt{commentThreads.\allowbreak list} and \texttt{comments.\allowbreak list} once the target resources have been identified. The implementation should also document the exact query parameters and timestamps of each collection session, both to support reproducibility and to justify the conditions under which the data were obtained \cite{youtube_data_api_docs}.
+
+If the default daily quota is not sufficient for the intended use of the system, the developer may request additional quota from Google. However, the official documentation states that this process requires a compliance audit to verify that the project follows the YouTube API Services Terms of Service. Consequently, efficient request design should be considered the first strategy for quota management, while quota extension should be treated as a secondary measure \cite{youtube_data_api_docs}.
+
 \subsection{Documented limitations}
+
+This application depends on an external platform whose methods, parameters, quota costs and usage policies may change over time. This creates an important limitation for any system built on top of the YouTube Data API, since the long-term stability of the application does not depend only on its internal design, but also on decisions made by the platform provider. This risk is not merely theoretical. The official YouTube documentation includes revision histories for both the Data API and the YouTube API Services Terms and Policies and these records show that parameters, deprecations and quota-related conditions have changed over time. For example, the quota cost of \texttt{search.\allowbreak list} was changed to 100 units, which directly affects collection strategies based on repeated search requests \cite{youtube_data_api_revision_history,youtube_api_services_developer_policies}.
+
+Another important limitation concerns the transparency and reproducibility of search results. The official documentation states that \texttt{order=relevance} is the default behavior of \texttt{search.\allowbreak list}, but it only describes this ordering in general terms and does not explain the ranking logic in detail. As a result, it is difficult to fully explain why certain videos are returned before others or to guarantee that the same query will produce stable results over time. Recent studies have reported variability, inconsistency and temporal decay in YouTube Search API results, which creates additional challenges for computational reproducibility in studies that depend on search-based collection. For this reason, the present project treats API-based retrieval as a constrained observation of the platform rather than as a complete or stable representation of all relevant YouTube content. A more detailed discussion of these issues is provided in Subsection~\ref{subsec:youtube_data_api_limitations_and_computational reproducibility_challenges}.
