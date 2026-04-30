@@ -1,15 +1,29 @@
+# LaTeX build artifacts
 *.aux
+*.bcf
 *.fdb_latexmk
 *.fls
 *.log
 *.out
+*.run.xml
 *.synctex.gz
 *.toc
 *.bbl
 *.blg
 *.xml
 
+# latexindent backups and check-mode temp files
+*.bak
+*.bak[0-9]
+*.tmp.bak
+*.tmp.tex
+
+# minted (shell-escape) cache
+/_minted-*/
 /_minted/
+
+# latexmk output directory
 /build/
 
+# Local notes
 /sources.md

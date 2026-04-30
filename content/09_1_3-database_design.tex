@@ -1,0 +1,59 @@
+\subsection{Database design}
+
+The database was designed for the PostgreSQL DBMS selected in Activity A1.1. Its purpose is to support the full workflow defined in the project scope: query definition, YouTube data collection, raw data normalization, processing traceability and visualization support. The schema also responds to the methodological requirement stated in Activity A1.3, which asks for storage of videos, comments, replies, user projects, API queries and processing metadata.
+
+\subsubsection{Design criteria}
+
+The schema was defined using the following criteria:
+
+\begin{itemize}
+    \item Preserve \textbf{traceability} of each collection session through explicit records of the effective query, execution time and API requests performed.
+
+    \item Store YouTube resources in a \textbf{normalized relational structure} that separates channels, videos and comments.
+
+    \item Represent \textbf{replies} through a self-reference in the comments table, avoiding duplicated structures for top-level comments and replies.
+
+    \item Preserve \textbf{reproducibility} by keeping request parameters, quota usage and processing metadata.
+
+    \item Support later \textbf{analysis and visualization} through indexes, sentiment outputs and derived metrics.
+\end{itemize}
+
+\subsubsection{Main entities}
+
+The schema is organized into four functional groups.
+
+\paragraph{Project management}
+
+The tables \texttt{app\_users}, \texttt{research\_projects} and \texttt{saved\_queries} support user project management. A user can own many projects and each project can store many saved queries. Each saved query keeps both the natural language request and the structured parameters that will later be sent to the YouTube Data API.
+
+\paragraph{Collection traceability}
+
+The tables \texttt{collection\_runs} and \texttt{api\_request\_logs} document the execution of each collection session. This design is important because the thesis requires methodological transparency. For that reason, each run stores the effective query parameters, execution status, timestamps, quota consumption and request sequence. The request log stores endpoint name, parameters, pagination data and response metadata.
+
+\paragraph{YouTube resources}
+
+The tables \texttt{youtube\_channels}, \texttt{youtube\_videos}, \texttt{video\_statistics\_snapshots} and \texttt{youtube\_comments} store the collected platform data. Channels and videos are stored as independent entities because one channel can publish many videos. Video metrics are stored in a dedicated snapshot table because values such as views, likes and comment counts change over time. Comments are linked to videos and replies are represented by the attribute \texttt{parent\_comment\_id}, which creates a self-referential relationship inside the same table.
+
+\paragraph{Processing and analysis}
+
+The tables \texttt{processing\_runs}, \texttt{comment\_sentiments} and \texttt{derived\_metrics} support the processing pipeline. A processing run stores the pipeline version, schema version, normalization rules and summary output. The sentiment table stores the label, score and confidence produced by the selected model for each comment. The metrics table stores aggregated results that can later be used in charts and summary views.
+
+\subsubsection{Relationship summary}
+
+The main relationships are the following:
+
+\begin{itemize}
+    \item One user can own many projects.
+    \item One project can contain many saved queries.
+    \item One project can execute many collection runs.
+    \item One collection run can generate many API request logs.
+    \item One channel can publish many videos.
+    \item One video can appear in many collection runs.
+    \item One video can have many comments.
+    \item One top-level comment can have many replies.
+    \item One collection run can be processed many times if the pipeline changes.
+\end{itemize}
+
+\subsubsection{Implementation notes}
+
+The implementation uses UUID primary keys for internal records and keeps the original YouTube identifiers as unique business keys. This choice simplifies joins inside the application while preserving the external identifiers required for reproducibility. In addition, indexes were defined on frequent access paths such as project history, video lookup, comment lookup and text search over collected comments.

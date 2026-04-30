@@ -12,4 +12,4 @@ The resulting application will provide a no-cost, transparent alternative to com
 
 ## Template
 
-This thesis was written using a custom [LaTeX template](https://github.com/Br4z/professional_project_thesis_template) designed for **professional projects** (thesis work format) for the Systems engineer program at the Universidad del Valle.
+This thesis was written using a custom [LaTeX template](https://github.com/braz9LKDI/professional_project_thesis_template) designed for **professional projects** (thesis work format) for the Systems engineer program at the Universidad del Valle.
