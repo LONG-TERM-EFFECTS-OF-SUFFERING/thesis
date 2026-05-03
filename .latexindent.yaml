@@ -1,6 +1,6 @@
 # For more information about this, see
 # https://github.com/braz9LKDI/style_config/blob/main/latex/docs/latexindent.md
-defaultIndent: "  "
+defaultIndent: "    "
 modifyLineBreaks:
   environments:
     BeginStartsOnOwnLine: 1
