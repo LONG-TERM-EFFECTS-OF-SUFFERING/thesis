@@ -13,3 +13,17 @@ The resulting application will provide a no-cost, transparent alternative to com
 ## Template
 
 This thesis was written using a custom [LaTeX template](https://github.com/braz9LKDI/professional_project_thesis_template) designed for **professional projects** (thesis work format) for the Systems engineer program at the Universidad del Valle.
+
+## Tooling
+
+This thesis uses my own [`style_config`](https://github.com/braz9LKDI/style_config) kit to keep the LaTeX source consistent, specifically its `latex/` stack:
+
+- latexindent handles formatting: indentation, line breaks around environments and alignment of tabular and math delimiters.
+
+- chktex catches common LaTeX issues like spacing problems, bad command usage and quoting mistakes.
+
+- latexmk orchestrates the build, running pdflatex and biber the right number of times until cross-references stabilize.
+
+- EditorConfig sets editor-level basics: indent style, line endings and final newline.
+
+Every config in the root of this repository (`.latexindent.yaml`, `.chktexrc`, `.latexmkrc`, `.editorconfig`, `.vscode/`) is a direct copy from that stack. The same setup can be adopted in any LaTeX project by copying the `latex/` folder and following its README.

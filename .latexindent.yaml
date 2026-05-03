@@ -1,43 +1,34 @@
-# 4-space indent, matching .editorconfig.
-defaultIndent: "    "
-
-# Reflow long lines and let environments add line breaks where appropriate.
+# For more information about this, see
+# https://github.com/braz9LKDI/style_config/blob/main/latex/docs/latexindent.md
+defaultIndent: "  "
 modifyLineBreaks:
-    environments:
-        BeginStartsOnOwnLine: 1
-        BodyStartsOnOwnLine: 1
-        EndStartsOnOwnLine: 1
-        EndFinishesWithLineBreak: 1
-    items:
-        ItemStartsOnOwnLine: 1
-    commands:
-        CommandStartsOnOwnLine: 0
-    oneSentencePerLine:
-        manipulateSentences: 0
-
-# Do not leave .bak files behind; overwrite in place only when changed.
+  environments:
+    BeginStartsOnOwnLine: 1
+    BodyStartsOnOwnLine: 1
+    EndStartsOnOwnLine: 1
+    EndFinishesWithLineBreak: 1
+  items:
+    ItemStartsOnOwnLine: 1
+  commands:
+    CommandStartsOnOwnLine: 0
+  oneSentencePerLine:
+    manipulateSentences: 0
 onlyOneBackUp: 1
 maxNumberOfBackUps: 0
 cycleThroughBackUps: 0
-
-# Wrap inside braces consistently.
 removeTrailingWhitespace:
-    beforeProcessing: 1
-    afterProcessing: 1
-
-# Indent each level of nested environments.
+  beforeProcessing: 1
+  afterProcessing: 1
 indentAfterItems:
-    itemize: 1
-    enumerate: 1
-    description: 1
-
-# Treat align/equation environments as math; do not reflow their content.
+  itemize: 1
+  enumerate: 1
+  description: 1
 lookForAlignDelims:
-    tabular: 1
-    tabularx: 1
-    array: 1
-    matrix: 1
-    pmatrix: 1
-    bmatrix: 1
-    align: 1
-    align*: 1
+  tabular: 1
+  tabularx: 1
+  array: 1
+  matrix: 1
+  pmatrix: 1
+  bmatrix: 1
+  align: 1
+  align*: 1

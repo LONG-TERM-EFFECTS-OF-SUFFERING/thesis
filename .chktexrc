@@ -1,14 +1,3 @@
-# Note: this file MERGES with the system /etc/texmf/chktex/chktexrc, it does
-# not replace it. The system rc already wipes \input, \cite, \ref, \label,
-# \pageref, \cite, \nocite, \index, \graphicspath, etc., so we only need to
-# add project-specific commands.
-#
-# Warning suppression is done via -n N flags in the Makefile, not here.
-# `Silent { ... }` and `WipeArg { ... }` lists take *command names*, not
-# warning numbers, despite the misleading name of `Silent`.
-
-# Wipe arguments of project-specific commands so chktex does not lint
-# their contents (e.g. as if they were prose).
 WipeArg
 {
     \addbibresource:{}
