@@ -16,7 +16,7 @@ This thesis was written using a custom [LaTeX template](https://github.com/braz9
 
 ## Tooling
 
-This thesis uses my own [`style_config`](https://github.com/braz9LKDI/style_config) kit to keep the LaTeX source consistent, specifically its `latex/` stack:
+This template is designed to be use with the [LaTeX Workshop VS Code extension](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop), and it uses my own [`style_config`](https://github.com/braz9LKDI/style_config) kit to keep the LaTeX source consistent, specifically its `latex_simplified/` stack:
 
 - latexindent handles formatting: indentation, line breaks around environments and alignment of tabular and math delimiters.
 
@@ -24,6 +24,4 @@ This thesis uses my own [`style_config`](https://github.com/braz9LKDI/style_conf
 
 - latexmk orchestrates the build, running pdflatex and biber the right number of times until cross-references stabilize.
 
-- EditorConfig sets editor-level basics: indent style, line endings and final newline.
-
-Every config in the root of this repository (`.latexindent.yaml`, `.chktexrc`, `.latexmkrc`, `.editorconfig`, `.vscode/`) is a direct copy from that stack. The same setup can be adopted in any LaTeX project by copying the `latex/` folder and following its README.
+Every config in the root of this repository (`.latexindent.yaml`, `.chktexrc`, `.latexmkrc` and `.vscode/`) is a direct copy from that stack. The same setup can be adopted in any LaTeX project by copying the `latex/`.

@@ -1,5 +1,3 @@
-# For more information about this, see
-# https://github.com/braz9LKDI/style_config/blob/main/latex/README.md
 MAIN        := main
 TEX_FILES   := $(shell find . -type f -name '*.tex' -not -path './build/*')
 BUILD_DIR   := build

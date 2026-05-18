@@ -1,5 +1,5 @@
 {
-  // Build with latexmk so it picks up .latexmkrc (pdflatex + biber + shell-escape).
+  "latex-workshop.formatting.latex": "latexindent",
   "latex-workshop.latex.recipes": [
     {
       "name": "latexmk",
@@ -11,15 +11,10 @@
     {
       "name": "latexmk",
       "command": "latexmk",
-      "args": ["-pdf", "-interaction=nonstopmode", "-file-line-error", "%DOC%"],
-      "env": {}
+      "args": ["-pdf", "-interaction=nonstopmode", "-file-line-error", "%DOC%"]
     }
   ],
-
-  // Output directory matches .latexmkrc.
   "latex-workshop.latex.outDir": "build",
-
-  // Auto-clean on close: remove latexindent backups and aux files.
   "latex-workshop.latex.autoClean.run": "onBuilt",
   "latex-workshop.latex.clean.fileTypes": [
     "*.aux",
@@ -51,14 +46,9 @@
     "*.bak1",
     "*.bak2"
   ],
-
-  // Linting: ChkTeX on save.
   "latex-workshop.linting.chktex.enabled": true,
   "latex-workshop.linting.chktex.exec.path": "chktex",
   "latex-workshop.linting.run": "onSave",
-
-  // Formatting: latexindent on save.
-  "latex-workshop.formatting.latex": "latexindent",
   "latex-workshop.formatting.latexindent.path": "latexindent",
   "latex-workshop.formatting.latexindent.args": [
     "-c",
@@ -66,26 +56,12 @@
     "-y=defaultIndent: '    '",
     "%TMPFILE%"
   ],
-
-  // Per-language: format on save for LaTeX only.
   "[latex]": {
     "editor.defaultFormatter": "James-Yu.latex-workshop",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true
+    "editor.formatOnSave": true
   },
-  "[bibtex]": {
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true
-  },
-
-  // SyncTeX: jump between source and PDF.
   "latex-workshop.synctex.afterBuild.enabled": true,
-
-  // File associations.
   "files.associations": {
-    "*.tex": "latex",
-    "*.bib": "bibtex",
     ".chktexrc": "properties",
     ".latexmkrc": "perl"
   }

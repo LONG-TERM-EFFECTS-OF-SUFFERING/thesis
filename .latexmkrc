@@ -1,5 +1,3 @@
-# For more information about this, see
-# https://github.com/braz9LKDI/style_config/blob/main/latex/docs/latexmk.md
 $pdf_mode = 1;
 
 $out_dir = 'build';

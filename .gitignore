@@ -18,7 +18,7 @@
 *.tmp.bak
 *.tmp.tex
 
-# minted (shell-escape) cache
+## minted (shell-escape) cache
 /_minted-*/
 /_minted/
 
