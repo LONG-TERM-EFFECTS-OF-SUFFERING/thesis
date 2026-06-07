@@ -27,3 +27,11 @@
 
 # Local notes
 /sources.md
+
+# AI
+_bmad/
+.agents/
+.codex/
+
+# Development
+src/

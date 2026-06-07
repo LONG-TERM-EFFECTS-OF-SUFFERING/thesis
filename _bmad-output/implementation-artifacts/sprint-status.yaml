@@ -1,0 +1,502 @@
+# generated: 2026-06-01
+# last_updated: 2026-06-01
+# project: thesis
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+#
+# STATUS DEFINITIONS:
+# ===================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in planning docs
+#   - ready-for-dev: Story file created and ready to implement
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - development_status is the canonical workflow status map used by BMAD.
+# - story_catalog links BMAD story keys back to backlog IDs and sprint assignments.
+# - sprints mirrors docs/sprint_planning.md so sprint membership is visible in one file.
+
+generated: 2026-06-01
+last_updated: 2026-06-01
+project: thesis
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  epic-1: in-progress
+  1-1-docker-backend-and-database-services: done
+  1-2-docker-frontend-service: backlog
+  1-3-nginx-and-gunicorn-ready-local-wiring: backlog
+  epic-1-retrospective: optional
+  epic-2: backlog
+  2-1-create-research-project: backlog
+  2-2-save-youtube-search-query: backlog
+  epic-2-retrospective: optional
+  epic-3: backlog
+  3-1-generate-draft-youtube-api-parameters-from-natural-language: backlog
+  3-2-validate-generated-youtube-api-parameters: backlog
+  3-3-build-editable-query-parameter-review-screen: backlog
+  3-4-save-approved-parameters-with-validation-feedback: backlog
+  epic-3-retrospective: optional
+  epic-4: backlog
+  4-1-create-collection-run-model-and-status-lifecycle: backlog
+  4-2-start-a-collection-run-from-a-saved-query: backlog
+  4-3-store-collection-run-counts-quota-timestamps-and-errors: backlog
+  4-4-create-api-request-log-model-and-service-wrapper: backlog
+  4-5-show-request-logs-for-each-collection-run: backlog
+  4-6-discover-videos-with-youtube-search-list: backlog
+  4-7-show-video-discovery-summary: backlog
+  epic-4-retrospective: optional
+  epic-5: backlog
+  5-1-store-video-metadata-and-raw-video-payload: backlog
+  5-2-store-channel-metadata-and-raw-channel-payload: backlog
+  5-3-store-video-statistics-snapshots: backlog
+  5-4-link-collection-runs-to-videos-idempotently: backlog
+  5-5-add-basic-cleaning-normalization-and-validation-report: backlog
+  epic-5-retrospective: optional
+  epic-6: backlog
+  6-1-show-results-summary-counts-and-card: backlog
+  6-2-show-sentiment-distribution-chart: backlog
+  6-3-filter-results-by-date-and-video: backlog
+  6-4-filter-results-by-sentiment: backlog
+  epic-6-retrospective: optional
+  epic-7: backlog
+  7-1-collect-top-level-comments-for-selected-videos: backlog
+  7-2-collect-comment-replies-with-pagination-and-resume-handling: backlog
+  7-3-store-comment-raw-payloads-quota-and-errors: backlog
+  7-4-run-one-pre-trained-sentiment-model-and-store-results: backlog
+  7-5-show-sentiment-labels-scores-and-model-information: backlog
+  epic-7-retrospective: optional
+  epic-8: backlog
+  8-1-export-videos-channels-and-logs-as-csv: backlog
+  8-2-export-raw-payloads-sentiment-and-metrics-as-json-or-csv: backlog
+  8-3-add-database-and-model-tests: backlog
+  8-4-add-youtube-collection-service-tests: backlog
+  8-5-add-llm-query-translation-tests: backlog
+  8-6-add-processing-tests: backlog
+  8-7-add-presentation-smoke-tests: backlog
+  8-8-validate-the-workflow-with-synthetic-fixtures: backlog
+  8-9-validate-the-workflow-with-real-youtube-topics: backlog
+  epic-8-retrospective: optional
+
+story_catalog:
+  1-1-docker-backend-and-database-services:
+    us_id: US-001
+    epic: EPIC-001
+    sprint: 1
+    priority: must
+    points: 5
+    title: Docker backend and database services
+    story_file: _bmad-output/implementation-artifacts/1-1-docker-backend-and-database-services.md
+  1-2-docker-frontend-service:
+    us_id: US-002
+    epic: EPIC-001
+    sprint: 1
+    priority: must
+    points: 4
+    title: Docker frontend service
+  1-3-nginx-and-gunicorn-ready-local-wiring:
+    us_id: US-003
+    epic: EPIC-001
+    sprint: 2
+    priority: must
+    points: 6
+    title: Nginx and Gunicorn-ready local wiring
+  2-1-create-research-project:
+    us_id: US-004
+    epic: EPIC-002
+    sprint: 1
+    priority: must
+    points: 7
+    title: Create research project
+  2-2-save-youtube-search-query:
+    us_id: US-005
+    epic: EPIC-002
+    sprint: 1
+    priority: must
+    points: 8
+    title: Save YouTube search query
+  3-1-generate-draft-youtube-api-parameters-from-natural-language:
+    us_id: US-006
+    epic: EPIC-003
+    sprint: 2
+    priority: must
+    points: 9
+    title: Generate draft YouTube API parameters from natural language
+  3-2-validate-generated-youtube-api-parameters:
+    us_id: US-007
+    epic: EPIC-003
+    sprint: 2
+    priority: must
+    points: 7
+    title: Validate generated YouTube API parameters
+  3-3-build-editable-query-parameter-review-screen:
+    us_id: US-008
+    epic: EPIC-003
+    sprint: 3
+    priority: must
+    points: 12
+    title: Build editable query parameter review screen
+  3-4-save-approved-parameters-with-validation-feedback:
+    us_id: US-009
+    epic: EPIC-003
+    sprint: 3
+    priority: must
+    points: 9
+    title: Save approved parameters with validation feedback
+  4-1-create-collection-run-model-and-status-lifecycle:
+    us_id: US-010
+    epic: EPIC-004
+    sprint: 4
+    priority: must
+    points: 7
+    title: Create collection run model and status lifecycle
+  4-2-start-a-collection-run-from-a-saved-query:
+    us_id: US-011
+    epic: EPIC-004
+    sprint: 4
+    priority: must
+    points: 9
+    title: Start a collection run from a saved query
+  4-3-store-collection-run-counts-quota-timestamps-and-errors:
+    us_id: US-012
+    epic: EPIC-004
+    sprint: 5
+    priority: must
+    points: 7
+    title: Store collection run counts, quota, timestamps and errors
+  4-4-create-api-request-log-model-and-service-wrapper:
+    us_id: US-013
+    epic: EPIC-004
+    sprint: 4
+    priority: must
+    points: 5
+    title: Create API request log model and service wrapper
+  4-5-show-request-logs-for-each-collection-run:
+    us_id: US-014
+    epic: EPIC-004
+    sprint: 6
+    priority: must
+    points: 9
+    title: Show request logs for each collection run
+  4-6-discover-videos-with-youtube-search-list:
+    us_id: US-015
+    epic: EPIC-004
+    sprint: 5
+    priority: must
+    points: 10
+    title: Discover videos with YouTube search.list
+  4-7-show-video-discovery-summary:
+    us_id: US-016
+    epic: EPIC-004
+    sprint: 7
+    priority: must
+    points: 7
+    title: Show video discovery summary
+  5-1-store-video-metadata-and-raw-video-payload:
+    us_id: US-017
+    epic: EPIC-005
+    sprint: 6
+    priority: must
+    points: 9
+    title: Store video metadata and raw video payload
+  5-2-store-channel-metadata-and-raw-channel-payload:
+    us_id: US-018
+    epic: EPIC-005
+    sprint: 6
+    priority: must
+    points: 6
+    title: Store channel metadata and raw channel payload
+  5-3-store-video-statistics-snapshots:
+    us_id: US-019
+    epic: EPIC-005
+    sprint: 7
+    priority: must
+    points: 6
+    title: Store video statistics snapshots
+  5-4-link-collection-runs-to-videos-idempotently:
+    us_id: US-020
+    epic: EPIC-005
+    sprint: 7
+    priority: must
+    points: 7
+    title: Link collection runs to videos idempotently
+  7-1-collect-top-level-comments-for-selected-videos:
+    us_id: US-021
+    epic: EPIC-007
+    sprint: 8
+    priority: must
+    points: 12
+    title: Collect top-level comments for selected videos
+  7-2-collect-comment-replies-with-pagination-and-resume-handling:
+    us_id: US-022
+    epic: EPIC-007
+    sprint: 9
+    priority: must
+    points: 10
+    title: Collect comment replies with pagination and resume handling
+  7-3-store-comment-raw-payloads-quota-and-errors:
+    us_id: US-023
+    epic: EPIC-007
+    sprint: 8
+    priority: must
+    points: 9
+    title: Store comment raw payloads, quota and errors
+  5-5-add-basic-cleaning-normalization-and-validation-report:
+    us_id: US-024
+    epic: EPIC-005
+    sprint: 10
+    priority: must
+    points: 9
+    title: Add basic cleaning, normalization and validation report
+  7-4-run-one-pre-trained-sentiment-model-and-store-results:
+    us_id: US-025
+    epic: EPIC-007
+    sprint: 10
+    priority: must
+    points: 7
+    title: Run one pre-trained sentiment model and store results
+  7-5-show-sentiment-labels-scores-and-model-information:
+    us_id: US-026
+    epic: EPIC-007
+    sprint: 11
+    priority: must
+    points: 9
+    title: Show sentiment labels, scores and model information
+  6-1-show-results-summary-counts-and-card:
+    us_id: US-027
+    epic: EPIC-006
+    sprint: 9
+    priority: should
+    points: 10
+    title: Show results summary counts and card
+  6-2-show-sentiment-distribution-chart:
+    us_id: US-028
+    epic: EPIC-006
+    sprint: 12
+    priority: should
+    points: 12
+    title: Show sentiment distribution chart
+  6-3-filter-results-by-date-and-video:
+    us_id: US-029
+    epic: EPIC-006
+    sprint: 11
+    priority: could
+    points: 8
+    title: Filter results by date and video
+  6-4-filter-results-by-sentiment:
+    us_id: US-030
+    epic: EPIC-006
+    sprint: 11
+    priority: could
+    points: 6
+    title: Filter results by sentiment
+  8-1-export-videos-channels-and-logs-as-csv:
+    us_id: US-031
+    epic: EPIC-008
+    sprint: 12
+    priority: could
+    points: 7
+    title: Export videos, channels and logs as CSV
+  8-2-export-raw-payloads-sentiment-and-metrics-as-json-or-csv:
+    us_id: US-032
+    epic: EPIC-008
+    sprint: 13
+    priority: could
+    points: 8
+    title: Export raw payloads, sentiment and metrics as JSON or CSV
+  8-3-add-database-and-model-tests:
+    us_id: US-033
+    epic: EPIC-008
+    sprint: 11
+    priority: must
+    points: 5
+    title: Add database and model tests
+  8-4-add-youtube-collection-service-tests:
+    us_id: US-034
+    epic: EPIC-008
+    sprint: 5
+    priority: must
+    points: 5
+    title: Add YouTube collection service tests
+  8-5-add-llm-query-translation-tests:
+    us_id: US-035
+    epic: EPIC-008
+    sprint: 10
+    priority: must
+    points: 6
+    title: Add LLM query translation tests
+  8-6-add-processing-tests:
+    us_id: US-036
+    epic: EPIC-008
+    sprint: 10
+    priority: must
+    points: 5
+    title: Add processing tests
+  8-7-add-presentation-smoke-tests:
+    us_id: US-037
+    epic: EPIC-008
+    sprint: 13
+    priority: must
+    points: 7
+    title: Add presentation smoke tests
+  8-8-validate-the-workflow-with-synthetic-fixtures:
+    us_id: US-038
+    epic: EPIC-008
+    sprint: 12
+    priority: must
+    points: 8
+    title: Validate the workflow with synthetic fixtures
+  8-9-validate-the-workflow-with-real-youtube-topics:
+    us_id: US-039
+    epic: EPIC-008
+    sprint: 13
+    priority: must
+    points: 8
+    title: Validate the workflow with real YouTube topics
+
+sprints:
+  - sprint: 1
+    status: active
+    start: 2026-05-25
+    end: 2026-06-05
+    goal: local app and research records
+    points: 24
+    stories:
+      - 1-1-docker-backend-and-database-services
+      - 1-2-docker-frontend-service
+      - 2-1-create-research-project
+      - 2-2-save-youtube-search-query
+  - sprint: 2
+    status: planned
+    start: 2026-06-08
+    end: 2026-06-19
+    goal: production wiring and parameter drafting
+    points: 22
+    stories:
+      - 1-3-nginx-and-gunicorn-ready-local-wiring
+      - 3-1-generate-draft-youtube-api-parameters-from-natural-language
+      - 3-2-validate-generated-youtube-api-parameters
+  - sprint: 3
+    status: planned
+    start: 2026-06-22
+    end: 2026-07-03
+    goal: query review and approval loop
+    points: 21
+    stories:
+      - 3-3-build-editable-query-parameter-review-screen
+      - 3-4-save-approved-parameters-with-validation-feedback
+  - sprint: 4
+    status: planned
+    start: 2026-07-06
+    end: 2026-07-17
+    goal: auditable collection run foundation
+    points: 21
+    stories:
+      - 4-1-create-collection-run-model-and-status-lifecycle
+      - 4-2-start-a-collection-run-from-a-saved-query
+      - 4-4-create-api-request-log-model-and-service-wrapper
+  - sprint: 5
+    status: planned
+    start: 2026-07-20
+    end: 2026-07-31
+    goal: search discovery with service tests
+    points: 22
+    stories:
+      - 4-3-store-collection-run-counts-quota-timestamps-and-errors
+      - 4-6-discover-videos-with-youtube-search-list
+      - 8-4-add-youtube-collection-service-tests
+  - sprint: 6
+    status: planned
+    start: 2026-08-03
+    end: 2026-08-14
+    goal: run observability and video context
+    points: 24
+    stories:
+      - 4-5-show-request-logs-for-each-collection-run
+      - 5-1-store-video-metadata-and-raw-video-payload
+      - 5-2-store-channel-metadata-and-raw-channel-payload
+  - sprint: 7
+    status: planned
+    start: 2026-08-17
+    end: 2026-08-28
+    goal: discovery integrity and summaries
+    points: 20
+    stories:
+      - 4-7-show-video-discovery-summary
+      - 5-3-store-video-statistics-snapshots
+      - 5-4-link-collection-runs-to-videos-idempotently
+  - sprint: 8
+    status: planned
+    start: 2026-08-31
+    end: 2026-09-11
+    goal: top-level comments foundation
+    points: 21
+    stories:
+      - 7-1-collect-top-level-comments-for-selected-videos
+      - 7-3-store-comment-raw-payloads-quota-and-errors
+  - sprint: 9
+    status: planned
+    start: 2026-09-14
+    end: 2026-09-25
+    goal: comment depth and first result counts
+    points: 20
+    stories:
+      - 7-2-collect-comment-replies-with-pagination-and-resume-handling
+      - 6-1-show-results-summary-counts-and-card
+  - sprint: 10
+    status: planned
+    start: 2026-09-28
+    end: 2026-10-09
+    goal: processing, sentiment core and tests
+    points: 27
+    stories:
+      - 5-5-add-basic-cleaning-normalization-and-validation-report
+      - 7-4-run-one-pre-trained-sentiment-model-and-store-results
+      - 8-5-add-llm-query-translation-tests
+      - 8-6-add-processing-tests
+  - sprint: 11
+    status: planned
+    start: 2026-10-12
+    end: 2026-10-23
+    goal: sentiment labels, filtered review and models
+    points: 28
+    stories:
+      - 7-5-show-sentiment-labels-scores-and-model-information
+      - 6-3-filter-results-by-date-and-video
+      - 6-4-filter-results-by-sentiment
+      - 8-3-add-database-and-model-tests
+  - sprint: 12
+    status: planned
+    start: 2026-10-26
+    end: 2026-11-06
+    goal: sentiment chart, export and synthetic proof
+    points: 27
+    stories:
+      - 6-2-show-sentiment-distribution-chart
+      - 8-1-export-videos-channels-and-logs-as-csv
+      - 8-8-validate-the-workflow-with-synthetic-fixtures
+  - sprint: 13
+    status: planned
+    start: 2026-11-09
+    end: 2026-11-20
+    goal: final validation and presentation proof
+    points: 23
+    stories:
+      - 8-2-export-raw-payloads-sentiment-and-metrics-as-json-or-csv
+      - 8-7-add-presentation-smoke-tests
+      - 8-9-validate-the-workflow-with-real-youtube-topics

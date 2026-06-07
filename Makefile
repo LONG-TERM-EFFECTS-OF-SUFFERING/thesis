@@ -1,5 +1,5 @@
 MAIN        := main
-TEX_FILES   := $(shell find . -type f -name '*.tex' -not -path './build/*')
+TEX_FILES   := $(shell find . -type f -name '*.tex' -not -path './build/*' -not -path './.git/*' -not -path './src/*')
 BUILD_DIR   := build
 
 LATEXMK     := latexmk
