@@ -2,6 +2,8 @@
 
 Before implementation, the work was organized using Scrum planning artifacts. The product backlog defines the epics and user stories, and the sprint planning document distributes those stories across thirteen two-week sprints from May 25 to November 20, 2026. These artifacts are maintained externally in \href{https://github.com/LONG-TERM-EFFECTS-OF-SUFFERING/thesis/tree/main/docs/product_backlog.md}{\texttt{product\_backlog.md}} and \href{https://github.com/LONG-TERM-EFFECTS-OF-SUFFERING/thesis/tree/main/docs/sprint_planning.md}{\texttt{sprint\_planning.md}}.
 
+The operational tracking of the software increment is performed in the Taiga project \textit{OpenTube Insights}. Each row of the product backlog is represented in Taiga as a user story, and tasks are not used as a lower tracking level. Therefore, the user story is the smallest unit of planned and verifiable implementation work. When a commit completes a user story, the commit message includes the Taiga integration reference using the format \texttt{TG-\textless ref\textgreater\ \#done}, where \texttt{ref} is the Taiga reference number of the corresponding user story. This convention links the version-control history with the Scrum tracking artifact and allows completed stories to be reflected automatically in Taiga.
+
 \input{content/09_1-to_design}
 
 \input{content/09_2-to_implement_data_collection_module}
