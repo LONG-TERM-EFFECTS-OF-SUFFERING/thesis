@@ -34,4 +34,6 @@ _bmad/
 .codex/
 
 # Development
-src/
+src/*
+!src/docker-compose.yml
+!src/.env.example

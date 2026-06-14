@@ -2,7 +2,7 @@
 
 This page lists reusable commands for the thesis app and explains what each one does.
 
-Run commands from the folder shown in each section. The main thesis repo ignores `src/`, so active API/UI development commands happen inside `src/api`, `src/ui`, or `src`.
+Run commands from the folder shown in each section. The main thesis repo tracks shared root Compose files in `src/`, while active API/UI development commands happen inside the nested repositories `src/api` and `src/ui`.
 
 ## Backend (quick SQLite development)
 
@@ -31,7 +31,7 @@ python manage.py check
 
 Runs Django's system checks. This catches common configuration problems.
 
-## Docker compose (reproducible PostgreSQL path)
+## Docker compose (reproducible local stack)
 
 ```bash
 cd src
@@ -44,7 +44,7 @@ Checks whether `src/docker-compose.yml` is valid after environment variables and
 docker compose up --build
 ```
 
-Builds the backend image and starts the database and API containers in the foreground. The terminal shows logs while the services run.
+Builds the backend and frontend images, then starts the database, API and UI containers in the foreground. The terminal shows logs while the services run.
 
 ```bash
 docker compose up --build -d
@@ -59,6 +59,12 @@ API_HOST_PORT=8001 docker compose up --build
 Starts the stack with the API exposed on host port `8001` for this one command. Use this when something else is already using port `8000`.
 
 ```bash
+UI_HOST_PORT=5174 docker compose up --build
+```
+
+Starts the stack with the frontend exposed on host port `5174` for this one command. Use this when something else is already using port `5173`.
+
+```bash
 POSTGRES_HOST_PORT=5433 docker compose up --build
 ```
 
@@ -68,14 +74,15 @@ Starts the stack with PostgreSQL exposed on host port `5433` for this one comman
 docker compose ps
 ```
 
-Shows whether the `api` and `db` services are running and which ports are exposed.
+Shows whether the `api`, `db` and `ui` services are running and which ports are exposed.
 
 ```bash
+docker compose logs ui
 docker compose logs api
 docker compose logs db
 ```
 
-Shows logs for the backend or database container.
+Shows logs for the frontend, backend or database container.
 
 ```bash
 docker compose exec api python manage.py migrate
@@ -120,10 +127,10 @@ docker compose exec db psql -U opentube_insights -d opentube_insights
 Opens a PostgreSQL shell inside the database container using the default local development database and user.
 
 ```bash
-docker compose --env-file api/.env up --build
+docker compose --env-file .env up --build
 ```
 
-Starts the stack while reading Compose override values from `src/api/.env`.
+Starts the stack while reading Compose override values from `src/.env`.
 
 ```bash
 docker compose down
@@ -140,7 +147,7 @@ Stops containers and deletes the PostgreSQL data volume. Use this only when you 
 ## Health check
 
 ```bash
-curl http://localhost:8000/api/health/
+curl "http://127.0.0.1:${API_HOST_PORT:-8000}/api/health/"
 ```
 
 Asks the backend health endpoint if the API is running.
@@ -151,9 +158,21 @@ Expected response:
 { "status": "ok" }
 ```
 
+```bash
+curl "http://127.0.0.1:${UI_HOST_PORT:-5173}/api/health/"
+```
+
+Asks the backend health endpoint through the Vite frontend proxy.
+
 ## Frontend Commands
 
 Run these from `src/ui`.
+
+```bash
+npm test
+```
+
+Runs the small frontend helper tests.
 
 ```bash
 npm run dev

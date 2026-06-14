@@ -22,17 +22,19 @@ Django REST Framework, often shortened to DRF, adds API-focused tools on top of 
 
 Docker runs software inside containers. A container is like a small isolated environment with everything the service needs.
 
-In this project, Docker helps run the backend and PostgreSQL in a reproducible way.
+In this project, Docker helps run the frontend, backend and PostgreSQL in a reproducible way.
 
 ## Docker Compose
 
 Docker Compose starts several containers together using a compose file. In this project, the local development compose file is `src/docker-compose.yml`.
 
-For US-001, Compose starts:
+After US-002, Compose starts:
 
 - `db`: PostgreSQL database.
 
 - `api`: Django backend.
+
+- `ui`: React/Vite frontend.
 
 ## Environment variable
 
@@ -50,7 +52,7 @@ This lets the same code use SQLite locally or PostgreSQL in Docker.
 
 A `.env` file is a local text file that stores environment-variable values for development.
 
-In this project, `src/api/.env.example` is the safe template. You can copy it to `src/api/.env` and edit local values such as ports or database settings. The real `.env` file is ignored by Git.
+In this project, `src/.env.example` is the safe template for Docker Compose port and frontend proxy overrides. `src/api/.env.example` is the safe template for backend-local settings. Real `.env` files are ignored by Git.
 
 ## Health endpoint
 
@@ -78,7 +80,7 @@ Even before custom models exist, Django has built-in migrations for users, sessi
 
 A nested repository is a Git repository inside another repository's working folder.
 
-In this project, `src/api` and `src/ui` can have their own Git histories while the main thesis repo ignores `src/`. This lets you keep app-development commits separate from thesis/documentation commits.
+In this project, `src/api` and `src/ui` can have their own Git histories while the main thesis repo tracks only shared root Compose files under `src/`. This lets you keep app-development commits separate from thesis/documentation commits without losing the local orchestration files.
 
 ## Git submodule
 

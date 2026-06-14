@@ -22,7 +22,7 @@ This story created the first active backend foundation for the thesis app. Befor
 
 - bind Docker ports to localhost by default.
 
-- keep active development files under `src/`, outside the main thesis repository's tracked file set.
+- keep backend and frontend implementation files in nested repositories while the main repo owns shared Compose files.
 
 The goal is not to build the research features yet. The goal is to prove that the backend and database environment works.
 
@@ -59,11 +59,13 @@ After the review fixes, the app development layout changed:
 ```text
 thesis repo
     -> tracks thesis docs, BMAD artifacts and project-understanding docs
-    -> ignores src/
+    -> tracks src/docker-compose.yml and src/.env.example
+    -> ignores nested app implementation files
 
 src/
     -> contains development projects and local orchestration
     -> contains src/docker-compose.yml
+    -> contains src/.env.example
 
 src/api/
     -> backend Django project
@@ -76,7 +78,7 @@ src/ui/
 
 The API and UI are not Git submodules. A submodule is a formal pointer from the parent repo to a specific commit in another repo. This project is not using that mechanism.
 
-Instead, `src/api` and `src/ui` are nested development repositories that live inside the working tree. The main thesis repo ignores `src/`, so it does not accidentally track API or UI implementation files. That keeps the thesis/documentation history separate from app-development history while still letting you work on everything in one folder.
+Instead, `src/api` and `src/ui` are nested development repositories that live inside the working tree. The main thesis repo tracks only the shared root orchestration files in `src/`, especially `src/docker-compose.yml` and `src/.env.example`, while ignoring API and UI implementation files. That keeps the thesis/documentation history separate from app-development history while still letting Compose stay reproducible from the main repo.
 
 ## File-by-file explanation
 
@@ -104,11 +106,11 @@ Think of this file as a template. It shows the names and default values, but it 
 
 If you copy this file to `src/api/.env`, Django reads that API-local `.env` file for local settings. Your shell environment still wins if both places define the same variable.
 
-Docker Compose does not automatically read `src/api/.env` in every invocation. If you want Compose to use those same override values, run Compose from `src/` with `--env-file api/.env`.
+Django reads `src/api/.env` for local backend runs. Docker Compose uses `src/.env` for Compose-level port and frontend proxy overrides.
 
 ### `src/docker-compose.yml`
 
-This file tells Docker Compose how to run the backend and database together.
+This file tells Docker Compose how to run the backend and database together. US-002 later adds the frontend service to the same file.
 
 It defines two services:
 
@@ -147,7 +149,7 @@ The host port mappings bind to localhost:
 127.0.0.1:5432
 ```
 
-This means the services are available from your computer, but not intentionally exposed on every network interface. If port `8000` or `5432` is busy, change `API_HOST_PORT` or `POSTGRES_HOST_PORT` in `src/api/.env`, or pass those variables directly in your shell.
+This means the services are available from your computer, but not intentionally exposed on every network interface. If port `8000` or `5432` is busy, change `API_HOST_PORT` or `POSTGRES_HOST_PORT` in `src/.env`, or pass those variables directly in your shell.
 
 The API command is:
 
@@ -437,7 +439,7 @@ Here is the request path for the health endpoint:
 
 ```text
 Browser or curl
-    -> http://localhost:8000/api/health/
+    -> http://127.0.0.1:8000/api/health/
     -> opentube_insights_api/urls.py sees "api/"
     -> core/urls.py sees "health/"
     -> core/views.py calls health()
@@ -496,17 +498,17 @@ docker compose exec db psql -U opentube_insights -d opentube_insights
 
 Use this path when validating story completion.
 
-If you want Compose to use variables from `src/api/.env`, use:
+If you want Compose to use variables from `src/.env`, use:
 
 ```bash
 cd src
-docker compose --env-file api/.env up --build
+docker compose --env-file .env up --build
 ```
 
 ### Health check
 
 ```bash
-curl http://localhost:8000/api/health/
+curl http://127.0.0.1:8000/api/health/
 ```
 
 Expected:

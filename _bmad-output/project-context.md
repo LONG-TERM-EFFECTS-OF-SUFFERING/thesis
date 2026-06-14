@@ -41,17 +41,17 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 - Frontend linting uses ESLint `10.3.0`; plugin versions are governed by the frontend package manifest.
 
-- Active implementation happens in `src/api` and `src/ui`, but those folders are nested repositories ignored by the main thesis repo.
+- Active implementation happens in `src/api` and `src/ui`, and those folders are nested repositories ignored by the main thesis repo. The main repo owns only shared root orchestration files such as `src/docker-compose.yml` and `src/.env.example`.
 
 - Do not downgrade, substitute or opportunistically upgrade Python, Django, DRF, React, Vite, TypeScript, ESLint, PostgreSQL or psycopg without an explicit migration task and validation plan.
 
 ## Repository layout and Git rules
 
-- The main thesis repository tracks thesis prose, planning artifacts, BMAD artifacts and learning documentation. It intentionally ignores `src/`.
+- The main thesis repository tracks thesis prose, planning artifacts, BMAD artifacts, learning documentation and shared root Compose artifacts under `src/`. It intentionally ignores nested app repositories such as `src/api` and `src/ui`.
 
 - `src/api` and `src/ui` are nested Git repositories, not Git submodules. `git submodule status` should be empty. Do not convert them to submodules unless Brandon explicitly asks for that migration.
 
-- Do not add API, UI, virtualenv, node, Compose or app runtime files to the main thesis repo. Development files belong under `src/` and are committed from the relevant nested repository when needed.
+- Do not add API, UI, virtualenv, node or app runtime files to the main thesis repo. Shared root Compose files belong to the main repo; API and UI implementation files are committed from the relevant nested repository when needed.
 
 - Use the main repo for `content/`, `docs/`, `_bmad-output/`, LaTeX tooling and project-understanding docs.
 
@@ -59,13 +59,14 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 - Use `src/docker-compose.yml` for local multi-service orchestration. Run Compose commands from `src/`, for example `cd src && docker compose config`.
 
-- Backend local env template is `src/api/.env.example`; local overrides go in `src/api/.env`. Django reads `src/api/.env`; Docker Compose reads it only when invoked with `--env-file api/.env`.
+- Backend local env template is `src/api/.env.example`; local backend overrides go in `src/api/.env`. Docker Compose override values live in `src/.env.example`; copy it to `src/.env` for local Compose port/proxy overrides.
 
 - The backend Django project package is `opentube_insights_api`. Do not recreate or refer to the old `thesis_api` package name for current implementation work.
 
 - If Brandon asks to create commits, for the commit message follow the "Conventional Commits" convention.
 
-- App development is tracked in Taiga at the user story (US) level. Tasks are not used under user stories, so each US is the smallest trackable work item. When a commit completes a user story, the commit message must include the Taiga integration reference in the format `TG-<ref> #<status-slug>`. For completed stories in this Taiga project, use `TG-<ref> #done`, where `<ref>` is the Taiga reference number of the corresponding user story. This allows the Taiga integration to automatically update the story status.
+- Brandon is using GitFlow, if he asks to create branches the name of the:
+    - feature would be the number of the US (`feature/US-XXX`).
 
 ## Taiga workflow
 
@@ -151,6 +152,45 @@ Use this section before reading the full LaTeX thesis. Only open `content/*.tex`
 - Testing/validation intent: prove individual components with controlled tests, prove the end-to-end workflow from natural-language query to visual output, and validate with synthetic fixtures before relying on live YouTube topics.
 
 ## Critical implementation rules
+
+## Documentation
+
+Whenever new code is generated, it should include documentation when the function, class, module, or component is part of the public interface, contains non-trivial logic, has side effects, or may be reused in other parts of the system.
+
+```py
+"""
+<description>.
+
+Args:
+    <name> (<type>): <description>.
+    .
+    .
+    .
+Returns:
+    <type>: <description>.
+"""
+```
+
+> Kind of a Google Style.
+
+For JavaScript functions:
+
+```js
+/**
+ * <Description>.
+ *
+ * @param {<type>} <name>: <description>.
+ * .
+ * .
+ * .
+ * @returns {<type>}: <description>.
+ * @throws {<type>} <description>.
+ */
+```
+
+Descriptions should start with a lowercase letter unless the first word is a proper noun, acronym, or code identifier.
+
+Documentation should focus on intent, inputs, outputs, side effects, error cases, and any behavior that is not immediately obvious from the code.
 
 ### Language-specific rules
 
