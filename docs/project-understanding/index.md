@@ -14,12 +14,15 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 4. [02 - Docker frontend service](02-docker-frontend-service.md).
 
+5. [03 - Create research project](03-create-research-project.md).
+
 ## Story notes
 
 |                                 file                                 | story  | status |                                                               what it explains                                                                |
 | :------------------------------------------------------------------: | :----: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------: |
 | [01-local-backend-and-database.md](01-local-backend-and-database.md) | US-001 |  Done  | Django backend scaffold, SQLite, PostgreSQL, Docker Compose, migrations, environment config, health checks and the `src/` nested-repo layout. |
 |       [02-docker-frontend-service.md](02-docker-frontend-service.md)       | US-002 |  Done  | Dockerized React/Vite frontend, Compose `ui` service, Vite proxy, frontend health check, and frontend validation commands. |
+|      [03-create-research-project.md](03-create-research-project.md)      | US-004 |  Done  | Research project model, project API, owner fallback, frontend project workspace, and project validation commands.                             |
 
 ## How to use this folder
 

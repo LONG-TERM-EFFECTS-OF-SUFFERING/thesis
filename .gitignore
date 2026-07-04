@@ -37,3 +37,5 @@ _bmad/
 src/*
 !src/docker-compose.yml
 !src/.env.example
+!src/run-local.sh
+!src/README.md

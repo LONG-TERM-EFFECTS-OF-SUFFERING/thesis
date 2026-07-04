@@ -18,6 +18,24 @@ Django is the Python web framework used for the backend. It provides tools for U
 
 Django REST Framework, often shortened to DRF, adds API-focused tools on top of Django. It helps return JSON responses and will later help with serializers and API views.
 
+## Serializer
+
+A serializer converts between Django/Python data and JSON. It also validates incoming JSON before the backend saves it.
+
+In US-004, `ResearchProjectSerializer` makes `id`, owner and timestamp fields read-only so the browser cannot choose them.
+
+## Model
+
+A model is a Python class that describes a database table. Django uses models to create queries, validate field types and generate migrations.
+
+In US-004, `ResearchProject` maps to the `research_projects` table.
+
+## Constraint
+
+A constraint is a database-level rule. It protects important conditions even if a bug bypasses higher-level validation.
+
+In US-004, constraints prevent duplicate project names for the same owner and reject unsupported project statuses.
+
 ## Docker
 
 Docker runs software inside containers. A container is like a small isolated environment with everything the service needs.
@@ -76,6 +94,12 @@ A migration is Django's way of applying database structure changes.
 
 Even before custom models exist, Django has built-in migrations for users, sessions, admin tables and permissions.
 
+## UUID
+
+A UUID is a long unique identifier, such as `00000000-0000-0000-0000-000000000000`.
+
+Research projects use UUIDs as public record identifiers instead of simple increasing numbers.
+
 ## Nested repository
 
 A nested repository is a Git repository inside another repository's working folder.
@@ -93,6 +117,14 @@ This project is not using submodules for `src/api` or `src/ui`. They are nested 
 PostgreSQL is the main relational database used for reproducible thesis validation. It is the database target for Docker Compose.
 
 SQLite can be useful for quick local development, but PostgreSQL is the database that matters for story validation.
+
+## Research project
+
+A research project is the workspace for one study topic. Saved queries, collection runs and later results will belong to a project so data remains organized by research context.
+
+## Fallback owner
+
+The fallback owner is a local development user used before sign-in exists. Unauthenticated project API requests use `OPENTUBE_DEFAULT_OWNER_USERNAME`, defaulting to `local-researcher`.
 
 ## `python-dotenv`
 

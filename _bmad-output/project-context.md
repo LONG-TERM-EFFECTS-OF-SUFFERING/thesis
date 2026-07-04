@@ -45,6 +45,28 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 - Do not downgrade, substitute or opportunistically upgrade Python, Django, DRF, React, Vite, TypeScript, ESLint, PostgreSQL or psycopg without an explicit migration task and validation plan.
 
+## Library and dependency policy
+
+- Libraries are welcome when they clearly accelerate a real current feature, reduce implementation risk, or provide well-tested behavior that would be wasteful to rebuild.
+
+- Do not add a library just because it is popular, familiar, or might be useful later. Speculative dependencies should wait until the app has the repeated need.
+
+- Prefer this order: existing project code, platform/browser features, React/Vite/TypeScript basics, already-installed dependencies, then a new library.
+
+- Before adding a new dependency, document the concrete problem it solves, why local code would be worse, any trade-offs such as bundle size, licensing, maintenance, styling constraints, or API lock-in.
+
+- For UI work, keep plain React and CSS until component repetition or accessibility complexity makes a library cheaper. Add UI libraries component-by-component when possible instead of adopting a large design system by default.
+
+- For domain-heavy features such as charts, tables, server-state caching, validation, dates, or accessible primitives, prefer proven libraries over custom implementations when the feature is non-trivial.
+
+## Subrepo documentation independence
+
+- Documentation inside `src/api` and `src/ui` must treat that folder as the repository root.
+
+- Do not write subrepo README paths from the main thesis repository perspective. For example, in `src/api/README.md`, use `.env`, `.env.example`, `manage.py` and `db.sqlite3`, not `src/api/.env` or `src/api/manage.py`.
+
+- Main-repo paths such as `src/api`, `src/ui` and `src/docker-compose.yml` belong in thesis-level docs, BMAD artifacts and `docs/project-understanding/`, not inside subrepo-local setup instructions.
+
 ## Repository layout and Git rules
 
 - The main thesis repository tracks thesis prose, planning artifacts, BMAD artifacts, learning documentation and shared root Compose artifacts under `src/`. It intentionally ignores nested app repositories such as `src/api` and `src/ui`.
@@ -149,7 +171,7 @@ Use this section before reading the full LaTeX thesis. Only open `content/*.tex`
 
 - Reproducibility rule: API-dependent collection is a constrained observation of YouTube, not a stable complete representation. Preserve raw payloads, original YouTube IDs, effective query parameters, model metadata, processing summaries and collection timestamps so another reviewer can reconstruct what happened.
 
-- Testing/validation intent: prove individual components with controlled tests, prove the end-to-end workflow from natural-language query to visual output, and validate with synthetic fixtures before relying on live YouTube topics.
+- Testing/validation intent: prove individual components with controlled tests, prove the end-to-end workflow from natural-language query to visual output and validate with synthetic fixtures before relying on live YouTube topics.
 
 ## Critical implementation rules
 
@@ -190,7 +212,7 @@ For JavaScript functions:
 
 Descriptions should start with a lowercase letter unless the first word is a proper noun, acronym, or code identifier.
 
-Documentation should focus on intent, inputs, outputs, side effects, error cases, and any behavior that is not immediately obvious from the code.
+Documentation should focus on intent, inputs, outputs, side effects, error cases and any behavior that is not immediately obvious from the code.
 
 ### Language-specific rules
 

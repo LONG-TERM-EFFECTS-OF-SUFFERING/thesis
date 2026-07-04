@@ -164,6 +164,29 @@ curl "http://127.0.0.1:${UI_HOST_PORT:-5173}/api/health/"
 
 Asks the backend health endpoint through the Vite frontend proxy.
 
+## Project API
+
+```bash
+curl -sS -X POST "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Cali polarization study","description":"Local thesis test","default_language":"es"}'
+```
+
+Creates a research project for the current effective owner. During local unauthenticated development, that owner defaults to `local-researcher`.
+
+```bash
+curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/"
+```
+
+Lists research projects visible to the current effective owner.
+
+```bash
+cd src/api
+python manage.py makemigrations --check --dry-run
+```
+
+Checks whether Django model changes are already represented by migration files.
+
 ## Frontend Commands
 
 Run these from `src/ui`.

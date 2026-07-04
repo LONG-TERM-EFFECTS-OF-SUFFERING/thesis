@@ -1,5 +1,5 @@
 # generated: 2026-06-01
-# last_updated: 2026-06-07
+# last_updated: 2026-06-29
 # project: thesis
 # project_key: NOKEY
 # tracking_system: file-system
@@ -30,7 +30,7 @@
 # - sprints mirrors docs/sprint_planning.md so sprint membership is visible in one file.
 
 generated: 2026-06-01
-last_updated: 2026-06-07
+last_updated: 2026-06-29
 project: thesis
 project_key: NOKEY
 tracking_system: file-system
@@ -42,8 +42,8 @@ development_status:
   1-2-docker-frontend-service: done
   1-3-nginx-and-gunicorn-ready-local-wiring: backlog
   epic-1-retrospective: optional
-  epic-2: backlog
-  2-1-create-research-project: backlog
+  epic-2: in-progress
+  2-1-create-research-project: done
   2-2-save-youtube-search-query: backlog
   epic-2-retrospective: optional
   epic-3: backlog
@@ -124,6 +124,7 @@ story_catalog:
     priority: must
     points: 7
     title: Create research project
+    story_file: _bmad-output/implementation-artifacts/2-1-create-research-project.md
   2-2-save-youtube-search-query:
     us_id: US-005
     epic: EPIC-002
