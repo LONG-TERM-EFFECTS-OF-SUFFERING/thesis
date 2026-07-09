@@ -180,6 +180,22 @@ curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/"
 
 Lists research projects visible to the current effective owner.
 
+Replace `<project-id>` with an `id` from the project create or list response.
+
+```bash
+curl -sS -X POST "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/queries/" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Cali mobility videos","search_term":"movilidad Cali","max_videos_to_discover":250,"structured_query_params":{"part":"snippet","type":"video","q":"movilidad Cali"}}'
+```
+
+Creates a saved YouTube search query inside one research project.
+
+```bash
+curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/queries/"
+```
+
+Lists saved queries for one research project and effective owner.
+
 ```bash
 cd src/api
 python manage.py makemigrations --check --dry-run

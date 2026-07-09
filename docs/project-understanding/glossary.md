@@ -122,6 +122,10 @@ SQLite can be useful for quick local development, but PostgreSQL is the database
 
 A research project is the workspace for one study topic. Saved queries, collection runs and later results will belong to a project so data remains organized by research context.
 
+## Saved query
+
+A saved query is reusable YouTube search criteria stored inside a research project. It records the search term, optional filters and structured parameters before any collection run is started.
+
 ## Fallback owner
 
 The fallback owner is a local development user used before sign-in exists. Unauthenticated project API requests use `OPENTUBE_DEFAULT_OWNER_USERNAME`, defaulting to `local-researcher`.
