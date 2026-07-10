@@ -53,6 +53,19 @@ docker compose up --build -d
 Builds and starts the containers in the background. The `-d` means detached mode.
 
 ```bash
+WEB_HOST_PORT=8081 docker compose up --build
+```
+
+Starts the stack with the Nginx front door exposed on host port `8081` for this one command. Use this when something else is already using port `8080`.
+
+```bash
+curl "http://127.0.0.1:8081/"
+curl "http://127.0.0.1:8081/api/health/"
+```
+
+Checks the Nginx front door using the same temporary port override.
+
+```bash
 API_HOST_PORT=8001 docker compose up --build
 ```
 
@@ -74,15 +87,22 @@ Starts the stack with PostgreSQL exposed on host port `5433` for this one comman
 docker compose ps
 ```
 
-Shows whether the `api`, `db` and `ui` services are running and which ports are exposed.
+Shows whether the `api`, `db`, `ui` and `web` services are running and which ports are exposed.
 
 ```bash
+docker compose logs web
 docker compose logs ui
 docker compose logs api
 docker compose logs db
 ```
 
-Shows logs for the frontend, backend or database container.
+Shows logs for the Nginx front door, frontend, backend or database container.
+
+```bash
+docker compose exec api gunicorn --check-config -c gunicorn.conf.py opentube_insights_api.wsgi:application
+```
+
+Checks the Gunicorn configuration inside the API container.
 
 ```bash
 docker compose exec api python manage.py migrate
@@ -97,10 +117,10 @@ docker compose exec api python manage.py check
 Runs Django's system checks inside the API container.
 
 ```bash
-docker compose exec api python manage.py test core
+docker compose exec -e OPENTUBE_ALLOW_ORCHESTRATION_TEST_SKIP=1 api python manage.py test core
 ```
 
-Runs the backend tests inside the API container.
+Runs the backend tests inside the API container. The environment flag makes the root-orchestration-file checks skip explicitly because the API image intentionally contains only backend files.
 
 ```bash
 docker compose exec api python manage.py showmigrations
@@ -150,7 +170,7 @@ Stops containers and deletes the PostgreSQL data volume. Use this only when you 
 curl "http://127.0.0.1:${API_HOST_PORT:-8000}/api/health/"
 ```
 
-Asks the backend health endpoint if the API is running.
+Asks the backend health endpoint directly if the API is running.
 
 Expected response:
 
@@ -159,10 +179,22 @@ Expected response:
 ```
 
 ```bash
+curl "http://127.0.0.1:${WEB_HOST_PORT:-8080}/api/health/"
+```
+
+Asks the backend health endpoint through the Nginx front door.
+
+```bash
 curl "http://127.0.0.1:${UI_HOST_PORT:-5173}/api/health/"
 ```
 
 Asks the backend health endpoint through the Vite frontend proxy.
+
+```bash
+curl "http://127.0.0.1:${WEB_HOST_PORT:-8080}/"
+```
+
+Asks Nginx for the browser-facing frontend page.
 
 ## Project API
 

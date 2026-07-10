@@ -35,7 +35,11 @@ _bmad/
 
 # Development
 src/*
+!src/playground
 !src/docker-compose.yml
 !src/.env.example
 !src/run-local.sh
 !src/README.md
+!src/nginx/
+!src/nginx/default.conf
+
