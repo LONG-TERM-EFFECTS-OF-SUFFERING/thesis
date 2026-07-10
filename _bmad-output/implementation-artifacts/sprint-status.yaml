@@ -1,5 +1,5 @@
 # generated: 2026-06-01
-# last_updated: 2026-07-06
+# last_updated: 2026-07-09
 # project: thesis
 # project_key: NOKEY
 # tracking_system: file-system
@@ -30,7 +30,7 @@
 # - sprints mirrors docs/sprint_planning.md so sprint membership is visible in one file.
 
 generated: 2026-06-01
-last_updated: 2026-07-06
+last_updated: 2026-07-09
 project: thesis
 project_key: NOKEY
 tracking_system: file-system
@@ -40,7 +40,7 @@ development_status:
   epic-1: in-progress
   1-1-docker-backend-and-database-services: done
   1-2-docker-frontend-service: done
-  1-3-nginx-and-gunicorn-ready-local-wiring: backlog
+  1-3-nginx-and-gunicorn-ready-local-wiring: done
   epic-1-retrospective: optional
   epic-2: in-progress
   2-1-create-research-project: done
@@ -117,6 +117,7 @@ story_catalog:
     priority: must
     points: 6
     title: Nginx and Gunicorn-ready local wiring
+    story_file: _bmad-output/implementation-artifacts/1-3-nginx-and-gunicorn-ready-local-wiring.md
   2-1-create-research-project:
     us_id: US-004
     epic: EPIC-002
