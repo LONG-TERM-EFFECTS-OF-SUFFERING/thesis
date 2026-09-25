@@ -32,6 +32,7 @@
 _bmad/
 .agents/
 .codex/
+.claude
 
 # Development
 src/*
@@ -42,4 +43,3 @@ src/*
 !src/README.md
 !src/nginx/
 !src/nginx/default.conf
-

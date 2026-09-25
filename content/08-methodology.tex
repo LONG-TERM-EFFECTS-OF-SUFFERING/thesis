@@ -8,11 +8,11 @@ The choice of Scrum is motivated by two primary factors: its \textbf{flexibility
 
 \subsection{Product backlog}
 
-The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \parencite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements and improvements for the web application. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
+The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \autocite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements and improvements for the web application. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
 
 \subsection{Sprint backlog}
 
-Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items and an actionable plan for delivering an increment \parencite{schwaber2020scrum}, the \textbf{sprint backlog} will serve as the operational plan for each development iteration. For this individual project, sprints will be two weeks periods during which specific functionality will be developed and integrated into the application.
+Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items and an actionable plan for delivering an increment \autocite{schwaber2020scrum}, the \textbf{sprint backlog} will serve as the operational plan for each development iteration. For this individual project, sprints will be two weeks periods during which specific functionality will be developed and integrated into the application.
 
 \section{Scrum events adapted for this project}
 
@@ -20,13 +20,13 @@ While Scrum events are designed for team collaboration, certain events will be a
 
 \subsection{Sprint planning}
 
-At the beginning of each sprint, sprint planning will determine what can be delivered in the upcoming sprint and how that work will be achieved \parencite{schwaber2020scrum}. This will involve selecting \textbf{product backlog} items and defining a clear \textbf{sprint goal}.
+At the beginning of each sprint, sprint planning will determine what can be delivered in the upcoming sprint and how that work will be achieved \autocite{schwaber2020scrum}. This will involve selecting \textbf{product backlog} items and defining a clear \textbf{sprint goal}.
 
 \subsection{Sprint retrospective}
 
-The sprint Retrospective provides an opportunity to plan ways to increase quality and effectiveness \parencite{schwaber2020scrum}. For this individual project, retrospectives will be conducted at the end of each sprint to reflect on what went well, what challenges were encountered and what adjustments should be made for subsequent sprints. This practice supports continuous improvement and systematic documentation of the development process.
+The sprint Retrospective provides an opportunity to plan ways to increase quality and effectiveness \autocite{schwaber2020scrum}. For this individual project, retrospectives will be conducted at the end of each sprint to reflect on what went well, what challenges were encountered and what adjustments should be made for subsequent sprints. This practice supports continuous improvement and systematic documentation of the development process.
 
-Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner} and \textbf{developers} \parencite{schwaber2020scrum}, this project adapts its core principles to the context of individual thesis development. The emphasis remains on the empirical pillars of \textbf{transparency}, \textbf{inspection} and \textbf{adaptation} \parencite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
+Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner} and \textbf{developers} \autocite{schwaber2020scrum}, this project adapts its core principles to the context of individual thesis development. The emphasis remains on the empirical pillars of \textbf{transparency}, \textbf{inspection} and \textbf{adaptation} \autocite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
 
 \section{Activities to be carried out}
 
@@ -70,7 +70,7 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
     \end{tabularx}
 \end{table}
 
-\subsection{Specific objective 3~\ref{obj:implement_processing_and_visualization}}
+\subsection{Specific objective 3~\ref{obj:implement_processing_analysis_and_visualization}}
 
 \begin{table}[H]
     \centering
@@ -80,15 +80,16 @@ Although Scrum is traditionally conceived as a framework for teams, with defined
     \begin{tabularx}
         {\textwidth}{>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{4cm}X}
         \toprule
-        \textbf{ID}          & \textbf{Activity}                                                                                                                         & \textbf{Expected result}                                                                                             \\
+        \textbf{ID}          & \textbf{Activity}                                                                                                                                                                                                  & \textbf{Expected result}                                                                                             \\
         \midrule
-        \label{act:3.1} A3.1 & Implement the data processing pipeline for cleaning, normalizing and structuring raw API responses.                                       & Source code for the processing pipeline with data transformation, validation and schema mapping functionality.       \\
+        \label{act:3.1} A3.1 & Implement the data processing pipeline for cleaning, normalizing and structuring raw API responses.                                                                                                                & Source code for the processing pipeline with data transformation, validation and schema mapping functionality.       \\
         \midrule
-        \label{act:3.2} A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies and associated metadata.                      & Database implementation with tables, relationships and indexes following the designed schema.                        \\
+        \label{act:3.2} A3.2 & Implement the database layer with the designed schema for storing videos, comments, replies and associated metadata.                                                                                               & Database implementation with tables, relationships and indexes following the designed schema.                        \\
         \midrule
-        \label{act:3.3} A3.3 & Implement data visualization components to present key metrics and insights from processed YouTube data through charts and summary views. & Source code for visualization components that render processed metrics and support interpretation of collected data. \\
+        \label{act:3.3} A3.3 & Implement the analysis component that computes descriptive metrics and applies a pre-trained sentiment classification model to the collected comments, storing model name, version and confidence for each result. & Source code for the analysis component with metric computation, sentiment classification and per-run model metadata. \\
+        \label{act:3.4} A3.4 & Implement data visualization components to present key metrics and insights from processed YouTube data through charts and summary views.                                                                          & Source code for visualization components that render processed metrics and support interpretation of collected data. \\
         \midrule
-        \label{act:3.4} A3.4 & Implement user project management functionality allowing users to create, save and manage multiple data collection projects.              & Source code for project management features including CRUD operations for user projects and saved queries.           \\
+        \label{act:3.5} A3.5 & Implement user project management functionality allowing users to create, save and manage multiple data collection projects.                                                                                       & Source code for project management features including CRUD operations for user projects and saved queries.           \\
         \bottomrule
     \end{tabularx}
 \end{table}
