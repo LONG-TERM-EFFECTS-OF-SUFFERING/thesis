@@ -7,7 +7,7 @@ $pdflatex = 'pdflatex -shell-escape -halt-on-error -file-line-error '
           . '-interaction=nonstopmode %O %S';
 
 $bibtex_use = 2;
-$biber = 'biber --validate-datamodel %O %S';
+$biber = 'biber %O %S';
 
 $clean_ext = '_minted-%R nav snm vrb run.xml bbl bcf';
 
