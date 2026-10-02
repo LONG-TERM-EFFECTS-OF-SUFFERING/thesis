@@ -1,5 +1,5 @@
 # generated: 2026-06-01
-# last_updated: 2026-07-09
+# last_updated: 2026-08-05
 # project: thesis
 # project_key: NOKEY
 # tracking_system: file-system
@@ -30,7 +30,7 @@
 # - sprints mirrors docs/sprint_planning.md so sprint membership is visible in one file.
 
 generated: 2026-06-01
-last_updated: 2026-07-09
+last_updated: 2026-08-05
 project: thesis
 project_key: NOKEY
 tracking_system: file-system
@@ -46,8 +46,8 @@ development_status:
   2-1-create-research-project: done
   2-2-save-youtube-search-query: done
   epic-2-retrospective: optional
-  epic-3: backlog
-  3-1-generate-draft-youtube-api-parameters-from-natural-language: backlog
+  epic-3: in-progress
+  3-1-generate-draft-youtube-api-parameters-from-natural-language: done
   3-2-validate-generated-youtube-api-parameters: backlog
   3-3-build-editable-query-parameter-review-screen: backlog
   3-4-save-approved-parameters-with-validation-feedback: backlog
@@ -141,6 +141,7 @@ story_catalog:
     priority: must
     points: 9
     title: Generate draft YouTube API parameters from natural language
+    story_file: _bmad-output/implementation-artifacts/3-1-generate-draft-youtube-api-parameters-from-natural-language.md
   3-2-validate-generated-youtube-api-parameters:
     us_id: US-007
     epic: EPIC-003

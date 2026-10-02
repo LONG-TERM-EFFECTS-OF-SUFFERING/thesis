@@ -1,58 +1,40 @@
 #!/usr/bin/env python3
 """
-Interactive playground for the methods listed in 09_1_2-YouTube_Data_API_review.
+Interactive playground for YouTube Data API v3 using DIRECT HTTP REQUESTS.
+No Google client libraries (google-api-python-client, google-auth) are used,
+aligning strictly with the thesis architecture specification.
 
-Covered methods:
-- search.list
-- videos.list
-- commentThreads.list
-- comments.list
-- channels.list
-- playlistItems.list
+Covered methods & endpoints:
+* search.list          -> GET https://www.googleapis.com/youtube/v3/search
+* videos.list          -> GET https://www.googleapis.com/youtube/v3/videos
+* commentThreads.list  -> GET https://www.googleapis.com/youtube/v3/commentThreads
+* comments.list        -> GET https://www.googleapis.com/youtube/v3/comments
+* channels.list        -> GET https://www.googleapis.com/youtube/v3/channels
+* playlistItems.list   -> GET https://www.googleapis.com/youtube/v3/playlistItems
 
-Auth:
-- Public data: API key
-- Private 'mine=True' calls: OAuth 2.0 (optional)
+Authentication options:
+* Public data: API key passed as query parameter (?key=...)
+* OAuth 2.0: Bearer token passed in HTTP Authorization header (Bearer <token>)
 
 Environment variables:
-- YOUTUBE_API_KEY
-- YOUTUBE_CLIENT_SECRET_FILE
-- YOUTUBE_TOKEN_FILE (optional, default: token.json)
-
-Install:
-    pip install -r requirements_youtube_playground.txt
-
-Run:
-    python youtube_data_api_playground.py
-    python youtube_data_api_playground.py --api-key YOUR_KEY
-    python youtube_data_api_playground.py --client-secret client_secret.json
+* YOUTUBE_API_KEY
+* YOUTUBE_ACCESS_TOKEN (optional OAuth 2.0 bearer token)
 """
 
 from __future__ import annotations
-
 import argparse
 import json
 import os
 import sys
+import urllib.parse
+import urllib.request
+import urllib.error
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-
-try:
-    from google.auth.transport.requests import Request
-    from google.oauth2.credentials import Credentials
-    from google_auth_oauthlib.flow import InstalledAppFlow
-except ImportError:
-    Request = None
-    Credentials = None
-    InstalledAppFlow = None
-
-
-SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
+BASE_URL = "https://www.googleapis.com/youtube/v3"
 OUTPUT_DIR = Path("playground_outputs")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
@@ -63,6 +45,15 @@ QUOTA_COSTS = {
     "comments.list": 1,
     "channels.list": 1,
     "playlistItems.list": 1,
+}
+
+ENDPOINT_PATHS = {
+    "search.list": "/search",
+    "videos.list": "/videos",
+    "commentThreads.list": "/commentThreads",
+    "comments.list": "/comments",
+    "channels.list": "/channels",
+    "playlistItems.list": "/playlistItems",
 }
 
 DEFAULT_FIELDS = {
@@ -105,84 +96,62 @@ DEFAULT_FIELDS = {
 @dataclass
 class AppConfig:
     api_key: Optional[str]
-    client_secret_file: Optional[str]
-    token_file: str
+    access_token: Optional[str]
 
 
-class ServiceFactory:
+class DirectHttpClient:
+    """Handles raw HTTP requests to YouTube Data API v3 endpoints without external libraries."""
+
     def __init__(self, config: AppConfig) -> None:
         self.config = config
-        self._api_key_service = None
-        self._oauth_service = None
 
-    def public_service(self):
-        if self._api_key_service is not None:
-            return self._api_key_service
+    def get(self, endpoint_name: str, params: Dict[str, Any], require_oauth: bool = False) -> Dict[str, Any]:
+        path = ENDPOINT_PATHS.get(endpoint_name)
+        if not path:
+            raise ValueError(f"Unknown endpoint method: {endpoint_name}")
 
-        if self.config.api_key:
-            self._api_key_service = build(
-                "youtube",
-                "v3",
-                developerKey=self.config.api_key,
-                cache_discovery=False,
-            )
-            return self._api_key_service
+        query_params = {k: str(v) for k, v in params.items() if v not in (None, "")}
 
-        if self.config.client_secret_file:
-            print("No API key found. Falling back to OAuth 2.0.")
-            return self.oauth_service()
+        headers = {
+            "Accept": "application/json",
+            "User-Agent": "OpenTube-Playground/1.0 (Direct HTTP Client)",
+        }
 
-        raise RuntimeError(
-            "No credentials available. Set YOUTUBE_API_KEY or provide --api-key."
-        )
-
-    def oauth_service(self):
-        if self._oauth_service is not None:
-            return self._oauth_service
-
-        if not self.config.client_secret_file:
-            raise RuntimeError(
-                "OAuth client secret file not configured. Set YOUTUBE_CLIENT_SECRET_FILE or use --client-secret."
-            )
-
-        if InstalledAppFlow is None or Credentials is None or Request is None:
-            raise RuntimeError(
-                "OAuth dependencies are missing. Install google-auth-oauthlib and google-auth-httplib2."
-            )
-
-        creds = None
-        token_path = Path(self.config.token_file)
-
-        if token_path.exists():
-            creds = Credentials.from_authorized_user_file(str(token_path), SCOPES)
-
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    self.config.client_secret_file,
-                    SCOPES,
+        # Handle Auth
+        if require_oauth or self.config.access_token:
+            if not self.config.access_token:
+                raise RuntimeError(
+                    "OAuth access token required for this call. "
+                    "Set YOUTUBE_ACCESS_TOKEN or pass --access-token."
                 )
-                creds = flow.run_local_server(port=0)
-            token_path.write_text(creds.to_json(), encoding="utf-8")
+            headers["Authorization"] = f"Bearer {self.config.access_token}"
+        elif self.config.api_key:
+            query_params["key"] = self.config.api_key
+        else:
+            raise RuntimeError(
+                "No credentials available. Provide an API key (--api-key / YOUTUBE_API_KEY) "
+                "or an OAuth Access Token (--access-token / YOUTUBE_ACCESS_TOKEN)."
+            )
 
-        self._oauth_service = build(
-            "youtube",
-            "v3",
-            credentials=creds,
-            cache_discovery=False,
-        )
-        return self._oauth_service
+        full_url = f"{BASE_URL}{path}?{urllib.parse.urlencode(query_params)}"
+        req = urllib.request.Request(full_url, headers=headers, method="GET")
 
-    def close(self) -> None:
-        for service in (self._api_key_service, self._oauth_service):
-            if service is not None and hasattr(service, "close"):
-                service.close()
+        try:
+            with urllib.request.urlopen(req) as resp:
+                body = resp.read().decode("utf-8")
+                return json.loads(body)
+        except urllib.error.HTTPError as err:
+            error_body = err.read().decode("utf-8")
+            try:
+                parsed_error = json.loads(error_body)
+                raise RuntimeError(f"HTTP {err.code}: {json.dumps(parsed_error, indent=2)}")
+            except json.JSONDecodeError:
+                raise RuntimeError(f"HTTP {err.code}: {error_body}")
+        except urllib.error.URLError as err:
+            raise RuntimeError(f"Network error: {err.reason}")
 
 
-# ---------- Input helpers ----------
-
+### ---------- Input helpers ----------
 def ask_str(label: str, default: Optional[str] = None, required: bool = False) -> Optional[str]:
     while True:
         suffix = f" [{default}]" if default not in (None, "") else ""
@@ -196,7 +165,6 @@ def ask_str(label: str, default: Optional[str] = None, required: bool = False) -
         print("This value is required.")
 
 
-
 def ask_int(label: str, default: Optional[int] = None, required: bool = False) -> Optional[int]:
     while True:
         raw = ask_str(label, str(default) if default is not None else None, required=required)
@@ -206,7 +174,6 @@ def ask_int(label: str, default: Optional[int] = None, required: bool = False) -
             return int(raw)
         except ValueError:
             print("Please enter an integer.")
-
 
 
 def ask_choice(label: str, options: Dict[str, str], default_key: str) -> str:
@@ -221,41 +188,32 @@ def ask_choice(label: str, options: Dict[str, str], default_key: str) -> str:
         print("Invalid choice.")
 
 
-
-def ask_yes_no(label: str, default: bool = False) -> bool:
-    default_text = "Y/n" if default else "y/N"
-    value = input(f"{label} [{default_text}]: ").strip().lower()
-    if not value:
-        return default
-    return value in {"y", "yes"}
-
-
-
 def parse_csv_ids(raw: str) -> str:
     parts = [part.strip() for part in raw.split(",") if part.strip()]
     return ",".join(parts)
 
 
-# ---------- Output helpers ----------
-
+### ---------- Output helpers ----------
 def timestamp_utc() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
-
 def save_response(method_name: str, request_params: Dict[str, Any], response: Dict[str, Any]) -> Path:
+    # Sanitized request params (redact raw API key for privacy/reproducibility)
+    sanitized_params = {k: ("***" if k == "key" else v) for k, v in request_params.items()}
+
     payload = {
         "capturedAtUtc": datetime.now(timezone.utc).isoformat(),
         "method": method_name,
+        "endpoint": f"{BASE_URL}{ENDPOINT_PATHS[method_name]}",
         "estimatedQuotaCost": QUOTA_COSTS.get(method_name),
-        "request": request_params,
+        "request": sanitized_params,
         "response": response,
     }
     filename = f"{timestamp_utc()}_{method_name.replace('.', '_')}.json"
     path = OUTPUT_DIR / filename
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     return path
-
 
 
 def print_response_summary(response: Dict[str, Any]) -> None:
@@ -269,36 +227,31 @@ def print_response_summary(response: Dict[str, Any]) -> None:
         print(f"nextPageToken: {response['nextPageToken']}")
 
 
-
-def execute_request(method_name: str, request_params: Dict[str, Any], request) -> None:
+def execute_request(client: DirectHttpClient, method_name: str, params: Dict[str, Any], require_oauth: bool = False) -> None:
+    path = ENDPOINT_PATHS[method_name]
+    full_url = f"{BASE_URL}{path}"
     print("\n" + "=" * 80)
-    print(f"Method: {method_name}")
+    print(f"Method: {method_name} ({full_url})")
     print(f"Estimated quota cost: {QUOTA_COSTS.get(method_name, 'unknown')} unit(s)")
     print("Request parameters:")
-    print(json.dumps(request_params, indent=2, ensure_ascii=False))
+    print(json.dumps(params, indent=2, ensure_ascii=False))
     print("-" * 80)
+
     try:
-        response = request.execute()
+        response = client.get(method_name, params, require_oauth=require_oauth)
         print_response_summary(response)
         print(json.dumps(response, indent=2, ensure_ascii=False))
-        saved_path = save_response(method_name, request_params, response)
-        print(f"\nSaved response to: {saved_path}")
-    except HttpError as exc:
-        print("HTTP error while calling the API.")
-        try:
-            error_payload = json.loads(exc.content.decode("utf-8"))
-            print(json.dumps(error_payload, indent=2, ensure_ascii=False))
-        except Exception:
-            print(str(exc))
+        saved_path = save_response(method_name, params, response)
+        print(f"\nSaved raw HTTP response payload to: {saved_path}")
+    except RuntimeError as exc:
+        print(f"Error executing API request:\n{exc}")
     except Exception as exc:
         print(f"Unexpected error: {exc}")
     print("=" * 80 + "\n")
 
 
-# ---------- Playground actions ----------
-
-def run_search_list(factory: ServiceFactory) -> None:
-    service = factory.public_service()
+### ---------- Playground actions ----------
+def run_search_list(client: DirectHttpClient) -> None:
     q = ask_str("Search query (q)", required=True)
     type_value = ask_str("type", default="video")
     order = ask_str("order", default="relevance")
@@ -319,15 +272,10 @@ def run_search_list(factory: ServiceFactory) -> None:
         "pageToken": page_token,
         "fields": fields,
     }
-    params = {k: v for k, v in params.items() if v not in (None, "")}
-
-    request = service.search().list(**params)
-    execute_request("search.list", params, request)
+    execute_request(client, "search.list", params)
 
 
-
-def run_videos_list(factory: ServiceFactory) -> None:
-    service = factory.public_service()
+def run_videos_list(client: DirectHttpClient) -> None:
     ids = parse_csv_ids(ask_str("Video ID(s), comma-separated", required=True) or "")
     part = ask_str("part", default="snippet,statistics,contentDetails")
     fields = ask_str("fields (optional)", default=DEFAULT_FIELDS["videos.list"])
@@ -337,15 +285,10 @@ def run_videos_list(factory: ServiceFactory) -> None:
         "id": ids,
         "fields": fields,
     }
-    params = {k: v for k, v in params.items() if v not in (None, "")}
-
-    request = service.videos().list(**params)
-    execute_request("videos.list", params, request)
+    execute_request(client, "videos.list", params)
 
 
-
-def run_comment_threads_list(factory: ServiceFactory) -> None:
-    service = factory.public_service()
+def run_comment_threads_list(client: DirectHttpClient) -> None:
     filter_choice = ask_choice(
         "Choose the required filter for commentThreads.list",
         {
@@ -383,15 +326,10 @@ def run_comment_threads_list(factory: ServiceFactory) -> None:
         params["maxResults"] = ask_int("maxResults", default=20)
         params["pageToken"] = ask_str("pageToken (optional)")
 
-    params = {k: v for k, v in params.items() if v not in (None, "")}
-
-    request = service.commentThreads().list(**params)
-    execute_request("commentThreads.list", params, request)
+    execute_request(client, "commentThreads.list", params)
 
 
-
-def run_comments_list(factory: ServiceFactory) -> None:
-    service = factory.public_service()
+def run_comments_list(client: DirectHttpClient) -> None:
     filter_choice = ask_choice(
         "Choose the required filter for comments.list",
         {
@@ -423,22 +361,18 @@ def run_comments_list(factory: ServiceFactory) -> None:
         params["maxResults"] = ask_int("maxResults", default=20)
         params["pageToken"] = ask_str("pageToken (optional)")
 
-    params = {k: v for k, v in params.items() if v not in (None, "")}
-
-    request = service.comments().list(**params)
-    execute_request("comments.list", params, request)
+    execute_request(client, "comments.list", params)
 
 
-
-def run_channels_list(factory: ServiceFactory) -> None:
-    oauth_ready = bool(factory.config.client_secret_file)
+def run_channels_list(client: DirectHttpClient) -> None:
+    oauth_ready = bool(client.config.access_token)
     choices = {
         "1": "id",
         "2": "forHandle",
         "3": "forUsername",
     }
     if oauth_ready:
-        choices["4"] = "mine (OAuth 2.0 required)"
+        choices["4"] = "mine (OAuth 2.0 Access Token required)"
 
     filter_choice = ask_choice(
         "Choose the required filter for channels.list",
@@ -446,13 +380,12 @@ def run_channels_list(factory: ServiceFactory) -> None:
         default_key="1",
     )
 
-    service = factory.oauth_service() if filter_choice == "4" else factory.public_service()
-
     params: Dict[str, Any] = {
         "part": ask_str("part", default="snippet,statistics,contentDetails"),
         "fields": ask_str("fields (optional)", default=DEFAULT_FIELDS["channels.list"]),
     }
 
+    require_oauth = False
     if filter_choice == "1":
         params["id"] = parse_csv_ids(ask_str("Channel ID(s), comma-separated", required=True) or "")
     elif filter_choice == "2":
@@ -460,17 +393,13 @@ def run_channels_list(factory: ServiceFactory) -> None:
     elif filter_choice == "3":
         params["forUsername"] = ask_str("forUsername", required=True)
     else:
-        params["mine"] = True
+        params["mine"] = "true"
+        require_oauth = True
 
-    params = {k: v for k, v in params.items() if v not in (None, "")}
-
-    request = service.channels().list(**params)
-    execute_request("channels.list", params, request)
+    execute_request(client, "channels.list", params, require_oauth=require_oauth)
 
 
-
-def run_playlist_items_list(factory: ServiceFactory) -> None:
-    service = factory.public_service()
+def run_playlist_items_list(client: DirectHttpClient) -> None:
     filter_choice = ask_choice(
         "Choose the required filter for playlistItems.list",
         {
@@ -492,122 +421,110 @@ def run_playlist_items_list(factory: ServiceFactory) -> None:
     else:
         params["id"] = parse_csv_ids(ask_str("Playlist item ID(s), comma-separated", required=True) or "")
 
-    params = {k: v for k, v in params.items() if v not in (None, "")}
-
-    request = service.playlistItems().list(**params)
-    execute_request("playlistItems.list", params, request)
+    execute_request(client, "playlistItems.list", params)
 
 
-
-def run_my_uploads(factory: ServiceFactory) -> None:
-    service = factory.oauth_service()
+def run_my_uploads(client: DirectHttpClient) -> None:
+    if not client.config.access_token:
+        print("\n[Error] My Uploads flow requires an OAuth access token.")
+        print("Please provide --access-token or set YOUTUBE_ACCESS_TOKEN.\n")
+        return
 
     channels_params = {
         "part": "contentDetails,snippet",
-        "mine": True,
+        "mine": "true",
         "fields": "items(id,snippet/title,contentDetails/relatedPlaylists/uploads)",
     }
-    channels_request = service.channels().list(**channels_params)
-    print("\nRetrieving the authenticated user's uploads playlist via channels.list(mine=True)...")
-    response = channels_request.execute()
-    saved_path = save_response("channels.list", channels_params, response)
-    print(json.dumps(response, indent=2, ensure_ascii=False))
-    print(f"Saved response to: {saved_path}")
+    print("\nRetrieving authenticated user's channel info via GET /channels?mine=true ...")
+    try:
+        response = client.get("channels.list", channels_params, require_oauth=True)
+        save_response("channels.list", channels_params, response)
+        print(json.dumps(response, indent=2, ensure_ascii=False))
 
-    items = response.get("items", [])
-    if not items:
-        print("No channel found for the authenticated user.")
-        return
+        items = response.get("items", [])
+        if not items:
+            print("No channel found for authenticated user.")
+            return
 
-    uploads_playlist_id = (
-        items[0]
-        .get("contentDetails", {})
-        .get("relatedPlaylists", {})
-        .get("uploads")
-    )
-    if not uploads_playlist_id:
-        print("Could not find the uploads playlist ID in the channel resource.")
-        return
+        uploads_playlist_id = (
+            items[0]
+            .get("contentDetails", {})
+            .get("relatedPlaylists", {})
+            .get("uploads")
+        )
+        if not uploads_playlist_id:
+            print("Could not find uploads playlist ID.")
+            return
 
-    print(f"\nUploads playlist ID: {uploads_playlist_id}")
-    playlist_params = {
-        "part": "snippet,contentDetails",
-        "playlistId": uploads_playlist_id,
-        "maxResults": ask_int("maxResults for uploads playlist", default=10),
-        "fields": DEFAULT_FIELDS["playlistItems.list"],
-    }
-    request = service.playlistItems().list(**playlist_params)
-    execute_request("playlistItems.list", playlist_params, request)
-
+        print(f"\nUploads playlist ID: {uploads_playlist_id}")
+        playlist_params = {
+            "part": "snippet,contentDetails",
+            "playlistId": uploads_playlist_id,
+            "maxResults": ask_int("maxResults for uploads playlist", default=10),
+            "fields": DEFAULT_FIELDS["playlistItems.list"],
+        }
+        execute_request(client, "playlistItems.list", playlist_params, require_oauth=True)
+    except Exception as exc:
+        print(f"Error executing My Uploads flow: {exc}")
 
 
 def show_help_notes() -> None:
     print(
         """
-Notes:
-- search.list is expensive compared with the other read methods.
-- commentThreads.list requires exactly one filter: videoId, id, or allThreadsRelatedToChannelId.
-- comments.list requires exactly one filter: id or parentId.
-- Use part to choose top-level sections and fields to reduce nested output.
-- For text analysis, plainText is usually easier than html in comment endpoints.
-- Every additional page request consumes quota again.
-- All responses are saved in ./playground_outputs with UTC timestamps.
+Notes on Direct HTTP API Integration (Thesis Compliance):
+*  This playground uses direct HTTP requests (urllib) without google-api-python-client.
+*  Request URLs, parameters, headers, and raw JSON payloads are explicitly exposed and logged.
+*  search.list costs 100 quota units; other read endpoints cost 1 unit per request.
+*  commentThreads.list requires one filter: videoId, id, or allThreadsRelatedToChannelId.
+*  comments.list requires one filter: id or parentId.
+*  Use part for required sections and fields to minimize payload size and processing overhead.
+*  All response payloads are logged to ./playground_outputs with ISO/UTC timestamps.
 """.strip()
     )
 
 
 MENU = {
-    "1": ("search.list", run_search_list),
-    "2": ("videos.list", run_videos_list),
-    "3": ("commentThreads.list", run_comment_threads_list),
-    "4": ("comments.list", run_comments_list),
-    "5": ("channels.list", run_channels_list),
-    "6": ("playlistItems.list", run_playlist_items_list),
-    "7": ("My uploads flow (channels.list -> playlistItems.list via OAuth)", run_my_uploads),
-    "8": ("Show notes and parameter tips", lambda factory: show_help_notes()),
+    "1": ("search.list (GET /search)", run_search_list),
+    "2": ("videos.list (GET /videos)", run_videos_list),
+    "3": ("commentThreads.list (GET /commentThreads)", run_comment_threads_list),
+    "4": ("comments.list (GET /comments)", run_comments_list),
+    "5": ("channels.list (GET /channels)", run_channels_list),
+    "6": ("playlistItems.list (GET /playlistItems)", run_playlist_items_list),
+    "7": ("My uploads flow (GET /channels?mine=true -> GET /playlistItems)", run_my_uploads),
+    "8": ("Show architectural notes & parameter tips", lambda client: show_help_notes()),
     "9": ("Exit", None),
 }
 
 
-
 def parse_args() -> AppConfig:
-    parser = argparse.ArgumentParser(description="YouTube Data API v3 playground")
-    parser.add_argument("--api-key", default=os.getenv("YOUTUBE_API_KEY"))
-    parser.add_argument(
-        "--client-secret",
-        default=os.getenv("YOUTUBE_CLIENT_SECRET_FILE"),
-        help="Path to OAuth client secret JSON for installed apps",
+    parser = argparse.ArgumentParser(
+        description="YouTube Data API v3 Playground (Direct HTTP / No Google Client Library)"
     )
+    parser.add_argument("--api-key", default=os.getenv("YOUTUBE_API_KEY"), help="YouTube API key")
     parser.add_argument(
-        "--token-file",
-        default=os.getenv("YOUTUBE_TOKEN_FILE", "token.json"),
-        help="Where the OAuth token should be stored",
+        "--access-token",
+        default=os.getenv("YOUTUBE_ACCESS_TOKEN"),
+        help="OAuth 2.0 Access Token for authenticated endpoints (e.g. mine=true)",
     )
     args = parser.parse_args()
-    return AppConfig(
-        api_key=args.api_key,
-        client_secret_file=args.client_secret,
-        token_file=args.token_file,
-    )
-
+    return AppConfig(api_key=args.api_key, access_token=args.access_token)
 
 
 def print_banner(config: AppConfig) -> None:
     print("=" * 80)
-    print("YouTube Data API v3 Playground")
-    print("Official client: google-api-python-client")
-    print("Covered methods: search.list, videos.list, commentThreads.list, comments.list,")
-    print("                 channels.list, playlistItems.list")
-    print("Credentials detected:")
-    print(f"- API key: {'yes' if bool(config.api_key) else 'no'}")
-    print(f"- OAuth client secret: {'yes' if bool(config.client_secret_file) else 'no'}")
+    print("YouTube Data API v3 Playground (Direct HTTP Implementation)")
+    print("Architecture: Direct REST HTTP requests via standard library (urllib.request)")
+    print("Zero dependency on google-api-python-client or Google Auth SDKs")
+    print("-" * 80)
+    print("Credentials status:")
+    print(f"- API key: {'CONFIGURED' if bool(config.api_key) else 'NOT SET'}")
+    print(f"- OAuth Access Token: {'CONFIGURED' if bool(config.access_token) else 'NOT SET'}")
     print("=" * 80)
-
 
 
 def main() -> int:
     config = parse_args()
-    factory = ServiceFactory(config)
+    client = DirectHttpClient(config)
     print_banner(config)
 
     try:
@@ -623,17 +540,12 @@ def main() -> int:
             if not action:
                 print("Invalid choice.")
                 continue
-            try:
-                handler = action[1]
-                if handler is not None:
-                    handler(factory)
-            except RuntimeError as exc:
-                print(f"Configuration error: {exc}")
+            handler = action[1]
+            if handler is not None:
+                handler(client)
     except KeyboardInterrupt:
         print("\nInterrupted by user.")
         return 130
-    finally:
-        factory.close()
 
 
 if __name__ == "__main__":
