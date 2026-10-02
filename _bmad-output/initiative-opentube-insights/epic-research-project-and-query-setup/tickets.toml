@@ -1,0 +1,29 @@
+# tickets.toml — epic-research-project-and-query-setup
+# Table order is the build order, taken from the v6 story numbering.
+# Every `after` is empty: v6 declared no story prerequisites. Declare them with bmad-ticket.
+
+[[entry]]
+id = 1
+type = "story"
+title = "Create research project"
+description = "As a researcher, I want to create a research project so that I can organize a YouTube study by topic. A project has owner, name, description, status, default language, created date and updated date."
+verify = "A project has owner, name, description, status, default language, created date and updated date."
+covers = ["US-004"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "2-1-create-research-project"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Save YouTube search query"
+description = "As a researcher, I want to save a YouTube search query so that I can reuse and audit my collection criteria. A saved query belongs to one project and stores the natural language prompt, structured parameters, filters and source."
+verify = "A saved query belongs to one project and stores the natural language prompt, structured parameters, filters and source."
+covers = ["US-005"]
+after = []
+hitl = false
+risk = "low"
+estimate = 8
+v6_key = "2-2-save-youtube-search-query"

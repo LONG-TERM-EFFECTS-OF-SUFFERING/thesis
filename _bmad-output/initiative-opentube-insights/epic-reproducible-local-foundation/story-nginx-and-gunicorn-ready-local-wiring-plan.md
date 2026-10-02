@@ -1,10 +1,12 @@
 ---
-baseline_commit: 6764bd4c047329756dbd42efa78a4dc7ce34085b
+ticket: 3
+type: feature
+status: done
+baseline_revision: 6764bd4c047329756dbd42efa78a4dc7ce34085b
+migrated_from: v6 story file
 ---
 
 # Story 1.3: Nginx and Gunicorn-ready Local Wiring
-
-Status: done
 
 <!-- Ultimate context engine analysis completed - comprehensive developer guide created. -->
 

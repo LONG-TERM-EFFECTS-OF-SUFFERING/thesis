@@ -1,6 +1,12 @@
-# Story 1.1: Docker Backend and Database Services
+---
+ticket: 1
+type: feature
+status: done
+# baseline_revision: absent from the v6 record; not inferred from HEAD
+migrated_from: v6 story file
+---
 
-Status: done
+# Story 1.1: Docker Backend and Database Services
 
 <!-- Ultimate context engine analysis completed - comprehensive developer guide created. -->
 

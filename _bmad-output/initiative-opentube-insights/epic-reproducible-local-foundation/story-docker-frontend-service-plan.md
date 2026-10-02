@@ -1,6 +1,12 @@
-# Story 1.2: Docker Frontend Service
+---
+ticket: 2
+type: feature
+status: done
+# baseline_revision: absent from the v6 record; not inferred from HEAD
+migrated_from: v6 story file
+---
 
-Status: done
+# Story 1.2: Docker Frontend Service
 
 <!-- Ultimate context engine analysis completed - comprehensive developer guide created. -->
 

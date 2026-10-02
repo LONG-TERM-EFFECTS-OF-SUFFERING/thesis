@@ -1,0 +1,42 @@
+# tickets.toml — epic-reproducible-local-foundation
+# Table order is the build order, taken from the v6 story numbering.
+# Every `after` is empty: v6 declared no story prerequisites. Declare them with bmad-ticket.
+
+[[entry]]
+id = 1
+type = "story"
+title = "Docker backend and database services"
+description = "As a researcher-developer, I want the backend and database to run locally with Docker so that the data environment is reproducible on my machine. Docker Compose starts Django/DRF and PostgreSQL; backend environment variables are documented; migrations can run locally."
+verify = "Docker Compose starts Django/DRF and PostgreSQL."
+covers = ["US-001"]
+after = []
+hitl = false
+risk = "low"
+estimate = 5
+v6_key = "1-1-docker-backend-and-database-services"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Docker frontend service"
+description = "As a researcher-developer, I want the frontend to run locally with Docker so that I can use the app without manual frontend setup. Docker Compose starts the React/Vite frontend; frontend can call the backend URL through environment configuration."
+verify = "Docker Compose starts the React/Vite frontend."
+covers = ["US-002"]
+after = []
+hitl = false
+risk = "low"
+estimate = 4
+v6_key = "1-2-docker-frontend-service"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Nginx and Gunicorn-ready local wiring"
+description = "As a researcher-developer, I want local production-style service wiring so that the thesis app is closer to a reproducible deployment. Gunicorn startup is configured; Nginx reverse proxy configuration exists or is clearly documented; minimal setup steps are written."
+verify = "Gunicorn startup is configured."
+covers = ["US-003"]
+after = []
+hitl = false
+risk = "low"
+estimate = 6
+v6_key = "1-3-nginx-and-gunicorn-ready-local-wiring"

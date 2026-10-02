@@ -1,10 +1,12 @@
 ---
-baseline_commit: bfc37c82841658a19d0cf57182fe337079112738
+ticket: 1
+type: feature
+status: done
+baseline_revision: bfc37c82841658a19d0cf57182fe337079112738
+migrated_from: v6 story file
 ---
 
 # Story 3.1: Generate Draft YouTube API Parameters from Natural Language
-
-Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

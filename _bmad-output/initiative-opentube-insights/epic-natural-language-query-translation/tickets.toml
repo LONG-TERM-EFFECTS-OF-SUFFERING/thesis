@@ -1,0 +1,68 @@
+# tickets.toml — epic-natural-language-query-translation
+# Table order is the build order, taken from the v6 story numbering.
+# Every `after` is empty: v6 declared no story prerequisites. Declare them with bmad-ticket.
+
+[[entry]]
+id = 1
+type = "story"
+title = "Generate draft YouTube API parameters from natural language"
+description = "As a researcher, I want the app to draft YouTube API parameters from my natural-language request so that I do not need to know the API syntax. The system converts a natural language request into a draft parameter set for YouTube search."
+verify = "The system converts a natural language request into a draft parameter set for YouTube search."
+covers = ["US-006"]
+after = []
+hitl = false
+risk = "low"
+estimate = 9
+v6_key = "3-1-generate-draft-youtube-api-parameters-from-natural-language"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Validate generated YouTube API parameters"
+description = """
+Generated YouTube API parameters are validated before collection starts, so an invalid request is caught rather than spent against the quota.
+
+One pure backend function validates a structured_query_params object and returns findings; it reports and never mutates. US-008 and US-009 call the same function, against edited values and at save time.
+
+Checks: an allowlist of parameter names, so an edited set cannot smuggle in an unsupported parameter; part == "snippet"; type == "video"; non-empty q; maxResults an int in 0..50 and not a bool; order within the allowed enum; publishedAfter and publishedBefore RFC 3339 with an explicit offset; publishedAfter not later than publishedBefore; regionCode ISO 3166-1 alpha-2 shape; relevanceLanguage ISO 639-1 shape; the required keys part, type, q and maxResults present. Each finding carries a machine-readable parameter and code plus a human-readable message so US-008 can attach it to the right field.
+
+The draft endpoint's response gains a validation array; a clean draft returns []. Findings are informational on a draft and never turn a successful translation into an error. The read-only draft panel shows them in its existing aria-live region.
+
+What US-006 already does and this must not redo: order re-checked against the enum, max_videos_to_discover coerced, maxResults clamped to 50, and region_code / relevance_language dropped when longer than their SavedQuery columns. Those are length guards only; the US-006 review explicitly left format, RFC 3339 parsing and the date-range comparison here.
+
+Stdlib only: re and datetime.fromisoformat. No new dependency.
+"""
+verify = "A valid parameter set returns no findings; one invalid example per rule returns its finding, and the draft endpoint's response carries the validation array."
+covers = ["US-007"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "3-2-validate-generated-youtube-api-parameters"
+folded_from = "archive-v6/3-2-validate-generated-youtube-api-parameters.md"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Build editable query parameter review screen"
+description = "As a researcher, I want to review and edit generated query parameters so that I can trust what data will be collected. The user can inspect generated parameters in a readable form and edit values before saving or running."
+verify = "The user can inspect generated parameters in a readable form and edit values before saving or running."
+covers = ["US-008"]
+after = []
+hitl = false
+risk = "low"
+estimate = 12
+v6_key = "3-3-build-editable-query-parameter-review-screen"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Save approved parameters with validation feedback"
+description = "As a researcher, I want to save only approved and valid query parameters so that my collection criteria are traceable and reliable. The user sees validation errors before saving; approved parameters can be saved as the final query parameters."
+verify = "The user sees validation errors before saving."
+covers = ["US-009"]
+after = []
+hitl = false
+risk = "low"
+estimate = 9
+v6_key = "3-4-save-approved-parameters-with-validation-feedback"

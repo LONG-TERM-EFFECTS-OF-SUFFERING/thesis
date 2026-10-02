@@ -1,10 +1,12 @@
 ---
-baseline_commit: b8afe4db5e99d4be99d5057d432f6b51a4224139
+ticket: 2
+type: feature
+status: done
+baseline_revision: b8afe4db5e99d4be99d5057d432f6b51a4224139
+migrated_from: v6 story file
 ---
 
 # Story 2.2: Save YouTube Search Query
-
-Status: done
 
 ## Story
 
