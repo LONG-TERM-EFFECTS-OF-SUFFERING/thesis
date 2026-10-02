@@ -294,8 +294,8 @@ GPT-5 Codex
 
 ### File List
 
-- `_bmad-output/implementation-artifacts/2-2-save-youtube-search-query.md`
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`
+- `_bmad-output/initiative-opentube-insights/epic-research-project-and-query-setup/story-save-youtube-search-query-plan.md`
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`
 - `src/api/core/admin.py`
 - `src/api/core/models.py`
 - `src/api/core/migrations/0002_savedquery.py`

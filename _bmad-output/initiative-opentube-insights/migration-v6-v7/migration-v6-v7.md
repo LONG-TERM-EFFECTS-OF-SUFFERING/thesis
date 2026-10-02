@@ -1,7 +1,7 @@
 ---
 type: migration
 title: Move v6 planning and implementation artifacts into the v7 initiative layout
-status: approved
+status: done
 created: 2026-10-02
 module: method
 from: '6'
@@ -221,14 +221,20 @@ Filled in after the moves; an item that cannot be checked is recorded as such.
 
 | # | Item | Result |
 | :-: | --- | --- |
-| 1 | Every v6 source file is under an initiative, `backlog/`, `inbox/`, `archive-v6/`, or listed as left in place | _pending_ |
-| 2 | Every created folder holds a same-named main file; no name carries a date or a v6 story/epic number | _pending_ |
-| 3 | Every store-root entry is an `initiative-`/`epic-` folder, `backlog/`, a space, a `<type>-<slug>/`, or a listed remnant | _pending_ |
-| 4 | `tickets.py status <initiative>` exits 0; story counts match the archived tracking sources | _pending_ |
-| 5 | Every story is one entry; every build record one plan or a folded entry plus an archived file | _pending_ |
-| 6 | Every plan has a build type and mapped status; `done` stays `done`; baselines kept or disclosed | _pending_ |
-| 7 | Every epic/entry `covers` id exists in its requirement source; every requirement has an entry | _pending — adapted, see Deviation_ |
-| 8 | Every live path in References and prose links resolves from its new folder | _pending_ |
-| 9 | `config.user.toml` names the active initiative; `ticketing-store-config.toml` exists | _pending_ |
-| 10 | The store is under git as answered; no file tracked by two repositories | _pending_ |
-| 11 | This plan records every question, answer, the backup, and each item's result | _pending_ |
+| 1 | Every v6 source file is under an initiative, `backlog/`, `inbox/`, `archive-v6/`, or listed as left in place | **pass** — all 11 accounted for: 6 plans, 1 folded + archived, `deferred-work.md` in the initiative, `sprint-status.yaml` archived, the memlog in `inbox/archive-v6/`, `project-context.md` listed as left in place |
+| 2 | Every created folder holds a same-named main file; no name carries a date or a v6 story/epic number | **pass** — 8 epic folders and the initiative each hold their same-named file; `inbox/space.md` is its identity file. `archive-v6/3-2-…md` keeps its v6 number, which the archive rules allow (archived files move unchanged), and `migration-v6-v7/` is a named exception |
+| 3 | Every store-root entry is an `initiative-`/`epic-` folder, `backlog/`, a space, a `<type>-<slug>/`, or a listed remnant | **pass** — root holds `initiative-opentube-insights/`, `inbox/` (with `space.md`) and `project-context.md`, the last listed above as left alone |
+| 4 | `tickets.py status <initiative>` exits 0; story counts match the archived tracking sources | **pass** — exit 0. 39 tickets: 6 `done`, 33 `planned`. v6 had 39 stories: 6 `done`, 1 `ready-for-dev`, 32 `backlog`. The `ready-for-dev` one is `planned` because folding it leaves it without a plan, which is the agreed behaviour |
+| 5 | Every story is one entry; every build record one plan or a folded entry plus an archived file | **pass** — 39 entries across 8 `tickets.toml`, 6 plans, 1 folded entry with its archived file. No epic story files were written |
+| 6 | Every plan has a build type and mapped status; `done` stays `done`; baselines kept or disclosed | **pass** — all 6 plans are `type: feature`, `status: done`. Baselines kept for US-003, US-005, US-006; **absent for US-001, US-002, US-004** and recorded as absent rather than inferred from HEAD. The body `Status:` line was removed from each plan so frontmatter is the single source of status |
+| 7 | Every epic/entry `covers` id exists in its requirement source; every requirement has an entry | **pass, adapted** — checked against `docs/product_backlog.md` rather than a PRD coverage map, which this project does not have. 39 backlog `US` ids, 39 entry `covers` ids, each covered exactly once, none unmatched in either direction; every entry's `covers` id appears in its own epic's Requirements; the union of epic `covers` equals the backlog exactly |
+| 8 | Every live path in References and prose links resolves from its new folder | **pass, 3 listed apart** — 21 references to moved files rewritten across 5 plans. Three remaining mentions of `_bmad-output/implementation-artifacts/` are historical prose inside `done` plans describing the v6 folder itself, not links to a file (`story-docker-backend-and-database-services-plan.md` lines 137–138, `story-generate-draft-…-plan.md` line 364). A `done` plan stays as it was written, so they are left intact. No reference in `docs/` or `content/` pointed at any moved file |
+| 9 | `config.user.toml` names the active initiative; `ticketing-store-config.toml` exists | **pass** — `resolve_config.py` returns `core.active_initiative = "initiative-opentube-insights"`; `_bmad/custom/ticketing-store-config.toml` exists as the repo store and `read_toml.py` parses it |
+| 10 | The store is under git as answered; no file tracked by two repositories | **pass** — one repository, as answered. No `git init`, no `git rm --cached`, no `.gitignore` change. `_bmad-output/` stays in the thesis repo history and every move was a `git mv` |
+| 11 | This plan records every question, its answer, the backup, and each item's result | **pass** — this document |
+
+## Outcome
+
+Migration complete. `tickets.py status` exits 0 and `tickets.py next` puts `3.2` (US-007) first in `ready_to_start`.
+
+**The one real weakness:** no entry declares a prerequisite, so `ready_to_start` lists all 33 unstarted stories. v6 recorded no story-level dependencies and the migration forbids inferring them from list order. Until one `bmad-ticket` pass declares them, treat that list as "not blocked by anything *recorded*", not as "genuinely ready".
