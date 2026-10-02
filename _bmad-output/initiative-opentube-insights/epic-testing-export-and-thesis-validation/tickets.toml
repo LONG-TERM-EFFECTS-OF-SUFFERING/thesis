@@ -1,0 +1,120 @@
+# tickets.toml — epic-testing-export-and-thesis-validation
+# Table order is the build order, taken from the v6 story numbering.
+# Every `after` is empty: v6 declared no story prerequisites. Declare them with bmad-ticket.
+
+[[entry]]
+id = 1
+type = "story"
+title = "Export videos, channels and logs as CSV"
+description = "As a researcher, I want to export videos, channels and logs as CSV so that I can cite or continue analysis outside the app. The user can export videos, channels and request logs as CSV files."
+verify = "The user can export videos, channels and request logs as CSV files."
+covers = ["US-031"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "8-1-export-videos-channels-and-logs-as-csv"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Export raw payloads, sentiment and metrics as JSON or CSV"
+description = "As a researcher, I want to export raw payloads, sentiment and metrics so that the research dataset can be preserved and reused. The user can export raw payloads, sentiment results and derived metrics in a documented format."
+verify = "The user can export raw payloads, sentiment results and derived metrics in a documented format."
+covers = ["US-032"]
+after = []
+hitl = false
+risk = "low"
+estimate = 8
+v6_key = "8-2-export-raw-payloads-sentiment-and-metrics-as-json-or-csv"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Add database and model tests"
+description = "As a developer, I want database and model tests so that the thesis can show evidence that stored research data is correct. Tests cover important database models and relationships using controlled data."
+verify = "Tests cover important database models and relationships using controlled data."
+covers = ["US-033"]
+after = []
+hitl = false
+risk = "low"
+estimate = 5
+v6_key = "8-3-add-database-and-model-tests"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Add YouTube collection service tests"
+description = "As a developer, I want YouTube collection service tests so that collection behavior can be verified without depending on live API calls. Tests cover collection behavior, request logging, dedupe and error handling with controlled responses."
+verify = "Tests cover collection behavior, request logging, dedupe and error handling with controlled responses."
+covers = ["US-034"]
+after = []
+hitl = false
+risk = "low"
+estimate = 5
+v6_key = "8-4-add-youtube-collection-service-tests"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Add LLM query translation tests"
+description = "As a developer, I want LLM query translation tests so that generated parameters remain predictable and valid. Tests cover natural language translation, allowed parameters, invalid inputs and deterministic fixture examples."
+verify = "Tests cover natural language translation, allowed parameters, invalid inputs and deterministic fixture examples."
+covers = ["US-035"]
+after = []
+hitl = false
+risk = "low"
+estimate = 6
+v6_key = "8-5-add-llm-query-translation-tests"
+
+[[entry]]
+id = 6
+type = "story"
+title = "Add processing tests"
+description = "As a developer, I want processing tests so that cleaning, normalization and validation can be proven with controlled data. Tests cover processing run creation, normalization, validation counts and error reporting."
+verify = "Tests cover processing run creation, normalization, validation counts and error reporting."
+covers = ["US-036"]
+after = []
+hitl = false
+risk = "low"
+estimate = 5
+v6_key = "8-6-add-processing-tests"
+
+[[entry]]
+id = 7
+type = "story"
+title = "Add presentation smoke tests"
+description = "As a developer, I want presentation smoke tests so that the main user path and result screens can be checked before thesis validation. Tests or smoke checks cover the main user path and key result screens."
+verify = "Tests or smoke checks cover the main user path and key result screens."
+covers = ["US-037"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "8-7-add-presentation-smoke-tests"
+
+[[entry]]
+id = 8
+type = "story"
+title = "Validate the workflow with synthetic fixtures"
+description = "As a developer, I want to validate the complete workflow with synthetic fixtures so that the thesis demo can run without live API risk. A fixture-based path proves query review, collection-like data, processing and visual output without relying on live API availability."
+verify = "A fixture-based path proves query review, collection-like data, processing and visual output without relying on live API availability."
+covers = ["US-038"]
+after = []
+hitl = false
+risk = "low"
+estimate = 8
+v6_key = "8-8-validate-the-workflow-with-synthetic-fixtures"
+
+[[entry]]
+id = 9
+type = "story"
+title = "Validate the workflow with real YouTube topics"
+description = "As a developer, I want to validate the workflow with real YouTube topics so that the thesis demonstrates real collection behavior. A validation run uses one or two real YouTube topics and records input, collection, processing and chart output."
+verify = "A validation run uses one or two real YouTube topics and records input, collection, processing and chart output."
+covers = ["US-039"]
+after = []
+hitl = false
+risk = "low"
+estimate = 8
+v6_key = "8-9-validate-the-workflow-with-real-youtube-topics"

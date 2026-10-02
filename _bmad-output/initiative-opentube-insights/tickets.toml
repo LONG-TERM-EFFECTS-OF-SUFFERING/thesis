@@ -1,0 +1,52 @@
+# tickets.toml — the initiative's epics, in build order.
+# Build order follows the EPIC-00N numbering in docs/product_backlog.md.
+# No epic declares `after`: v6 recorded no cross-epic dependencies and the migration
+# forbids inferring one from list order. Declare them with bmad-ticket.
+
+[[epic]]
+id = 1
+slug = "epic-reproducible-local-foundation"
+title = "The app runs locally in a reproducible environment"
+covers = ["US-001", "US-002", "US-003"]
+
+[[epic]]
+id = 2
+slug = "epic-research-project-and-query-setup"
+title = "Researchers organize studies and save collection criteria"
+covers = ["US-004", "US-005"]
+
+[[epic]]
+id = 3
+slug = "epic-natural-language-query-translation"
+title = "Natural-language requests become valid YouTube API parameters"
+covers = ["US-006", "US-007", "US-008", "US-009"]
+
+[[epic]]
+id = 4
+slug = "epic-traceable-youtube-collection"
+title = "Collection runs and API requests are logged and auditable"
+covers = ["US-010", "US-011", "US-012", "US-013", "US-014", "US-015", "US-016"]
+
+[[epic]]
+id = 5
+slug = "epic-youtube-data-storage-and-processing"
+title = "Collected YouTube data is stored, normalized and validated"
+covers = ["US-017", "US-018", "US-019", "US-020", "US-024"]
+
+[[epic]]
+id = 6
+slug = "epic-results-visualization-and-analysis"
+title = "Researchers read summaries, a chart and filters"
+covers = ["US-027", "US-028", "US-029", "US-030"]
+
+[[epic]]
+id = 7
+slug = "epic-comments-and-sentiment-analysis"
+title = "Comments are collected and scored for sentiment"
+covers = ["US-021", "US-022", "US-023", "US-025", "US-026"]
+
+[[epic]]
+id = 8
+slug = "epic-testing-export-and-thesis-validation"
+title = "Tests, exports and validation evidence support the thesis"
+covers = ["US-031", "US-032", "US-033", "US-034", "US-035", "US-036", "US-037", "US-038", "US-039"]

@@ -1,0 +1,68 @@
+# tickets.toml — epic-comments-and-sentiment-analysis
+# Table order is the build order, taken from the v6 story numbering.
+# Every `after` is empty: v6 declared no story prerequisites. Declare them with bmad-ticket.
+
+[[entry]]
+id = 1
+type = "story"
+title = "Collect top-level comments for selected videos"
+description = "As a researcher, I want to collect top-level comments for selected videos so that I can analyze audience reaction. The app collects top-level comments for selected videos and links comments to videos and collection runs."
+verify = "The app collects top-level comments for selected videos and links comments to videos and collection runs."
+covers = ["US-021"]
+after = []
+hitl = false
+risk = "low"
+estimate = 12
+v6_key = "7-1-collect-top-level-comments-for-selected-videos"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Collect comment replies with pagination and resume handling"
+description = "As a researcher, I want comment replies collected safely across pages so that audience conversations are not lost during collection. The app collects replies, handles pagination and can resume or report partial collection safely."
+verify = "The app collects replies, handles pagination and can resume or report partial collection safely."
+covers = ["US-022"]
+after = []
+hitl = false
+risk = "low"
+estimate = 10
+v6_key = "7-2-collect-comment-replies-with-pagination-and-resume-handling"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Store comment raw payloads, quota and errors"
+description = "As a researcher, I want comment payloads, quota use and errors stored so that comment collection remains reproducible. Comment and reply payloads, quota use and errors are stored for reproducibility."
+verify = "Comment and reply payloads, quota use and errors are stored for reproducibility."
+covers = ["US-023"]
+after = []
+hitl = false
+risk = "low"
+estimate = 9
+v6_key = "7-3-store-comment-raw-payloads-quota-and-errors"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Run one pre-trained sentiment model and store results"
+description = "As a researcher, I want basic sentiment analysis stored for comments so that I can identify broad opinion patterns. Each analyzed comment stores sentiment label, score, confidence, model name, model version and processing run."
+verify = "Each analyzed comment stores sentiment label, score, confidence, model name, model version and processing run."
+covers = ["US-025"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "7-4-run-one-pre-trained-sentiment-model-and-store-results"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Show sentiment labels, scores and model information"
+description = "As a researcher, I want to see sentiment labels with model context so that I can interpret sentiment results responsibly. The UI shows sentiment results clearly, including label, score, confidence and model/version context."
+verify = "The UI shows sentiment results clearly, including label, score, confidence and model/version context."
+covers = ["US-026"]
+after = []
+hitl = false
+risk = "low"
+estimate = 9
+v6_key = "7-5-show-sentiment-labels-scores-and-model-information"

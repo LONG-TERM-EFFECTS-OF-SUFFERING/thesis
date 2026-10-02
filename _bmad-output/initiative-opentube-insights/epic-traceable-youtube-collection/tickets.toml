@@ -1,0 +1,94 @@
+# tickets.toml — epic-traceable-youtube-collection
+# Table order is the build order, taken from the v6 story numbering.
+# Every `after` is empty: v6 declared no story prerequisites. Declare them with bmad-ticket.
+
+[[entry]]
+id = 1
+type = "story"
+title = "Create collection run model and status lifecycle"
+description = "As a researcher, I want each collection attempt to have a recorded run status so that I can trace whether the dataset was collected successfully. A run stores project, query, status, started/finished timestamps and basic lifecycle states."
+verify = "A run stores project, query, status, started/finished timestamps and basic lifecycle states."
+covers = ["US-010"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "4-1-create-collection-run-model-and-status-lifecycle"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Start a collection run from a saved query"
+description = "As a researcher, I want to start a collection run from a saved query so that the dataset is linked to approved criteria. The user can start a run from a saved query; the backend records effective parameters used for the run."
+verify = "The user can start a run from a saved query."
+covers = ["US-011"]
+after = []
+hitl = false
+risk = "low"
+estimate = 9
+v6_key = "4-2-start-a-collection-run-from-a-saved-query"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Store collection run counts, quota, timestamps and errors"
+description = "As a researcher, I want each collection run to record counts, quota, timestamps and errors so that I can explain what happened during collection. A run records item counts, quota units, timestamps and error message when applicable."
+verify = "A run records item counts, quota units, timestamps and error message when applicable."
+covers = ["US-012"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "4-3-store-collection-run-counts-quota-timestamps-and-errors"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Create API request log model and service wrapper"
+description = "As a researcher, I want every YouTube API request to be logged consistently so that another researcher can audit how data was collected. YouTube API calls go through one wrapper that records endpoint, method, params, status, quota cost, timestamps, counts and errors."
+verify = "YouTube API calls go through one wrapper that records endpoint, method, params, status, quota cost, timestamps, counts and errors."
+covers = ["US-013"]
+after = []
+hitl = false
+risk = "low"
+estimate = 5
+v6_key = "4-4-create-api-request-log-model-and-service-wrapper"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Show request logs for each collection run"
+description = "As a researcher, I want to view request logs for a collection run so that I can inspect the evidence behind the collected dataset. A run detail page or section shows the request logs linked to that run in a readable table."
+verify = "A run detail page or section shows the request logs linked to that run in a readable table."
+covers = ["US-014"]
+after = []
+hitl = false
+risk = "low"
+estimate = 9
+v6_key = "4-5-show-request-logs-for-each-collection-run"
+
+[[entry]]
+id = 6
+type = "story"
+title = "Discover videos with YouTube search.list"
+description = "As a researcher, I want the app to discover videos from YouTube search so that I can build a topic dataset. The app calls search.list with documented parameters, stores discovered video IDs and avoids unnecessary repeated calls."
+verify = "The app calls search."
+covers = ["US-015"]
+after = []
+hitl = false
+risk = "low"
+estimate = 10
+v6_key = "4-6-discover-videos-with-youtube-search-list"
+
+[[entry]]
+id = 7
+type = "story"
+title = "Show video discovery summary"
+description = "As a researcher, I want to see a summary of discovered and skipped videos so that I can understand the collection result quickly. The user can see discovered count, duplicate/skipped count and a basic list of discovered video IDs."
+verify = "The user can see discovered count, duplicate/skipped count and a basic list of discovered video IDs."
+covers = ["US-016"]
+after = []
+hitl = false
+risk = "low"
+estimate = 7
+v6_key = "4-7-show-video-discovery-summary"
