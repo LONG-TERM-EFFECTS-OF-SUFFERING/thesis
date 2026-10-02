@@ -22,16 +22,19 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 8. [06 - Generate draft YouTube API parameters](06-generate-draft-youtube-api-parameters.md).
 
+9. [07 - Validate generated YouTube API parameters](07-validate-generated-youtube-api-parameters.md).
+
 ## Story notes
 
-|                                            file                                            | story  | status |                                                               what it explains                                                                |
-| :----------------------------------------------------------------------------------------: | :----: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------: |
-|            [01-local-backend-and-database.md](01-local-backend-and-database.md)            | US-001 |  Done  | Django backend scaffold, SQLite, PostgreSQL, Docker Compose, migrations, environment config, health checks and the `src/` nested-repo layout. |
-|               [02-docker-frontend-service.md](02-docker-frontend-service.md)               | US-002 |  Done  |          Dockerized React/Vite frontend, Compose `ui` service, Vite proxy, frontend health check, and frontend validation commands.           |
-| [05-nginx-and-gunicorn-ready-local-wiring.md](05-nginx-and-gunicorn-ready-local-wiring.md) | US-003 |  Done  |       Gunicorn API startup, Nginx `web` service, front-door routing, Compose variables and production-style local validation commands.        |
-|               [03-create-research-project.md](03-create-research-project.md)               | US-004 |  Done  |               Research project model, project API, owner fallback, frontend project workspace, and project validation commands.               |
-|             [04-save-youtube-search-query.md](04-save-youtube-search-query.md)             | US-005 |  Done  |  Saved-query model, project-scoped query API, owner isolation, manual query form, stale-list protection and saved-query validation commands.  |
-| [06-generate-draft-youtube-api-parameters.md](06-generate-draft-youtube-api-parameters.md) | US-006 |  Done  |     LLM query translation service, strict Structured Outputs schema, draft endpoint error statuses, read-only draft UI and offline tests.     |
+|                                                file                                                | story  | status |                                                                what it explains                                                                |
+| :------------------------------------------------------------------------------------------------: | :----: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------------: |
+|                [01-local-backend-and-database.md](01-local-backend-and-database.md)                | US-001 |  Done  | Django backend scaffold, SQLite, PostgreSQL, Docker Compose, migrations, environment config, health checks and the `src/` nested-repo layout.  |
+|                   [02-docker-frontend-service.md](02-docker-frontend-service.md)                   | US-002 |  Done  |           Dockerized React/Vite frontend, Compose `ui` service, Vite proxy, frontend health check, and frontend validation commands.           |
+|     [05-nginx-and-gunicorn-ready-local-wiring.md](05-nginx-and-gunicorn-ready-local-wiring.md)     | US-003 |  Done  |        Gunicorn API startup, Nginx `web` service, front-door routing, Compose variables and production-style local validation commands.        |
+|                   [03-create-research-project.md](03-create-research-project.md)                   | US-004 |  Done  |               Research project model, project API, owner fallback, frontend project workspace, and project validation commands.                |
+|                 [04-save-youtube-search-query.md](04-save-youtube-search-query.md)                 | US-005 |  Done  |  Saved-query model, project-scoped query API, owner isolation, manual query form, stale-list protection and saved-query validation commands.   |
+|     [06-generate-draft-youtube-api-parameters.md](06-generate-draft-youtube-api-parameters.md)     | US-006 |  Done  |     LLM query translation service, strict Structured Outputs schema, draft endpoint error statuses, read-only draft UI and offline tests.      |
+| [07-validate-generated-youtube-api-parameters.md](07-validate-generated-youtube-api-parameters.md) | US-007 |  Done  | Pure parameter validator, allowlist and YouTube rules, RFC 3339 checks, the draft response's validation array and the read-only findings list. |
 
 ## How to use this folder
 
