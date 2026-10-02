@@ -34,7 +34,8 @@ Stdlib only: re and datetime.fromisoformat. No new dependency.
 """
 verify = "A valid parameter set returns no findings; one invalid example per rule returns its finding, and the draft endpoint's response carries the validation array."
 covers = ["US-007"]
-after = []
+after = [1]
+references = ["_bmad-output/initiative-opentube-insights/archive-v6/3-2-validate-generated-youtube-api-parameters.md"]
 hitl = false
 risk = "low"
 estimate = 7
