@@ -15,6 +15,10 @@ existing_patterns_found: 10
 
 # Project context for AI agents
 
+> **The operative rules live in `AGENTS.md` at the repository root**, inside the `bmad:context` block, and load in every session. This file is the reference material behind them: the thesis brief, the full stack list and its rationale, the dependency reasoning, the Taiga operating detail and the docstring templates. Where the two disagree, `AGENTS.md` wins and this file should be corrected.
+>
+> Moved into `AGENTS.md` on 2026-10-02 and deliberately not repeated here: the nested-repository and thesis-repo tracking rules, secret handling, branch and commit conventions, the test, migration-check, Compose-PostgreSQL and `make check` commands, and the Python/TypeScript conventions that differ from ecosystem defaults.
+
 _This file contains critical rules and patterns that AI agents must follow when implementing code in this project. Focus on unobvious details that agents might otherwise miss._
 
 ---
@@ -69,26 +73,17 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 ## Repository layout and Git rules
 
-- The main thesis repository tracks thesis prose, planning artifacts, BMAD artifacts, learning documentation and shared root Compose artifacts under `src/`. It intentionally ignores nested app repositories such as `src/api` and `src/ui`.
+The policy lines are in `AGENTS.md` (Policy): nested repositories rather than submodules, what the thesis repo may and may not track, branch naming, Conventional Commits and the Taiga reference. What remains here is the detail behind them.
 
 - `src/api` and `src/ui` are nested Git repositories, not Git submodules. `git submodule status` should be empty. Do not convert them to submodules unless Brandon explicitly asks for that migration.
 
-- Do not add API, UI, virtualenv, node or app runtime files to the main thesis repo. Shared root Compose files belong to the main repo; API and UI implementation files are committed from the relevant nested repository when needed.
+- Use the main repo for `content/`, `docs/`, `_bmad-output/`, LaTeX tooling and project-understanding docs. Use `src/api` for backend code and backend Git history, `src/ui` for frontend code and frontend Git history.
 
-- Use the main repo for `content/`, `docs/`, `_bmad-output/`, LaTeX tooling and project-understanding docs.
-
-- Use `src/api` for backend code and backend Git history. Use `src/ui` for frontend code and frontend Git history.
-
-- Use `src/docker-compose.yml` for local multi-service orchestration. Run Compose commands from `src/`, for example `cd src && docker compose config`.
+- Use `src/docker-compose.yml` for local multi-service orchestration, and run Compose commands from `src/`, for example `cd src && docker compose config`.
 
 - Backend local env template is `src/api/.env.example`; local backend overrides go in `src/api/.env`. Docker Compose override values live in `src/.env.example`; copy it to `src/.env` for local Compose port/proxy overrides.
 
 - The backend Django project package is `opentube_insights_api`. Do not recreate or refer to the old `thesis_api` package name for current implementation work.
-
-- If Brandon asks to create commits, for the commit message follow the "Conventional Commits" convention.
-
-- Brandon is using GitFlow, if he asks to create branches the name of the:
-    - feature would be the number of the US (`feature/US-XXX`).
 
 ## Taiga workflow
 
@@ -173,8 +168,6 @@ Use this section before reading the full LaTeX thesis. Only open `content/*.tex`
 
 - Testing/validation intent: prove individual components with controlled tests, prove the end-to-end workflow from natural-language query to visual output and validate with synthetic fixtures before relying on live YouTube topics.
 
-## Critical implementation rules
-
 ## Documentation
 
 Whenever new code is generated, it should include documentation when the function, class, module, or component is part of the public interface, contains non-trivial logic, has side effects, or may be reused in other parts of the system.
@@ -214,11 +207,11 @@ Descriptions should start with a lowercase letter unless the first word is a pro
 
 Documentation should focus on intent, inputs, outputs, side effects, error cases and any behavior that is not immediately obvious from the code.
 
+The one-line form of this convention is in `AGENTS.md`; the templates above are the detail behind it.
+
 ### Language-specific rules
 
-- Python backend files should use `from __future__ import annotations` when adding new modules, matching the current `src/api` pattern.
-
-- Keep Python modules import-safe: no database queries, network calls, file writes, secret generation or environment mutation at import time.
+Eight rules from this section moved into `AGENTS.md` (Policy and Conventions that differ from defaults) and are not repeated here: `from __future__ import annotations`, import-safe modules, secret handling, loud failure for production-required secrets, Compose-PostgreSQL validation, `import type` under `verbatimModuleSyntax`, avoiding `Any` and `any`, and not changing compiler strictness during feature work. What follows is the rest.
 
 - Backend helper functions should have explicit return types, especially settings/env helpers, serializers, services and view utilities.
 
@@ -226,31 +219,19 @@ Documentation should focus on intent, inputs, outputs, side effects, error cases
 
 - Environment helpers should fail clearly for invalid required values, especially database-related configuration.
 
-- Do not hardcode secrets, database credentials, backend URLs or API keys in code; read them from environment variables or centralized config helpers.
-
-- Safe defaults are allowed only for non-secret local development values. Production-required secrets should fail loudly if missing.
-
 - For Django settings, use `pathlib.Path` for filesystem paths and keep database selection environment-driven.
 
 - Django settings must not contain business logic. Keep views thin and move reusable behavior into named helper/service functions that Brandon can trace.
 
-- Django model changes require migrations and must be validated against Docker Compose PostgreSQL; never rely on SQLite-specific behavior for model, query, transaction or constraint logic.
-
 - TypeScript frontend code uses ES modules, React JSX transform and Vite bundler resolution.
 
 - TypeScript config has `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`, `verbatimModuleSyntax`, `moduleDetection: "force"` and `noEmit`; agents must keep code clean enough for `npm run build`.
-
-- With `verbatimModuleSyntax`, use `import type` and `export type` for type-only imports/exports.
 
 - Preserve existing frontend import style in the local file/module; do not broadly introduce extensioned imports unless the local config and surrounding code already support them.
 
 - Prefer named React components with nearby typed props definitions over clever generic component patterns.
 
 - Frontend API calls should centralize base URL/env parsing; do not hardcode backend URLs inside components.
-
-- Avoid Python `Any` and TypeScript `any` unless there is a short justification. Type external API/backend payloads at the boundary and narrow from there.
-
-- Do not change Python or TypeScript compiler/linter strictness as part of feature work unless the story is specifically about tooling migration.
 
 - Prefer explicit, beginner-readable code over clever abstractions in both Python and TypeScript.
 
