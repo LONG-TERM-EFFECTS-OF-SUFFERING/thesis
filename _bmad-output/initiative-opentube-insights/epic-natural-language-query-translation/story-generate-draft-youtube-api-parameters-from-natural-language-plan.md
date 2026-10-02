@@ -427,9 +427,9 @@ Post-review (2026-08-05), after applying all 22 patches:
 
 ### File List
 
-- `_bmad-output/implementation-artifacts/3-1-generate-draft-youtube-api-parameters-from-natural-language.md`
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`
-- `_bmad-output/implementation-artifacts/deferred-work.md`
+- `_bmad-output/initiative-opentube-insights/epic-natural-language-query-translation/story-generate-draft-youtube-api-parameters-from-natural-language-plan.md`
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`
+- `_bmad-output/initiative-opentube-insights/deferred-work.md`
 - `src/.env.example`
 - `docs/project-understanding/06-generate-draft-youtube-api-parameters.md`
 - `docs/project-understanding/index.md`

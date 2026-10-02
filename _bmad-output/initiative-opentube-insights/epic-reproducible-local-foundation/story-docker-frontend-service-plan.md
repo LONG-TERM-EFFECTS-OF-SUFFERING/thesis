@@ -100,8 +100,8 @@ US-002 is part of EPIC-001, "reproducible local foundation." US-001 already esta
 Sources:
 
 - `docs/product_backlog.md`, EPIC-001 and US-002.
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`, `story_catalog.1-2-docker-frontend-service`.
-- `_bmad-output/implementation-artifacts/1-1-docker-backend-and-database-services.md`, previous story file list and completion notes.
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`, `story_catalog.1-2-docker-frontend-service`.
+- `_bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-backend-and-database-services-plan.md`, previous story file list and completion notes.
 
 ### Current Repository State
 
@@ -211,8 +211,8 @@ GPT-5 Codex
 
 - `.gitignore`
 - `_bmad-output/project-context.md`
-- `_bmad-output/implementation-artifacts/1-2-docker-frontend-service.md`
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`
+- `_bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-frontend-service-plan.md`
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`
 - `docs/project-understanding/01-local-backend-and-database.md`
 - `docs/project-understanding/02-docker-frontend-service.md`
 - `docs/project-understanding/commands.md`

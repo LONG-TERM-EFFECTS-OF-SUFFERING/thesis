@@ -112,7 +112,7 @@ Sources:
 
 - `docs/product_backlog.md`, EPIC-001 and US-003.
 - `docs/sprint_planning.md`, Sprint 2.
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`, `story_catalog.1-3-nginx-and-gunicorn-ready-local-wiring`.
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`, `story_catalog.1-3-nginx-and-gunicorn-ready-local-wiring`.
 - `_bmad-output/project-context.md`, thesis stack and repository layout rules.
 
 ### Current Repository State
@@ -144,8 +144,8 @@ Preserve these US-001 and US-002 decisions:
 
 Sources:
 
-- `_bmad-output/implementation-artifacts/1-1-docker-backend-and-database-services.md`.
-- `_bmad-output/implementation-artifacts/1-2-docker-frontend-service.md`.
+- `_bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-backend-and-database-services-plan.md`.
+- `_bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-frontend-service-plan.md`.
 - `docs/project-understanding/01-local-backend-and-database.md`.
 - `docs/project-understanding/02-docker-frontend-service.md`.
 
@@ -230,8 +230,8 @@ If Docker is unavailable or host ports conflict, fix configurable port defaults 
 - [Source: docs/sprint_planning.md#Sprint-planning]
 - [Source: _bmad-output/project-context.md#Technology-stack-and-versions]
 - [Source: _bmad-output/project-context.md#Repository-layout-and-Git-rules]
-- [Source: _bmad-output/implementation-artifacts/1-1-docker-backend-and-database-services.md#Dev-Notes]
-- [Source: _bmad-output/implementation-artifacts/1-2-docker-frontend-service.md#Dev-Notes]
+- [Source: _bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-backend-and-database-services-plan.md#Dev-Notes]
+- [Source: _bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-frontend-service-plan.md#Dev-Notes]
 - [Source: docs/project-understanding/01-local-backend-and-database.md]
 - [Source: docs/project-understanding/02-docker-frontend-service.md]
 - [Source: src/docker-compose.yml]
@@ -300,8 +300,8 @@ GPT-5 Codex
 
 ### File List
 
-- `_bmad-output/implementation-artifacts/1-3-nginx-and-gunicorn-ready-local-wiring.md`
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`
+- `_bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-nginx-and-gunicorn-ready-local-wiring-plan.md`
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`
 - `src/api/core/tests.py`
 - `src/api/gunicorn.conf.py`
 - `src/api/README.md`

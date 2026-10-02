@@ -163,7 +163,7 @@ Sources:
 - `docs/product_backlog.md:27`, US-004.
 - `docs/product_backlog.md:28`, US-005 dependency context.
 - `docs/sprint_planning.md:9`, Sprint 1 goal.
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`, `story_catalog.2-1-create-research-project`.
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`, `story_catalog.2-1-create-research-project`.
 
 ### Current Repository State
 
@@ -347,8 +347,8 @@ US-002 established:
 
 Sources:
 
-- `_bmad-output/implementation-artifacts/1-1-docker-backend-and-database-services.md`.
-- `_bmad-output/implementation-artifacts/1-2-docker-frontend-service.md:127-156`.
+- `_bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-backend-and-database-services-plan.md`.
+- `_bmad-output/initiative-opentube-insights/epic-reproducible-local-foundation/story-docker-frontend-service-plan.md:127-156`.
 
 ### Git Intelligence
 
@@ -502,8 +502,8 @@ GPT-5 Codex
 - `docs/project-understanding/commands.md`
 - `docs/project-understanding/glossary.md`
 - `docs/project-understanding/index.md`
-- `_bmad-output/implementation-artifacts/2-1-create-research-project.md`
-- `_bmad-output/implementation-artifacts/sprint-status.yaml`
+- `_bmad-output/initiative-opentube-insights/epic-research-project-and-query-setup/story-create-research-project-plan.md`
+- `_bmad-output/initiative-opentube-insights/archive-v6/sprint-status.yaml`
 
 ### Change Log
 
