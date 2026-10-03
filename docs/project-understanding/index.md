@@ -24,6 +24,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 9. [07 - Validate generated YouTube API parameters](07-validate-generated-youtube-api-parameters.md).
 
+10. [09 - Save approved parameters with validation feedback](09-save-approved-parameters-with-validation-feedback.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -35,6 +37,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 |                 [04-save-youtube-search-query.md](04-save-youtube-search-query.md)                 | US-005 |  Done  |  Saved-query model, project-scoped query API, owner isolation, manual query form, stale-list protection and saved-query validation commands.   |
 |     [06-generate-draft-youtube-api-parameters.md](06-generate-draft-youtube-api-parameters.md)     | US-006 |  Done  |     LLM query translation service, strict Structured Outputs schema, draft endpoint error statuses, read-only draft UI and offline tests.      |
 | [07-validate-generated-youtube-api-parameters.md](07-validate-generated-youtube-api-parameters.md) | US-007 |  Done  | Pure parameter validator, allowlist and YouTube rules, RFC 3339 checks, the draft response's validation array and the read-only findings list. |
+| [09-save-approved-parameters-with-validation-feedback.md](09-save-approved-parameters-with-validation-feedback.md) | US-009 |  Done  | Save-time validation through the US-007 validator, all-or-nothing draft provenance, server-derived `query_source` and the rejected-save feedback. |
 
 ## How to use this folder
 
