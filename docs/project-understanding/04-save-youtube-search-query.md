@@ -304,7 +304,7 @@ curl -sS -X POST "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-
     "max_videos_to_discover":250,
     "region_code":"CO",
     "relevance_language":"es",
-    "structured_query_params":{"part":"snippet","type":"video","q":"movilidad Cali"},
+    "structured_query_params":{"part":"snippet","type":"video","q":"movilidad Cali","maxResults":50},
     "notes":"Manual seed query for sprint testing."
   }'
 ```
