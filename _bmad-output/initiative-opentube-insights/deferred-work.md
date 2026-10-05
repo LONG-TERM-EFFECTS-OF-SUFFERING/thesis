@@ -17,3 +17,6 @@ Items raised during review that are real but not actionable in the story that su
 - source_plan: `_bmad-output/initiative-opentube-insights/epic-traceable-youtube-collection/story-create-collection-run-model-and-status-lifecycle-plan.md`
   summary: `docs/database_schema.md` `collection_runs` lists `saved_query_id` and `initiated_by_user_id` as `null: NO` though their Django field is `SET_NULL, null=True`.
   evidence: The doc contradicts itself in the same rows; migration `0004_collectionrun` creates both columns nullable. Fix the null column in a thesis docs commit.
+- source_plan: `_bmad-output/initiative-opentube-insights/epic-traceable-youtube-collection/story-start-a-collection-run-from-a-saved-query-plan.md`
+  summary: A Django admin session cookie on the same host makes every UI POST fail with a DRF CSRF 403 and switches the effective owner to the admin user.
+  evidence: `REST_FRAMEWORK` sets no `DEFAULT_AUTHENTICATION_CLASSES`, so DRF's default `SessionAuthentication` runs; cookies ignore ports, so the admin `sessionid` reaches `/api` through the Vite proxy and `startCollectionRun`/`createSavedQuery` send no CSRF token. Settle together with the auth deferral above.
