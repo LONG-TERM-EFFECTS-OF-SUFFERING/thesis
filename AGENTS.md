@@ -12,7 +12,7 @@ Undergraduate thesis: a web application that collects, processes and visualizes 
 - Never hardcode secrets, database credentials, backend URLs or API keys — read them through the env helpers in `src/api/opentube_insights_api/settings.py`.
 - A production-required secret has no default and must fail loudly; safe defaults are for non-secret local values only.
 - Keep thesis prose commits separate from app code commits.
-- Branch `feature/US-XXX` using the backlog id. Conventional Commits. Add `TG-<ref> #done` when a commit completes a user story.
+- Branch `feature/US-XXX` using the backlog id. Conventional Commits. Add `TG-<ref> #done` in the main repository when a commit completes a user story.
 - Taiga is used at user-story level only — never create Taiga tasks under a story.
 
 ## Where things are
