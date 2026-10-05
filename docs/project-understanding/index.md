@@ -28,6 +28,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 11. [09 - Save approved parameters with validation feedback](09-save-approved-parameters-with-validation-feedback.md).
 
+12. [10 - Create collection run model and status lifecycle](10-create-collection-run-model-and-status-lifecycle.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -41,6 +43,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [07-validate-generated-youtube-api-parameters.md](07-validate-generated-youtube-api-parameters.md) | US-007 |  Done  | Pure parameter validator, allowlist and YouTube rules, RFC 3339 checks, the draft response's validation array and the read-only findings list. |
 | [08-build-editable-query-parameter-review-screen.md](08-build-editable-query-parameter-review-screen.md) | US-008 |  Done  | Draft-to-form copy, one form as the review screen, the Order field, UTC/local date round trip and full structured params on save. |
 | [09-save-approved-parameters-with-validation-feedback.md](09-save-approved-parameters-with-validation-feedback.md) | US-009 |  Done  | Save-time validation through the US-007 validator, all-or-nothing draft provenance, server-derived `query_source` and the rejected-save feedback. |
+| [10-create-collection-run-model-and-status-lifecycle.md](10-create-collection-run-model-and-status-lifecycle.md) | US-010 |  Done  | `CollectionRun` model, five-state lifecycle in one `transition_to` method, compare-and-set against stale copies, PostgreSQL check constraints and delete rules. |
 
 ## How to use this folder
 
