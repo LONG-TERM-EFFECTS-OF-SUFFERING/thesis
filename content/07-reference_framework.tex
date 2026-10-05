@@ -9,11 +9,11 @@
 
     \item \textbf{LLM (Large Language Model)}: \enquote{a narrow artificial intelligence (AI) system that has been trained on a massive amount of text data to interpret natural language and generate human-like responses to text-based prompts or questions}. \autocite{almarie2023llm}
 
-    \item \textbf{Computational reproducibility}: \enquote{obtaining consistent results using the same input data, computational methods and conditions of analysis}. \autocite{nasem2019reproducibility} In the context of API-driven platforms, computational reproducibility specifically applies to the data processing and analysis stages given immutable, stored raw payloads.
+    \item \textbf{Computational reproducibility}: \enquote{obtaining consistent results using the same input data, computational methods and conditions of analysis}. \autocite{nasem2019reproducibility} In the context of API-driven platforms, computational reproducibility applies to the data processing and analysis stages while the stored raw payloads exist; in OpenTube, platform terms limit that period to 30 days after collection (Subsection~\ref{subsec:ethics_privacy_and_terms_compliance}).
 
-    \item \textbf{Data provenance (or documented provenance)}: the documented origin, chain of custody, execution context and transformation history of a dataset. In API data collection, provenance requires preserving full request metadata—including query parameters, pagination tokens, execution timestamps and raw JSON responses—to guarantee complete traceability of how data were retrieved.
+    \item \textbf{Data provenance (or documented provenance)}: the documented origin, chain of custody, execution context and transformation history of a dataset. In API data collection, provenance requires recording full request metadata—including query parameters, pagination tokens, execution timestamps and, for as long as platform terms permit, raw JSON responses—so that the way data were retrieved can be traced.
 
-    \item \textbf{Methodological auditability}: the characteristic of a system or study that enables external reviewers to inspect, verify and trace every stage of data collection and processing through accessible logs, immutable raw payloads and documented parameter configurations, even when underlying third-party endpoints exhibit temporal result decay.
+    \item \textbf{Methodological auditability}: the characteristic of a system or study that enables external reviewers to inspect, verify and trace every stage of data collection and processing through accessible logs, raw payloads retained for as long as platform terms permit and documented parameter configurations, even when underlying third-party endpoints exhibit temporal result decay.
 
     \item \textbf{Replicability}: \enquote{an attempt by a second researcher to replicate a previous study is an effort to determine whether applying the same methods to the same scientific question produces similar results}. \autocite{nasem2019reproducibility}
 
@@ -70,21 +70,22 @@ Table~\ref{tab:tool_comparison} summarizes the feature-by-feature comparison bet
     \scriptsize
     \caption{Feature-by-feature comparison of social media collection and analysis tools}
     \label{tab:tool_comparison}
+    % \begin{noindent} keeps latexindent from splitting the \shortstack line break into a new row
     \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X}
         \toprule
         \textbf{Feature / Capability}                           & \textbf{Commercial}    & \textbf{YTDT}                 & \textbf{4CAT}              & \textbf{OpenTube} \\
                                                                 & \shortstack{Talkwalker/\\Meltwater} & \autocite{youtube_data_tools} & \autocite{peeters20224cat} & (This work)       \\
         \midrule
-        Open-source architecture                                & No                     & Yes                           & Yes                        & \textbf{Yes}      \\
         No-cost academic access                                 & No                     & Yes                           & Yes                        & \textbf{Yes}      \\
         NLI parameter mapping (LLM layer)                       & Partial                & No                            & No                         & \textbf{Yes}      \\
         Per-request audit logging (\texttt{api\_request\_logs}) & No                     & No                            & Partial                    & \textbf{Yes}      \\
-        Raw API payload archiving (\texttt{raw\_payload})       & No                     & Partial                       & Yes                        & \textbf{Yes}      \\
+        Raw API payload archiving (\texttt{raw\_payload})       & No                     & Partial                       & Yes                        & \textbf{30 days}  \\
         Built-in sentiment classification pipeline              & Yes                    & No                            & Partial                    & \textbf{Yes}      \\
         Integrated interactive dashboards                       & Yes                    & Minimal                       & Yes                        & \textbf{Yes}      \\
         Spanish \& regional context workflows (e.g., PROMUEVA)  & No                     & No                            & General                    & \textbf{Targeted} \\
         \bottomrule
     \end{tabularx}
+    % \end{noindent}
 \end{table}
 
 \subsection{Key academic studies}
@@ -143,15 +144,17 @@ As a social media research infrastructure, the OpenTube platform operates at the
 
 \paragraph{Compliance with YouTube developer policies}
 
-The YouTube API services terms of service enforce restrictions regarding data storage, caching and retention. Specifically, Clause III.E requires API clients to avoid indefinite caching of API-derived data without periodic data refresh mechanisms or honoring user deletion requests on the platform \autocite{youtube_api_services_developer_policies}. OpenTube reconciles these contractual requirements with academic auditability standards through a three-tiered compliance policy:
+OpenTube requests public YouTube data with an API key and without OAuth user authorization, so every response it receives is \enquote{Non-Authorized Data} under the YouTube API Services Developer Policies. Clause III.E.4.d allows API clients to \enquote{temporarily store limited amounts of Non-Authorized Data for as long as is necessary for the purposes of the API Client but not longer than 30 calendar days}, and clause III.E.4.e requires reasonable efforts to keep stored data consistent with the data currently available through the API \autocite{youtube_api_services_developer_policies}. The policies contain no exemption for academic or non-commercial use. The only research-specific route, the YouTube Researcher Program, keeps the same 30-day refresh obligation and allows a dataset to be fixed at a point in time only to finalize the analysis for a publication \autocite{youtube_researcher_program_terms}. OpenTube therefore applies the following retention policy:
 
 \begin{enumerate}
-    \item \textbf{Restricted academic use}: collected datasets and raw payloads (\texttt{raw\_payload}) remain contained within local, non-commercial research workspaces, preventing public API data redistribution \autocite{docker_overview}.
+    \item \textbf{30-day retention window}: every record that holds YouTube API data (channels, videos, statistics snapshots, comments and replies) carries the timestamp of its last retrieval, and a scheduled purge deletes it 30 days later, together with the sentiment results and derived metrics computed from it.
 
-    \item \textbf{Data refresh and deletion routines}: the system architecture supports periodic verification pipelines that validate whether archived resources remain publicly available on YouTube, marking or purging local records when source content is removed.
+    \item \textbf{Refresh by re-collection}: re-running a saved query retrieves the current platform state and renews the retention window, which also drops content that was deleted on YouTube after the previous run.
 
-    \item \textbf{Provenance archiving for verifiability}: stored raw payloads serve exclusively as historical execution context for computational reproducibility, fulfilling scientific auditability guidelines without functioning as an unauthorized commercial database.
+    \item \textbf{Persistent methodological records}: projects, saved queries, effective parameters, collection run status, quota consumption and request logs describe the collection procedure rather than the platform content. They store no response bodies or YouTube resource identifiers and are kept as the auditable record of how each dataset was obtained.
 \end{enumerate}
+
+% Clause III.E.4.h, which prohibits using API data \enquote{to create new or derived data or metrics}, and clause III.E.2, which restricts aggregating API data across channels, remain in tension with any analytical tool built on the API \autocite{youtube_api_services_developer_policies}. OpenTube limits this exposure by deleting derived records within the same 30-day window, but does not claim to resolve it.
 
 \paragraph{Data privacy and statutory compliance (Ley 1581 de 2012)}
 
@@ -162,7 +165,7 @@ In the Colombian context, personal data handling is governed by Statutory Law 15
 
     \item \textbf{Aggregation at the presentation layer}: all visual dashboards, metrics tables and exportable summary artifacts mask individual user identities, displaying sentiment classifications and engagement figures only in aggregate form.
 
-    \item \textbf{Scientific purpose exemption}: data processing is conducted strictly for public-interest academic research, directly supporting computational social science projects such as PROMUEVA at Universidad del Valle  \autocite{promueva_project}.
+    \item \textbf{Scientific purpose exemption}: data processing is conducted strictly for public-interest academic research, directly supporting computational social science projects such as PROMUEVA at Universidad del Valle \autocite{promueva_project}. This exemption concerns personal data protection under Law 1581 only; it does not exempt OpenTube from the YouTube API Services Developer Policies described above.
 \end{itemize}
 
 \subsection{YouTube Data API limitations and computational reproducibility challenges}
@@ -173,7 +176,7 @@ Beyond the diversity of methodological approaches employed by researchers, the Y
 
 Recent empirical investigations reveal that the API's Search endpoint exhibits significant temporal variability in returned results. \textcite{efstratiou2025youtube} conducted a systematic audit by running identical queries at 5-day intervals over 12 weeks across six diverse topics, finding that Jaccard similarity between video sets declined substantially over time, demonstrating that datasets collected using the exact same historical query may differ vastly based solely on when queries are executed.
 
-In light of the temporal decay demonstrated by \textcite{efstratiou2025youtube}, true end-to-end computational reproducibility—defined as generating identical datasets from live API queries over time—is fundamentally unachievable on dynamic platforms like YouTube. Consequently, this work adopts a two-tiered methodological framework: (1) \textbf{Auditability and Documented Provenance} during data collection, achieved by capturing immutable logs of request parameters, raw payloads, pagination tokens and execution timestamps (\texttt{api\_request\_logs}, \texttt{collection\_runs}); and (2) \textbf{Computational Reproducibility} during analysis, guaranteed by applying deterministic parsing routines and documented sentiment models to the archived raw data. Tools and frameworks that systematically document API dependencies, timestamp data collection and maintain transparent records of all methodological decisions are essential for conducting replicable YouTube research within these known limitations.
+In light of the temporal decay demonstrated by \textcite{efstratiou2025youtube}, true end-to-end computational reproducibility—defined as generating identical datasets from live API queries over time—is fundamentally unachievable on dynamic platforms like YouTube. Consequently, this work adopts a two-tiered methodological framework: (1) \textbf{Auditability and Documented Provenance} during data collection, achieved by permanently logging request parameters, pagination tokens and execution timestamps (\texttt{api\_request\_logs}, \texttt{collection\_runs}) and by retaining raw payloads for the 30 days permitted by the YouTube API Services Developer Policies; and (2) \textbf{Computational Reproducibility} during analysis, obtained by applying deterministic parsing routines and documented sentiment models to the raw data while it is retained. Because a stored dataset cannot outlive that window, the reproducible unit in OpenTube is the documented collection procedure—saved query, effective parameters and request logs—rather than the dataset itself; the temporal decay described above already means that re-running a query yields a different sample, so the procedure is what another researcher can verify. Tools and frameworks that systematically document API dependencies, timestamp data collection and maintain transparent records of all methodological decisions are essential for conducting replicable YouTube research within these known limitations.
 
 \subsection{Scrum}
 
