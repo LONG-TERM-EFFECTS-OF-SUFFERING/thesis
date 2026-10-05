@@ -2,7 +2,7 @@
 type: initiative
 title: "A transparent, reproducible web application for YouTube research data"
 parent: none
-covers: [US-001, US-002, US-003, US-004, US-005, US-006, US-007, US-008, US-009, US-010, US-011, US-012, US-013, US-014, US-015, US-016, US-017, US-018, US-019, US-020, US-021, US-022, US-023, US-024, US-025, US-026, US-027, US-028, US-029, US-030, US-031, US-032, US-033, US-034, US-035, US-036, US-037, US-038, US-039]
+covers: [US-001, US-002, US-003, US-004, US-005, US-006, US-007, US-008, US-009, US-010, US-011, US-012, US-013, US-014, US-015, US-016, US-017, US-018, US-019, US-020, US-021, US-022, US-023, US-024, US-025, US-026, US-027, US-028, US-029, US-030, US-031, US-032, US-033, US-034, US-035, US-036, US-037, US-038, US-039, US-040]
 after: []
 assignee: ""
 status: in-progress
@@ -18,7 +18,7 @@ created: 2026-10-02
 
 A web application that automates collection, processing, analysis and visualization of YouTube video data for academic research. Existing commercial and social-listening tools are proprietary black boxes; researchers studying YouTube need a system that exposes its collection parameters, processing steps, schemas and validation evidence so another reviewer can reconstruct exactly what happened. The motivating case is PROMUEVA at Universidad del Valle, which needs transparent social-media data infrastructure to support computational models of polarization in Valle del Cauca and Cali.
 
-Collection is a constrained observation of YouTube, not a stable complete representation. Raw payloads, original YouTube IDs, effective query parameters, model metadata, processing summaries and collection timestamps are all preserved for that reason.
+Collection is a constrained observation of YouTube, not a stable complete representation. Effective query parameters, model metadata, processing summaries and collection timestamps are preserved for that reason. Raw payloads, original YouTube IDs and every record derived from them are kept for at most 30 days after fetch, as the YouTube API Services Developer Policies require (III.E.4.d); re-running a saved query renews them.
 
 ## Outcome
 
@@ -33,7 +33,7 @@ This initiative deliberately has no PRD and no separate spec: the backlog is the
 ## Done when
 
 1. A natural-language request reaches validated, researcher-approved YouTube API parameters without the researcher writing API syntax (US-006 to US-009).
-2. Every collection run records its effective parameters, request log, quota cost, counts, timestamps and errors, and the raw payloads it stored (US-010 to US-024).
+2. Every collection run records its effective parameters, request log, quota cost, counts, timestamps and errors, and the raw payloads it stored, which are purged 30 days after fetch (US-010 to US-024, US-040).
 3. Comments are collected and scored by one pre-trained sentiment model whose name and version are stored beside every result (US-021 to US-026).
 4. Results are readable as summaries, a sentiment distribution chart and filters, and exportable as CSV and JSON (US-027 to US-032).
 5. The full workflow passes functional and integration tests, proven on synthetic fixtures before real YouTube topics (US-033 to US-039).
@@ -59,6 +59,7 @@ Tracer path: a natural-language prompt becomes a saved query, a collection run d
 
 ## Notes
 
+- Decision: YouTube API data is deleted 30 days after it was fetched, with no academic exemption in the YouTube API Services Developer Policies (III.E.4.d); collection metadata persists and reproducibility means re-running the documented procedure. Added US-040 and reworded the affected stories (2026-10-04).
 - Decision: the requirement ids stay `US-0NN` from `docs/product_backlog.md` rather than minting `FR-N` ids, so the thesis traceability spine survives the v6 to v7 migration (2026-10-02).
 - Decision: `src/api` and `src/ui` stay nested repositories inside this project; no workspace layout (2026-10-02).
 - Open question: no entry declares a prerequisite. v6 recorded no story-level dependencies, and the migration forbids inferring them from list order, so every `after` is empty and `tickets.py next` will report far more as ready to start than really is. One pass of `bmad-ticket` should declare the real prerequisites, starting with epic Natural language query translation, where US-007, US-008 and US-009 all build on US-006.

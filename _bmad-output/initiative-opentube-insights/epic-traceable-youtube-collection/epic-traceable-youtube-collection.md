@@ -28,10 +28,10 @@ Transcribed from `docs/product_backlog.md`, each line keeping its `US-0NN` id so
 - US-010: Create collection run model and status lifecycle — A run stores project, query, status, started/finished timestamps and basic lifecycle states. (docs/product_backlog.md, User stories, priority must)
 - US-011: Start a collection run from a saved query — The user can start a run from a saved query; the backend records effective parameters used for the run. (docs/product_backlog.md, User stories, priority must)
 - US-012: Store collection run counts, quota, timestamps and errors — A run records item counts, quota units, timestamps and error message when applicable. (docs/product_backlog.md, User stories, priority must)
-- US-013: Create API request log model and service wrapper — YouTube API calls go through one wrapper that records endpoint, method, params, status, quota cost, timestamps, counts and errors. (docs/product_backlog.md, User stories, priority must)
+- US-013: Create API request log model and service wrapper — YouTube API calls go through one wrapper that records endpoint, method, params, status, quota cost, timestamps, counts and errors; it stores no response bodies or YouTube resource IDs, so logs outlive the 30-day purge. (docs/product_backlog.md, User stories, priority must)
 - US-014: Show request logs for each collection run — A run detail page or section shows the request logs linked to that run in a readable table. (docs/product_backlog.md, User stories, priority must)
-- US-015: Discover videos with YouTube search.list — The app calls search.list with documented parameters, stores discovered video IDs and avoids unnecessary repeated calls. (docs/product_backlog.md, User stories, priority must)
-- US-016: Show video discovery summary — The user can see discovered count, duplicate/skipped count and a basic list of discovered video IDs. (docs/product_backlog.md, User stories, priority must)
+- US-015: Discover videos with YouTube search.list — The app calls search.list with documented parameters, stores discovered video IDs with their fetch timestamp and avoids unnecessary repeated calls. (docs/product_backlog.md, User stories, priority must)
+- US-016: Show video discovery summary — The user can see discovered count, duplicate/skipped count and a basic list of discovered video IDs; after the run's data is purged, the counts remain with the purge date. (docs/product_backlog.md, User stories, priority must)
 
 ## Done when
 

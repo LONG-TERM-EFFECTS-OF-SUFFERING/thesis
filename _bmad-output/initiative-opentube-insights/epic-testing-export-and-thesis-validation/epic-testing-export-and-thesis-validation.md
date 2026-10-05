@@ -25,15 +25,15 @@ The thesis can demonstrate correctness and reproducibility from recorded evidenc
 
 Transcribed from `docs/product_backlog.md`, each line keeping its `US-0NN` id so entries cite the same ids the thesis uses.
 
-- US-031: Export videos, channels and logs as CSV — The user can export videos, channels and request logs as CSV files. (docs/product_backlog.md, User stories, priority could)
-- US-032: Export raw payloads, sentiment and metrics as JSON or CSV — The user can export raw payloads, sentiment results and derived metrics in a documented format. (docs/product_backlog.md, User stories, priority could)
-- US-033: Add database and model tests — Tests cover important database models and relationships using controlled data. (docs/product_backlog.md, User stories, priority must)
+- US-031: Export videos, channels and logs as CSV — The user can export videos, channels and request logs as CSV files; each export states the collection date and the date its data must be deleted. (docs/product_backlog.md, User stories, priority could)
+- US-032: Export raw payloads, sentiment and metrics as JSON or CSV — The user can export raw payloads, sentiment results and derived metrics in a documented format that states the collection date and the date the data must be deleted. (docs/product_backlog.md, User stories, priority could)
+- US-033: Add database and model tests — Tests cover important database models and relationships using controlled data, including the 30-day purge and its cascade to derived records. (docs/product_backlog.md, User stories, priority must)
 - US-034: Add YouTube collection service tests — Tests cover collection behavior, request logging, dedupe and error handling with controlled responses. (docs/product_backlog.md, User stories, priority must)
 - US-035: Add LLM query translation tests — Tests cover natural language translation, allowed parameters, invalid inputs and deterministic fixture examples. (docs/product_backlog.md, User stories, priority must)
 - US-036: Add processing tests — Tests cover processing run creation, normalization, validation counts and error reporting. (docs/product_backlog.md, User stories, priority must)
 - US-037: Add presentation smoke tests — Tests or smoke checks cover the main user path and key result screens. (docs/product_backlog.md, User stories, priority must)
 - US-038: Validate the workflow with synthetic fixtures — A fixture-based path proves query review, collection-like data, processing and visual output without relying on live API availability. (docs/product_backlog.md, User stories, priority must)
-- US-039: Validate the workflow with real YouTube topics — A validation run uses one or two real YouTube topics and records input, collection, processing and chart output. (docs/product_backlog.md, User stories, priority must)
+- US-039: Validate the workflow with real YouTube topics — A validation run uses one or two real YouTube topics and records input, collection, processing and chart output within one 30-day retention window. (docs/product_backlog.md, User stories, priority must)
 
 ## Done when
 

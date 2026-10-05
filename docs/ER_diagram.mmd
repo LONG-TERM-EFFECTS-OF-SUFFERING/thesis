@@ -1,0 +1,236 @@
+---
+config:
+  layout: dagre
+---
+erDiagram
+    AUTH_USER ||--o{ RESEARCH_PROJECTS : owns
+    AUTH_USER ||--o{ SAVED_QUERIES : creates
+    AUTH_USER |o--o{ COLLECTION_RUNS : initiates
+
+    RESEARCH_PROJECTS ||--o{ SAVED_QUERIES : contains
+    RESEARCH_PROJECTS ||--o{ COLLECTION_RUNS : contains
+    RESEARCH_PROJECTS ||--o{ PROCESSING_RUNS : contains
+
+    SAVED_QUERIES |o--o{ COLLECTION_RUNS : launches
+
+    COLLECTION_RUNS ||--o{ API_REQUEST_LOGS : records
+    COLLECTION_RUNS ||--o{ COLLECTION_RUN_VIDEOS : discovers
+    COLLECTION_RUNS ||--o{ COLLECTION_RUN_COMMENTS : collects
+    COLLECTION_RUNS |o--o{ VIDEO_STATISTICS_SNAPSHOTS : captures
+    COLLECTION_RUNS |o--o{ PROCESSING_RUNS : supplies_input
+
+    YOUTUBE_CHANNELS |o--o{ YOUTUBE_VIDEOS : publishes
+    YOUTUBE_VIDEOS ||--o{ COLLECTION_RUN_VIDEOS : appears_in
+    YOUTUBE_VIDEOS ||--o{ VIDEO_STATISTICS_SNAPSHOTS : has
+    YOUTUBE_VIDEOS ||--o{ YOUTUBE_COMMENTS : has
+
+    YOUTUBE_COMMENTS |o--o{ YOUTUBE_COMMENTS : parent_of
+    YOUTUBE_COMMENTS ||--o{ COLLECTION_RUN_COMMENTS : appears_in
+    YOUTUBE_COMMENTS ||--o{ COMMENT_SENTIMENTS : analyzed_as
+
+    PROCESSING_RUNS ||--o{ COMMENT_SENTIMENTS : produces
+    PROCESSING_RUNS ||--o{ DERIVED_METRICS : produces
+
+    AUTH_USER {
+        INTEGER id PK
+        VARCHAR username UK
+        VARCHAR email
+        VARCHAR first_name
+        VARCHAR last_name
+        BOOLEAN is_active
+        TIMESTAMPTZ date_joined
+    }
+
+    RESEARCH_PROJECTS {
+        UUID id PK
+        INTEGER owner_user_id FK
+        VARCHAR name
+        TEXT description
+        VARCHAR status
+        VARCHAR default_language
+        TIMESTAMPTZ created_at
+        TIMESTAMPTZ updated_at
+    }
+
+    SAVED_QUERIES {
+        UUID id PK
+        UUID project_id FK
+        INTEGER created_by_user_id FK
+        VARCHAR name
+        TEXT natural_language_prompt
+        VARCHAR query_source
+        TEXT search_term
+        TIMESTAMPTZ published_after
+        TIMESTAMPTZ published_before
+        INTEGER max_videos_to_discover
+        VARCHAR region_code
+        VARCHAR relevance_language
+        JSONB structured_query_params
+        VARCHAR llm_model_name
+        VARCHAR llm_prompt_version
+        DECIMAL translation_confidence
+        TEXT notes
+        TIMESTAMPTZ created_at
+        TIMESTAMPTZ updated_at
+    }
+
+    COLLECTION_RUNS {
+        UUID id PK
+        UUID project_id FK
+        UUID saved_query_id FK
+        INTEGER initiated_by_user_id FK
+        VARCHAR status
+        INTEGER requested_comment_limit
+        TIMESTAMPTZ started_at
+        TIMESTAMPTZ finished_at
+        INTEGER total_api_requests
+        INTEGER total_quota_units
+        INTEGER total_videos_discovered
+        INTEGER total_videos_collected
+        INTEGER total_comments_collected
+        INTEGER total_replies_collected
+        TEXT error_message
+        TIMESTAMPTZ data_purged_at
+        TIMESTAMPTZ created_at
+    }
+
+    API_REQUEST_LOGS {
+        UUID id PK
+        UUID collection_run_id FK
+        INTEGER request_sequence
+        VARCHAR endpoint_name
+        JSONB request_params
+        TEXT part_param
+        TEXT fields_param
+        VARCHAR page_token_sent
+        VARCHAR next_page_token_received
+        INTEGER response_http_status
+        INTEGER quota_cost
+        INTEGER items_returned
+        TIMESTAMPTZ started_at
+        TIMESTAMPTZ finished_at
+        TEXT error_message
+    }
+
+    YOUTUBE_CHANNELS {
+        UUID id PK
+        VARCHAR youtube_channel_id UK
+        TEXT title
+        TEXT description
+        VARCHAR country_code
+        TIMESTAMPTZ youtube_published_at
+        BIGINT subscriber_count
+        BIGINT video_count
+        BIGINT view_count
+        TIMESTAMPTZ last_fetched_at
+        JSONB raw_payload
+        TIMESTAMPTZ created_at
+        TIMESTAMPTZ updated_at
+    }
+
+    YOUTUBE_VIDEOS {
+        UUID id PK
+        VARCHAR youtube_video_id UK
+        UUID channel_id FK
+        TEXT title
+        TEXT description
+        TIMESTAMPTZ youtube_published_at
+        VARCHAR duration_iso8601
+        VARCHAR resolution
+        VARCHAR caption_status
+        VARCHAR default_language
+        VARCHAR default_audio_language
+        VARCHAR category_id
+        JSONB tags
+        VARCHAR live_broadcast_content
+        TIMESTAMPTZ last_fetched_at
+        JSONB raw_payload
+        TIMESTAMPTZ created_at
+        TIMESTAMPTZ updated_at
+    }
+
+    COLLECTION_RUN_VIDEOS {
+        UUID id PK
+        UUID collection_run_id FK
+        UUID video_id FK
+        INTEGER page_number
+        TIMESTAMPTZ discovered_at
+    }
+
+    VIDEO_STATISTICS_SNAPSHOTS {
+        UUID id PK
+        UUID video_id FK
+        UUID collection_run_id FK
+        BIGINT view_count
+        BIGINT like_count
+        BIGINT comment_count
+        TIMESTAMPTZ captured_at
+        JSONB raw_statistics
+    }
+
+    YOUTUBE_COMMENTS {
+        UUID id PK
+        VARCHAR youtube_comment_id UK
+        UUID video_id FK
+        UUID parent_comment_id FK
+        VARCHAR author_channel_id
+        TEXT text_display
+        TEXT text_original
+        BIGINT like_count
+        INTEGER total_reply_count
+        VARCHAR comment_level
+        TIMESTAMPTZ youtube_published_at
+        TIMESTAMPTZ youtube_updated_at
+        TIMESTAMPTZ first_collected_at
+        TIMESTAMPTZ last_fetched_at
+        JSONB raw_payload
+        TIMESTAMPTZ created_at
+        TIMESTAMPTZ updated_at
+    }
+
+    COLLECTION_RUN_COMMENTS {
+        UUID id PK
+        UUID collection_run_id FK
+        UUID comment_id FK
+        INTEGER page_number
+        INTEGER thread_position
+        TIMESTAMPTZ discovered_at
+    }
+
+    PROCESSING_RUNS {
+        UUID id PK
+        UUID project_id FK
+        UUID collection_run_id FK
+        VARCHAR status
+        INTEGER rows_read
+        INTEGER rows_written
+        JSONB summary_payload
+        TEXT error_message
+        TIMESTAMPTZ started_at
+        TIMESTAMPTZ finished_at
+        TIMESTAMPTZ created_at
+    }
+
+    COMMENT_SENTIMENTS {
+        UUID id PK
+        UUID processing_run_id FK
+        UUID comment_id FK
+        VARCHAR model_name
+        VARCHAR sentiment_label
+        DECIMAL sentiment_score
+        DECIMAL confidence
+        VARCHAR language_code
+        JSONB raw_payload
+        TIMESTAMPTZ created_at
+    }
+
+    DERIVED_METRICS {
+        UUID id PK
+        UUID processing_run_id FK
+        VARCHAR metric_scope
+        UUID scope_record_id
+        VARCHAR metric_name
+        DECIMAL metric_value_numeric
+        TEXT metric_value_text
+        TIMESTAMPTZ created_at
+    }

@@ -25,10 +25,10 @@ A researcher can study audience reaction with the model that produced every scor
 
 Transcribed from `docs/product_backlog.md`, each line keeping its `US-0NN` id so entries cite the same ids the thesis uses.
 
-- US-021: Collect top-level comments for selected videos — The app collects top-level comments for selected videos and links comments to videos and collection runs. (docs/product_backlog.md, User stories, priority must)
+- US-021: Collect top-level comments for selected videos — The app collects top-level comments for selected videos and links comments to videos and collection runs and stores a fetch timestamp on each comment. (docs/product_backlog.md, User stories, priority must)
 - US-022: Collect comment replies with pagination and resume handling — The app collects replies, handles pagination and can resume or report partial collection safely. (docs/product_backlog.md, User stories, priority must)
-- US-023: Store comment raw payloads, quota and errors — Comment and reply payloads, quota use and errors are stored for reproducibility. (docs/product_backlog.md, User stories, priority must)
-- US-025: Run one pre-trained sentiment model and store results — Each analyzed comment stores sentiment label, score, confidence, model name, model version and processing run. (docs/product_backlog.md, User stories, priority must)
+- US-023: Store comment raw payloads, quota and errors — Comment and reply payloads, quota use and errors are stored; comments and replies are covered by the 30-day purge. (docs/product_backlog.md, User stories, priority must)
+- US-025: Run one pre-trained sentiment model and store results — Each analyzed comment stores sentiment label, score, confidence, model name, model version and processing run; sentiment records are deleted when their comment is purged. (docs/product_backlog.md, User stories, priority must)
 - US-026: Show sentiment labels, scores and model information — The UI shows sentiment results clearly, including label, score, confidence and model/version context. (docs/product_backlog.md, User stories, priority must)
 
 ## Done when

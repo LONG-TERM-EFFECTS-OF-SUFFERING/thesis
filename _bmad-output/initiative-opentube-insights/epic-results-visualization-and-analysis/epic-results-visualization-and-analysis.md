@@ -25,8 +25,8 @@ A researcher reaches an interpretation of the dataset in the app; the signal is 
 
 Transcribed from `docs/product_backlog.md`, each line keeping its `US-0NN` id so entries cite the same ids the thesis uses.
 
-- US-027: Show results summary counts and card — The results view shows clear counts for projects, runs, videos, channels and available processed records. (docs/product_backlog.md, User stories, priority should)
-- US-028: Show sentiment distribution chart — After sentiment analysis exists, the results view shows a simple sentiment distribution chart. (docs/product_backlog.md, User stories, priority should)
+- US-027: Show results summary counts and card — The results view shows clear counts for projects, runs, videos, channels and available processed records, with the collection date of the data shown. (docs/product_backlog.md, User stories, priority should)
+- US-028: Show sentiment distribution chart — After sentiment analysis exists, the results view shows a simple sentiment distribution chart labeled with the collection date of its data. (docs/product_backlog.md, User stories, priority should)
 - US-029: Filter results by date and video — Basic filters update visible tables and charts by date range and selected video. (docs/product_backlog.md, User stories, priority could)
 - US-030: Filter results by sentiment — After sentiment exists, visible tables and charts can be filtered by sentiment group. (docs/product_backlog.md, User stories, priority could)
 

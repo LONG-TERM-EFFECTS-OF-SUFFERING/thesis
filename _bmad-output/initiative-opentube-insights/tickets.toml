@@ -31,7 +31,7 @@ covers = ["US-010", "US-011", "US-012", "US-013", "US-014", "US-015", "US-016"]
 id = 5
 slug = "epic-youtube-data-storage-and-processing"
 title = "Collected YouTube data is stored, normalized and validated"
-covers = ["US-017", "US-018", "US-019", "US-020", "US-024"]
+covers = ["US-017", "US-018", "US-019", "US-020", "US-024", "US-040"]
 
 [[epic]]
 id = 6

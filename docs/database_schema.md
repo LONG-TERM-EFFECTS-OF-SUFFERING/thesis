@@ -18,6 +18,8 @@ This data dictionary describes the persistence layer for the YouTube research pl
 
 - Numeric ranges and date ordering rules should be enforced with Django `CheckConstraint` objects where noted.
 
+- Retention: the YouTube API Services Developer Policies (III.E.4.d) allow API data to be stored for at most 30 calendar days. A purge command (US-040) deletes `youtube_channels`, `youtube_videos` and `youtube_comments` rows whose `last_fetched_at` is older than 30 days, `video_statistics_snapshots` by `captured_at`, and `derived_metrics` by `created_at`. Link tables, snapshots and sentiment records go with their parent rows through `ON DELETE CASCADE`. Researcher-authored and collection metadata tables (`research_projects`, `saved_queries`, `collection_runs`, `api_request_logs`, `processing_runs`) are kept; `api_request_logs` therefore stores no response bodies or YouTube resource identifiers.
+
 ### Django authentication user (`auth_user`)
 
 - **Django model**: `django.contrib.auth.models.User` through `settings.AUTH_USER_MODEL`.
@@ -110,6 +112,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 | `total_comments_collected` |    `INTEGER`    |              `PositiveIntegerField(default=0)`              |  NO  |  -  | Number of top-level comments collected.                                                                          |
 | `total_replies_collected`  |    `INTEGER`    |              `PositiveIntegerField(default=0)`              |  NO  |  -  | Number of replies collected.                                                                                     |
 |      `error_message`       |     `TEXT`      |             `TextField(null=True, blank=True)`              | YES  |  -  | Error message recorded when the run fails.                                                                       |
+|      `data_purged_at`      |  `TIMESTAMPTZ`  |           `DateTimeField(null=True, blank=True)`            | YES  |  -  | Timestamp when the purge deleted the YouTube data collected by this run; the run record itself is kept.          |
 |        `created_at`        |  `TIMESTAMPTZ`  |             `DateTimeField(auto_now_add=True)`              |  NO  |  -  | Timestamp when the run record was created.                                                                       |
 
 ### `api_request_logs`
@@ -157,7 +160,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 |   `subscriber_count`   |    `BIGINT`     | `PositiveBigIntegerField(null=True, blank=True)`  | YES  |   -    | Subscriber count reported by the API.                                                    |
 |     `video_count`      |    `BIGINT`     | `PositiveBigIntegerField(null=True, blank=True)`  | YES  |   -    | Number of videos reported by the API.                                                    |
 |      `view_count`      |    `BIGINT`     | `PositiveBigIntegerField(null=True, blank=True)`  | YES  |   -    | Total channel views reported by the API.                                                 |
-|   `last_fetched_at`    |  `TIMESTAMPTZ`  |      `DateTimeField(null=True, blank=True)`       | YES  |   -    | Timestamp of the most recent channel data retrieval.                                     |
+|   `last_fetched_at`    |  `TIMESTAMPTZ`  |       `DateTimeField(default=timezone.now)`       |  NO  |   -    | Timestamp of the most recent channel data retrieval; starts the 30-day retention window. |
 |     `raw_payload`      |     `JSONB`     |        `JSONField(null=True, blank=True)`         | YES  |   -    | Raw API response payload stored in PostgreSQL as `JSONB`.                                |
 |      `created_at`      |  `TIMESTAMPTZ`  |        `DateTimeField(auto_now_add=True)`         |  NO  |   -    | Timestamp when the channel record was created.                                           |
 |      `updated_at`      |  `TIMESTAMPTZ`  |          `DateTimeField(auto_now=True)`           |  NO  |   -    | Timestamp of the most recent update to the channel record.                               |
@@ -186,7 +189,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 |      `category_id`       |  `VARCHAR(20)`  | `CharField(max_length=20, null=True, blank=True)` | YES  |   -    | YouTube category identifier.                                                                                |
 |          `tags`          |     `JSONB`     |             `JSONField(default=list)`             |  NO  |   -    | Video tags stored in PostgreSQL as a `JSONB` array.                                                         |
 | `live_broadcast_content` |  `VARCHAR(20)`  | `CharField(max_length=20, null=True, blank=True)` | YES  |   -    | Indicates whether the video is live, upcoming or none.                                                      |
-|    `last_fetched_at`     |  `TIMESTAMPTZ`  |      `DateTimeField(null=True, blank=True)`       | YES  |   -    | Timestamp of the most recent video data retrieval.                                                          |
+|    `last_fetched_at`     |  `TIMESTAMPTZ`  |       `DateTimeField(default=timezone.now)`       |  NO  |   -    | Timestamp of the most recent video data retrieval; starts the 30-day retention window.                      |
 |      `raw_payload`       |     `JSONB`     |        `JSONField(null=True, blank=True)`         | YES  |   -    | Raw API response payload stored in PostgreSQL as `JSONB`.                                                   |
 |       `created_at`       |  `TIMESTAMPTZ`  |        `DateTimeField(auto_now_add=True)`         |  NO  |   -    | Timestamp when the video record was created.                                                                |
 |       `updated_at`       |  `TIMESTAMPTZ`  |          `DateTimeField(auto_now=True)`           |  NO  |   -    | Timestamp of the most recent update to the video record.                                                    |
@@ -249,7 +252,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 | `youtube_published_at` |  `TIMESTAMPTZ`  |      `DateTimeField(null=True, blank=True)`       | YES  |   -    | Publication timestamp of the comment in YouTube.                                                           |
 |  `youtube_updated_at`  |  `TIMESTAMPTZ`  |      `DateTimeField(null=True, blank=True)`       | YES  |   -    | Last update timestamp of the comment in YouTube.                                                           |
 |  `first_collected_at`  |  `TIMESTAMPTZ`  |       `DateTimeField(default=timezone.now)`       |  NO  |   -    | Timestamp when the comment was first stored in the system.                                                 |
-|   `last_fetched_at`    |  `TIMESTAMPTZ`  |       `DateTimeField(default=timezone.now)`       |  NO  |   -    | Timestamp of the most recent retrieval of the comment.                                                     |
+|   `last_fetched_at`    |  `TIMESTAMPTZ`  |       `DateTimeField(default=timezone.now)`       |  NO  |   -    | Timestamp of the most recent retrieval of the comment; starts the 30-day retention window.                 |
 |     `raw_payload`      |     `JSONB`     |        `JSONField(null=True, blank=True)`         | YES  |   -    | Raw API response payload stored in PostgreSQL as `JSONB`.                                                  |
 |      `created_at`      |  `TIMESTAMPTZ`  |        `DateTimeField(auto_now_add=True)`         |  NO  |   -    | Timestamp when the comment record was created.                                                             |
 |      `updated_at`      |  `TIMESTAMPTZ`  |          `DateTimeField(auto_now=True)`           |  NO  |   -    | Timestamp of the most recent update to the comment record.                                                 |
