@@ -34,6 +34,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 14. [12 - Create API request log model and service wrapper](12-create-api-request-log-model-and-service-wrapper.md).
 
+15. [13 - Store collection run counts, quota, timestamps and errors](13-store-collection-run-counts-quota-timestamps-and-errors.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -49,6 +51,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [09-save-approved-parameters-with-validation-feedback.md](09-save-approved-parameters-with-validation-feedback.md) | US-009 |  Done  | Save-time validation through the US-007 validator, all-or-nothing draft provenance, server-derived `query_source` and the rejected-save feedback. |
 | [10-create-collection-run-model-and-status-lifecycle.md](10-create-collection-run-model-and-status-lifecycle.md) | US-010 |  Done  | `CollectionRun` model, five-state lifecycle in one `transition_to` method, compare-and-set against stale copies, PostgreSQL check constraints and delete rules. |
 | [11-start-a-collection-run-from-a-saved-query.md](11-start-a-collection-run-from-a-saved-query.md) | US-011 |  Done  | Start endpoint, `effective_params` snapshot instead of a reference, re-validation at start, owner-scoped 404s and the per-card Start run button. |
+| [13-store-collection-run-counts-quota-timestamps-and-errors.md](13-store-collection-run-counts-quota-timestamps-and-errors.md) | US-012 |  Done  | Run counters and `error_message`, totals kept in step with the logs (one writer, one transaction, `F()` updates), and the required message on `failed`. |
 | [12-create-api-request-log-model-and-service-wrapper.md](12-create-api-request-log-model-and-service-wrapper.md) | US-013 |  Done  | `ApiRequestLog` model, the single `call_youtube` wrapper, log-before-request, quota cost table, and keeping the key, IDs and response bodies out of the logs. |
 
 ## How to use this folder
