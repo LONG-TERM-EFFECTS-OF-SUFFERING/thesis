@@ -214,6 +214,30 @@ python manage.py makemigrations --check --dry-run
 
 Checks whether Django model changes are already represented by migration files.
 
+## Collection runs
+
+Replace `<query-id>` with an `id` from the saved query list response.
+
+```bash
+curl -sS -X POST "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/queries/<query-id>/runs/"
+```
+
+Starts a collection run from one saved query. The run is created as `pending` with a copy of the query's parameters (US-011).
+
+```bash
+cd src/api
+venv/bin/python manage.py collect_runs
+```
+
+Collects every `pending` run, oldest first: it pages through YouTube `search.list` and stores the discovered videos (US-015). It needs `YOUTUBE_API_KEY` in `src/api/.env` and stops with `YOUTUBE_API_KEY is not configured.` without it. Each search page costs 100 quota units.
+
+```bash
+cd src
+docker compose exec api python manage.py collect_runs
+```
+
+The same command inside the running Compose `api` container.
+
 ## Frontend commands
 
 Run these from `src/ui`.

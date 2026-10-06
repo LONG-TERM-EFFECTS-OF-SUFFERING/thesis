@@ -36,6 +36,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 15. [13 - Store collection run counts, quota, timestamps and errors](13-store-collection-run-counts-quota-timestamps-and-errors.md).
 
+16. [14 - Discover videos with YouTube search.list](14-discover-videos-with-youtube-search-list.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -53,6 +55,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [11-start-a-collection-run-from-a-saved-query.md](11-start-a-collection-run-from-a-saved-query.md) | US-011 |  Done  | Start endpoint, `effective_params` snapshot instead of a reference, re-validation at start, owner-scoped 404s and the per-card Start run button. |
 | [13-store-collection-run-counts-quota-timestamps-and-errors.md](13-store-collection-run-counts-quota-timestamps-and-errors.md) | US-012 |  Done  | Run counters and `error_message`, totals kept in step with the logs (one writer, one transaction, `F()` updates), and the required message on `failed`. |
 | [12-create-api-request-log-model-and-service-wrapper.md](12-create-api-request-log-model-and-service-wrapper.md) | US-013 |  Done  | `ApiRequestLog` model, the single `call_youtube` wrapper, log-before-request, quota cost table, and keeping the key, IDs and response bodies out of the logs. |
+| [14-discover-videos-with-youtube-search-list.md](14-discover-videos-with-youtube-search-list.md) | US-015 |  Done  | `collect_runs` command, claiming a run safely, quota-saving paging, shared `youtube_videos` rows refreshed per run, and HTML-unescaped snippet text. |
 
 ## How to use this folder
 
