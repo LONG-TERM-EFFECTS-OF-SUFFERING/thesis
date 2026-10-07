@@ -50,6 +50,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 22. [20 - Store video statistics snapshots](20-store-video-statistics-snapshots.md).
 
+23. [21 - Link collection runs to videos idempotently](21-link-collection-runs-to-videos-idempotently.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -73,6 +75,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [17-store-video-metadata-and-raw-video-payload.md](17-store-video-metadata-and-raw-video-payload.md) | US-017 |  Done  | The `videos.list` details step, batches of 50, field mapping and narrowing, `raw_payload`, `last_fetched_at` refresh and `total_videos_collected`. |
 | [18-store-channel-metadata-and-raw-channel-payload.md](18-store-channel-metadata-and-raw-channel-payload.md) | US-018 |  Done  | The `channels.list` step, one channel row per channel updated in place, count parsing from strings, and video links that follow the latest data. |
 | [20-store-video-statistics-snapshots.md](20-store-video-statistics-snapshots.md) | US-019 |  Done  | One statistics snapshot per video per run, added never overwritten, the conditional unique constraint, free `statistics` part, and the BIGINT bound on every count. |
+| [21-link-collection-runs-to-videos-idempotently.md](21-link-collection-runs-to-videos-idempotently.md) | US-020 |  Done  | What idempotent means here, where the guarantee comes from (unique constraints plus `update_or_create`), and the two-run end-to-end proof. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 
 ## How to use this folder
