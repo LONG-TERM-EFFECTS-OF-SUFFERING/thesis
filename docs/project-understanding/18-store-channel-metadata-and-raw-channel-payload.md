@@ -60,6 +60,7 @@ YouTube sends channel statistics as strings: `"subscriberCount": "1200"`. `_coun
 | nothing (for example `hiddenSubscriberCount: true`) | empty |
 | `"-5"`, `"abc"`, `"١٢"` (non-ASCII digits) | empty |
 | `true`, or a bare number `7` | empty |
+| a number too large for the column (above 9,223,372,036,854,775,807) | empty (added in US-019, see page 20) |
 
 The `true` case is the AGENTS.md pitfall: in Python `isinstance(True, int)` is `True`, so a careless check would store `true` as `1`. `_count` rejects `bool` explicitly and accepts only strings of ASCII digits.
 
@@ -171,6 +172,6 @@ You need a real `YOUTUBE_API_KEY` in `src/api/.env`. A run with a cap of 5 costs
 
 ## Known gaps
 
-- An unexpectedly huge count, or an over-long country or channel ID, would fail the run on PostgreSQL. Real YouTube data does not do this, and the review left it, as in US-015 and US-017.
+- An over-long country or channel ID would fail the run on PostgreSQL. Real YouTube data does not do this, and the review left it, as in US-015 and US-017. (Oversized counts used to be in this list; US-019 fixed them for every count, see page 20.)
 
 - Channel counts keep only the latest value. Dated history of statistics is US-019, for videos.
