@@ -265,6 +265,12 @@ curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/runs
 
 Shows one run with its request logs in order (US-014).
 
+```bash
+curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/results/summary/"
+```
+
+Returns the project's results summary: counts of runs, videos, channels, comments, replies and statistics snapshots, and the date range its runs collected data (US-027).
+
 ## Frontend commands
 
 Run these from `src/ui`.

@@ -58,6 +58,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 26. [24 - Store comment raw payloads, quota and errors](24-store-comment-raw-payloads-quota-and-errors.md).
 
+27. [25 - Show results summary counts and card](25-show-results-summary-counts-and-card.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -85,6 +87,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [22-collect-top-level-comments-for-selected-videos.md](22-collect-top-level-comments-for-selected-videos.md) | US-021 |  Done  | Per-video comment limit on the saved query, the `commentThreads.list` step for videos collected in the run, `textOriginal` fallback, skipping disabled comments, and cycle-proof paging. |
 | [23-collect-comment-replies-with-pagination-and-resume-handling.md](23-collect-comment-replies-with-pagination-and-resume-handling.md) | US-022 |  Done  | Per-comment reply limit, the `comments.list` step for threads that report replies, skipping deleted parents, and resume as partial reporting plus an idempotent re-run. |
 | [24-store-comment-raw-payloads-quota-and-errors.md](24-store-comment-raw-payloads-quota-and-errors.md) | US-023 |  Done  | Tests-only: one audit run proving payloads, per-call quota, recorded errors, totals equal to the logs, and no YouTube IDs, text or key in any log row. |
+| [25-show-results-summary-counts-and-card.md](25-show-results-summary-counts-and-card.md) | US-027 |  Done  | The project results summary endpoint and card, counting in the database, shared rows with project-scoped counts, and why the date range comes from run-video links. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 
 ## How to use this folder
