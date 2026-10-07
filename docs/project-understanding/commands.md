@@ -238,6 +238,20 @@ docker compose exec api python manage.py collect_runs
 
 The same command inside the running Compose `api` container.
 
+```bash
+curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/runs/"
+```
+
+Lists a project's collection runs, newest first, with status and totals (US-014).
+
+Replace `<run-id>` with an `id` from that list.
+
+```bash
+curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/runs/<run-id>/"
+```
+
+Shows one run with its request logs in order (US-014).
+
 ## Frontend commands
 
 Run these from `src/ui`.

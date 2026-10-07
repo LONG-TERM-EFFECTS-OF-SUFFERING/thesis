@@ -40,6 +40,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 17. [15 - Add YouTube collection service tests](15-add-youtube-collection-service-tests.md).
 
+18. [16 - Show request logs for each collection run](16-show-request-logs-for-each-collection-run.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -56,6 +58,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [10-create-collection-run-model-and-status-lifecycle.md](10-create-collection-run-model-and-status-lifecycle.md) | US-010 |  Done  | `CollectionRun` model, five-state lifecycle in one `transition_to` method, compare-and-set against stale copies, PostgreSQL check constraints and delete rules. |
 | [11-start-a-collection-run-from-a-saved-query.md](11-start-a-collection-run-from-a-saved-query.md) | US-011 |  Done  | Start endpoint, `effective_params` snapshot instead of a reference, re-validation at start, owner-scoped 404s and the per-card Start run button. |
 | [13-store-collection-run-counts-quota-timestamps-and-errors.md](13-store-collection-run-counts-quota-timestamps-and-errors.md) | US-012 |  Done  | Run counters and `error_message`, totals kept in step with the logs (one writer, one transaction, `F()` updates), and the required message on `failed`. |
+| [16-show-request-logs-for-each-collection-run.md](16-show-request-logs-for-each-collection-run.md) | US-014 |  Done  | Runs list and run-detail endpoints, the Collection runs panel with Refresh, nested request logs, and the late-response guards in the UI. |
 | [12-create-api-request-log-model-and-service-wrapper.md](12-create-api-request-log-model-and-service-wrapper.md) | US-013 |  Done  | `ApiRequestLog` model, the single `call_youtube` wrapper, log-before-request, quota cost table, and keeping the key, IDs and response bodies out of the logs. |
 | [14-discover-videos-with-youtube-search-list.md](14-discover-videos-with-youtube-search-list.md) | US-015 |  Done  | `collect_runs` command, claiming a run safely, quota-saving paging, shared `youtube_videos` rows refreshed per run, and HTML-unescaped snippet text. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
