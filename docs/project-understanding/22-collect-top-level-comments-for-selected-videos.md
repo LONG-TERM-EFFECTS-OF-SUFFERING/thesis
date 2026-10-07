@@ -23,7 +23,7 @@ Audience reaction lives in the comments. This story collects them:
 4. commentThreads.list -> top-level comments, up to N per video     <- new
 ```
 
-Only **top-level** comments are collected. Replies are US-022.
+Only **top-level** comments are collected here. Replies came with US-022 (page 23).
 
 ## Why this matters
 
@@ -172,7 +172,7 @@ You need `YOUTUBE_API_KEY` in `src/api/.env`. With 2 videos and 20 comments each
 
 ## Known gaps
 
-- Replies, and resuming an interrupted run, are US-022.
+- Replies, and what happens to an interrupted run, came with US-022 (see page 23).
 
 - A comment ID or author channel ID longer than 64 characters would fail the run. Real YouTube IDs are much shorter, the same as for videos and channels.
 
