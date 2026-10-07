@@ -95,6 +95,7 @@ context: []
 - Pre-existing ruff E731 at `SavedQueryDraftApiTests` (a lambda) is untouched; it is not part of this change.
 - Verified by orchestrator: full suite 146 OK on PostgreSQL; `git diff --stat` on `core/` excluding `tests.py` is empty. Thesis baseline: `144c6afd02e432c1c2ce3d13f4cc7d522d01ede4`.
 - Frozen row 'Real path, success' amended by the human (2026-10-05) to the realistic two-page fixture from the review fix. Review patches applied; full suite 146 OK on PostgreSQL; product diff empty.
+- Deferred repeated-`nextPageToken` loop fixed at the user's request in `src/api` commit `922bf33` on this branch: `_discover_videos` stops when the new token equals the one just sent; `test_repeated_page_token_stops_paging` fails (not hangs) without it. Full suite 147 OK on PostgreSQL.
 
 ## Plan Change Log
 
