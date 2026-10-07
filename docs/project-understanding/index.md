@@ -52,6 +52,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 23. [21 - Link collection runs to videos idempotently](21-link-collection-runs-to-videos-idempotently.md).
 
+24. [22 - Collect top-level comments for selected videos](22-collect-top-level-comments-for-selected-videos.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -76,6 +78,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [18-store-channel-metadata-and-raw-channel-payload.md](18-store-channel-metadata-and-raw-channel-payload.md) | US-018 |  Done  | The `channels.list` step, one channel row per channel updated in place, count parsing from strings, and video links that follow the latest data. |
 | [20-store-video-statistics-snapshots.md](20-store-video-statistics-snapshots.md) | US-019 |  Done  | One statistics snapshot per video per run, added never overwritten, the conditional unique constraint, free `statistics` part, and the BIGINT bound on every count. |
 | [21-link-collection-runs-to-videos-idempotently.md](21-link-collection-runs-to-videos-idempotently.md) | US-020 |  Done  | What idempotent means here, where the guarantee comes from (unique constraints plus `update_or_create`), and the two-run end-to-end proof. |
+| [22-collect-top-level-comments-for-selected-videos.md](22-collect-top-level-comments-for-selected-videos.md) | US-021 |  Done  | Per-video comment limit on the saved query, the `commentThreads.list` step for videos collected in the run, `textOriginal` fallback, skipping disabled comments, and cycle-proof paging. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 
 ## How to use this folder
