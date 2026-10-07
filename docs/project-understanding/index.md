@@ -42,6 +42,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 18. [16 - Show request logs for each collection run](16-show-request-logs-for-each-collection-run.md).
 
+19. [17 - Store video metadata and raw video payload](17-store-video-metadata-and-raw-video-payload.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -61,6 +63,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [16-show-request-logs-for-each-collection-run.md](16-show-request-logs-for-each-collection-run.md) | US-014 |  Done  | Runs list and run-detail endpoints, the Collection runs panel with Refresh, nested request logs, and the late-response guards in the UI. |
 | [12-create-api-request-log-model-and-service-wrapper.md](12-create-api-request-log-model-and-service-wrapper.md) | US-013 |  Done  | `ApiRequestLog` model, the single `call_youtube` wrapper, log-before-request, quota cost table, and keeping the key, IDs and response bodies out of the logs. |
 | [14-discover-videos-with-youtube-search-list.md](14-discover-videos-with-youtube-search-list.md) | US-015 |  Done  | `collect_runs` command, claiming a run safely, quota-saving paging, shared `youtube_videos` rows refreshed per run, and HTML-unescaped snippet text. |
+| [17-store-video-metadata-and-raw-video-payload.md](17-store-video-metadata-and-raw-video-payload.md) | US-017 |  Done  | The `videos.list` details step, batches of 50, field mapping and narrowing, `raw_payload`, `last_fetched_at` refresh and `total_videos_collected`. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 
 ## How to use this folder

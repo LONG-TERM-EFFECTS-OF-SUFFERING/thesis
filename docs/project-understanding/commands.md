@@ -238,6 +238,19 @@ docker compose exec api python manage.py collect_runs
 
 The same command inside the running Compose `api` container.
 
+With `./run-local.sh` running in one terminal, run `collect_runs` from `src/api` in a second terminal, then click **Refresh** in the Collection runs panel. Nothing collects a run automatically: "Start run" only queues it as `pending`.
+
+## Django admin
+
+```bash
+cd src/api
+venv/bin/python manage.py createsuperuser
+```
+
+Creates an admin login, once per database. `run-local.sh` uses SQLite; with `DATABASE_ENGINE=postgresql`, run it again with that setting.
+
+Then open `http://127.0.0.1:8000/admin/`. Collection runs, request logs and videos are read-only there. Open the UI as `http://localhost:5173/`, not `127.0.0.1`, while logged into the admin: browsers share cookies across ports, and the admin login would make UI saves fail with a CSRF `403`.
+
 ```bash
 curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/runs/"
 ```
