@@ -29,3 +29,6 @@ Items raised during review that are real but not actionable in the story that su
 - source_plan: `_bmad-output/initiative-opentube-insights/epic-results-visualization-and-analysis/story-filter-results-by-sentiment-plan.md`
   summary: `parse_results_filters` (US-029) reads repeated `date_from`, `date_to` or `video` parameters with `QueryDict.get`, silently using the last value instead of rejecting the request.
   evidence: Found while reviewing US-030, whose `parse_sentiment_filter` now rejects repeated values. The same `getlist` check applies to `views.parse_results_filters`, with `QueryDict`-based parser tests.
+- source_plan: `_bmad-output/initiative-opentube-insights/epic-testing-export-and-thesis-validation/story-add-database-and-model-tests-plan.md`
+  summary: `docs/database_schema.md` `saved_queries` says the pair (`project_id`, `name`) is unique and describes a date-range check constraint; neither matches the model.
+  evidence: `SavedQuery.Meta.constraints` declares only `unique_saved_query_name_per_project_creator` on (`project`, `created_by`, `name`), and `published_after <= published_before` is enforced only in `SavedQuerySerializer.validate`, not in the database. Fix the doc in a thesis docs commit, or add a `CheckConstraint` with a migration if the database must enforce it.
