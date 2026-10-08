@@ -70,6 +70,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 32. [30 - Add processing tests](30-add-processing-tests.md).
 
+33. [31 - Show sentiment labels, scores and model information](31-show-sentiment-labels-scores-and-model-information.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -100,6 +102,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [23-collect-comment-replies-with-pagination-and-resume-handling.md](23-collect-comment-replies-with-pagination-and-resume-handling.md) | US-022 |  Done  | Per-comment reply limit, the `comments.list` step for threads that report replies, skipping deleted parents, and resume as partial reporting plus an idempotent re-run. |
 | [24-store-comment-raw-payloads-quota-and-errors.md](24-store-comment-raw-payloads-quota-and-errors.md) | US-023 |  Done  | Tests-only: one audit run proving payloads, per-call quota, recorded errors, totals equal to the logs, and no YouTube IDs, text or key in any log row. |
 | [28-store-comment-sentiment-results.md](28-store-comment-sentiment-results.md) | US-025 | Part A done | The `CommentSentiment` table, the classifier contract and result checks, the off-by-default `SENTIMENT_MODEL` switch with the `core.E001` check, and sentiment as its own processing run after a completed clean. Part B (the real model) is deferred. |
+| [31-show-sentiment-labels-scores-and-model-information.md](31-show-sentiment-labels-scores-and-model-information.md) | US-026 |  Done  | The run sentiment endpoint and Sentiment section, model name and version above the results, honest number formatting, counts that survive the purge, a message for every state, and a seeding recipe. |
 | [25-show-results-summary-counts-and-card.md](25-show-results-summary-counts-and-card.md) | US-027 |  Done  | The project results summary endpoint and card, counting in the database, shared rows with project-scoped counts, and why the date range comes from run-video links. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 | [29-add-llm-query-translation-tests.md](29-add-llm-query-translation-tests.md) | US-035 |  Done  | Tests-only: the worked-example table with exact expected drafts, deterministic requests, the draft endpoint through the real HTTP path, and a test that could not fail until review. |
