@@ -26,3 +26,6 @@ Items raised during review that are real but not actionable in the story that su
 - source_plan: `_bmad-output/initiative-opentube-insights/epic-testing-export-and-thesis-validation/story-add-processing-tests-plan.md`
   summary: Normalization rule 3 removes U+200D (zero-width joiner), which splits joined emoji sequences, e.g. a family emoji becomes three separate emoji in `text_normalized`.
   evidence: `normalize_comment_text("family \U0001F468\u200d\U0001F469\u200d\U0001F467 ok")` returns the three emoji unjoined (rule `chars_removed`). Approved in US-024's frozen rule list, so changing it needs a decision: keep U+200D when it sits between two emoji (and bump `NORMALIZATION_VERSION`), or accept the split because sentiment models see each emoji anyway.
+- source_plan: `_bmad-output/initiative-opentube-insights/epic-results-visualization-and-analysis/story-filter-results-by-sentiment-plan.md`
+  summary: `parse_results_filters` (US-029) reads repeated `date_from`, `date_to` or `video` parameters with `QueryDict.get`, silently using the last value instead of rejecting the request.
+  evidence: Found while reviewing US-030, whose `parse_sentiment_filter` now rejects repeated values. The same `getlist` check applies to `views.parse_results_filters`, with `QueryDict`-based parser tests.
