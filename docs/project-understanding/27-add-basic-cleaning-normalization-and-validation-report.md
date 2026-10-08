@@ -167,7 +167,7 @@ You can also try the rules directly in `venv/bin/python manage.py shell`:
 ```python
 from core.normalization import normalize_comment_text
 normalize_comment_text("  Mira https://x.co  isn&#39;t   GREAT 😍 ")
-# ('Mira <URL> isn\'t GREAT 😍', None, frozenset({...}))
+# ("Mira <URL> isn't GREAT 😍", None, frozenset({...}))
 ```
 
 ## Common errors
