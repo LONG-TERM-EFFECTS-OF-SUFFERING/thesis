@@ -38,7 +38,7 @@ US-015 deliberately left this counter for this story, because this is where it i
 
 ## Key concept: counts that survive the purge
 
-YouTube's policy allows video data to be kept for 30 days. The purge (US-040, not built yet) will then delete the `youtube_videos` rows, and with them the run-to-video links (`CASCADE`). The run row itself is kept as a methodological record, and its `data_purged_at` is set.
+YouTube's policy allows video data to be kept for 30 days. The purge (US-040, page 26) then deletes the `youtube_videos` rows, and with them the run-to-video links (`CASCADE`). The run row itself is kept as a methodological record, and its `data_purged_at` is set.
 
 So the summary reads its numbers from the **run row**, never by counting the list:
 
@@ -139,7 +139,7 @@ You need `YOUTUBE_API_KEY` in `src/api/.env`.
 
 5. Click an ID. The video opens on YouTube in a new tab.
 
-The "Data purged on" message cannot be seen yet, because the purge (US-040) does not exist. The API test covers that case.
+To see the "Data purged on" message, purge a run's data with `manage.py purge_youtube_data` (page 26 shows how to age a video for testing).
 
 ## Common errors
 

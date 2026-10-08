@@ -110,4 +110,4 @@ This story adds no screen. To see the redaction for yourself after a real collec
 
 ## Known gaps
 
-- Purge coverage for comments and replies is proven in US-040, when the purge exists.
+- Purge coverage for comments and replies is proven by US-040's tests (page 26).

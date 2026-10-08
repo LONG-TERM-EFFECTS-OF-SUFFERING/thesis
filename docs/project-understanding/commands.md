@@ -240,6 +240,16 @@ The same command inside the running Compose `api` container.
 
 With `./run-local.sh` running in one terminal, run `collect_runs` from `src/api` in a second terminal, then click **Refresh** in the Collection runs panel. Nothing collects a run automatically: "Start run" only queues it as `pending`.
 
+## 30-day purge
+
+```bash
+cd src/api
+venv/bin/python manage.py purge_youtube_data --dry-run
+venv/bin/python manage.py purge_youtube_data
+```
+
+Deletes YouTube data (channels, videos, comments, replies, statistics snapshots) fetched more than 30 days ago, as the YouTube API Services Developer Policies require (US-040). Runs, saved queries and request logs are kept. `--dry-run` prints what would be deleted and changes nothing. Run it at least once a day, and **not while `collect_runs` is running**: a video refreshed during the purge could still be deleted.
+
 ## Django admin
 
 ```bash

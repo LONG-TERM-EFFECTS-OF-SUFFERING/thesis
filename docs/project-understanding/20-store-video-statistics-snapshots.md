@@ -140,4 +140,4 @@ You need `YOUTUBE_API_KEY` in `src/api/.env`. Two runs with a cap of 5 cost abou
 
 - Snapshots are only visible in the admin. Showing them in the app (for example as a chart across runs) belongs to the results and visualization stories.
 
-- The purge (US-040) will delete snapshots by `captured_at` after 30 days, like the rest of the YouTube data.
+- The purge (US-040, page 26) deletes snapshots by `captured_at` after 30 days, like the rest of the YouTube data.
