@@ -20,3 +20,6 @@ Items raised during review that are real but not actionable in the story that su
 - source_plan: `_bmad-output/initiative-opentube-insights/epic-traceable-youtube-collection/story-start-a-collection-run-from-a-saved-query-plan.md`
   summary: A Django admin session cookie on the same host makes every UI POST fail with a DRF CSRF 403 and switches the effective owner to the admin user.
   evidence: `REST_FRAMEWORK` sets no `DEFAULT_AUTHENTICATION_CLASSES`, so DRF's default `SessionAuthentication` runs; cookies ignore ports, so the admin `sessionid` reaches `/api` through the Vite proxy and `startCollectionRun`/`createSavedQuery` send no CSRF token. Settle together with the auth deferral above.
+- source_plan: none
+  summary: Plug a real pre-trained sentiment model (e.g. pysentimiento/robertuito-sentiment-analysis from the AVISPA youtube-data-extraction notebooks) into the US-025 classifier slot, with its dependencies, label/score mapping, licence check and model version.
+  evidence: Split from US-025 by the human on 2026-10-08 to keep the method open; part A builds the table, the sentiment step and the report against a classifier interface tested with a fake. Open items: torch/transformers versions for Python 3.14, Docker image size, weights download kept out of tests, and the model card's research-use terms.
