@@ -184,4 +184,6 @@ normalize_comment_text("  Mira https://x.co  isn&#39;t   GREAT 😍 ")
 
 - Processing updates comments one by one. That is fine at thesis scale; a `ponytail:` comment in `processing.py` marks where to batch if runs grow large.
 
+- Rule 3 also removes U+200D, the zero-width joiner that builds emoji like 👨‍👩‍👧, so such emoji are split into their parts. Found in US-036 (page 30) and logged in `deferred-work.md` for a decision.
+
 - Only comment text is normalized. Video and channel fields are already typed and checked when they are collected (pages 17 and 18).
