@@ -48,7 +48,7 @@ SENTIMENT_MODEL="<a name>"    -> the name must be in CLASSIFIERS, or startup fai
 `CLASSIFIERS` is a registry (a dictionary from name to a function that builds the classifier). It is **empty** in part A. Setting `SENTIMENT_MODEL` to any name now makes Django's system check report:
 
 ```text
-core.E001 SENTIMENT_MODEL ... is not a registered sentiment model.
+core.E001 SENTIMENT_MODEL '<name>' is not a registered sentiment classifier.
 ```
 
 So `runserver`, `migrate`, `collect_runs` and the tests refuse to start, instead of quietly skipping sentiment because of a typo. Tests use a **fake** classifier registered only inside the test. No fake or placeholder result can ever reach your real data.
@@ -162,7 +162,7 @@ Real sentiment results appear once part B registers a model.
 
 ## Common errors
 
-- **`core.E001 ... is not a registered sentiment model`.** `SENTIMENT_MODEL` is set but no such model is registered. Leave it empty until part B, or check the spelling.
+- **`core.E001 ... is not a registered sentiment classifier`.** `SENTIMENT_MODEL` is set but no such model is registered. Leave it empty until part B, or check the spelling.
 
 - **No sentiment processing run after a collection.** Either `SENTIMENT_MODEL` is empty, or the cleaning run did not complete, which skips sentiment on purpose.
 
