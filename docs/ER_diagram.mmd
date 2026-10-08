@@ -63,6 +63,8 @@ erDiagram
         TIMESTAMPTZ published_after
         TIMESTAMPTZ published_before
         INTEGER max_videos_to_discover
+        INTEGER max_comments_per_video
+        INTEGER max_replies_per_comment
         VARCHAR region_code
         VARCHAR relevance_language
         JSONB structured_query_params
@@ -80,12 +82,15 @@ erDiagram
         UUID saved_query_id FK
         INTEGER initiated_by_user_id FK
         VARCHAR status
+        JSONB effective_params
         INTEGER requested_comment_limit
+        INTEGER requested_reply_limit
         TIMESTAMPTZ started_at
         TIMESTAMPTZ finished_at
         INTEGER total_api_requests
         INTEGER total_quota_units
         INTEGER total_videos_discovered
+        INTEGER total_videos_skipped
         INTEGER total_videos_collected
         INTEGER total_comments_collected
         INTEGER total_replies_collected
@@ -176,6 +181,7 @@ erDiagram
         VARCHAR author_channel_id
         TEXT text_display
         TEXT text_original
+        TEXT text_normalized
         BIGINT like_count
         INTEGER total_reply_count
         VARCHAR comment_level
@@ -216,6 +222,7 @@ erDiagram
         UUID processing_run_id FK
         UUID comment_id FK
         VARCHAR model_name
+        VARCHAR model_version
         VARCHAR sentiment_label
         DECIMAL sentiment_score
         DECIMAL confidence
