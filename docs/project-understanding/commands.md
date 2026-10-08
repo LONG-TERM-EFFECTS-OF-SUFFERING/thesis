@@ -281,6 +281,13 @@ curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/resu
 
 Returns the project's results summary: counts of runs, videos, channels, comments, replies and statistics snapshots, and the date range its runs collected data (US-027).
 
+```bash
+curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/results/summary/?date_from=2026-01-01&date_to=2026-03-31"
+curl -sS "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/results/videos/"
+```
+
+The same summary narrowed to videos published in that range (both days included, UTC); add `&video=<video-id>` with an `id` from the second command to narrow to one video (US-029).
+
 ## Frontend commands
 
 Run these from `src/ui`.
