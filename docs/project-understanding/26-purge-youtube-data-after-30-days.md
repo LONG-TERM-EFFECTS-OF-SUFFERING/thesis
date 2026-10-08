@@ -154,4 +154,4 @@ Passing looks like `OK` (240 tests). The second command runs only the purge test
 
 - There is no lock between the purge and `collect_runs`. The operating rule above covers it.
 
-- Processed data (cleaning in US-024, sentiment in US-025) does not exist yet. Those stories extend this command when they add tables holding derived YouTube data.
+- Cleaned comment text (US-024, page 27) is a column on the comment row, so this command already removes it with the comment. Sentiment (US-025) extends the command if it adds tables holding derived YouTube data.

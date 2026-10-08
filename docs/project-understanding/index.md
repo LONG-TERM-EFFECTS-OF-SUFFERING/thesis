@@ -62,6 +62,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 28. [26 - Purge YouTube data after 30 days](26-purge-youtube-data-after-30-days.md).
 
+29. [27 - Add basic cleaning, normalization and validation report](27-add-basic-cleaning-normalization-and-validation-report.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -86,6 +88,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [18-store-channel-metadata-and-raw-channel-payload.md](18-store-channel-metadata-and-raw-channel-payload.md) | US-018 |  Done  | The `channels.list` step, one channel row per channel updated in place, count parsing from strings, and video links that follow the latest data. |
 | [20-store-video-statistics-snapshots.md](20-store-video-statistics-snapshots.md) | US-019 |  Done  | One statistics snapshot per video per run, added never overwritten, the conditional unique constraint, free `statistics` part, and the BIGINT bound on every count. |
 | [21-link-collection-runs-to-videos-idempotently.md](21-link-collection-runs-to-videos-idempotently.md) | US-020 |  Done  | What idempotent means here, where the guarantee comes from (unique constraints plus `update_or_create`), and the two-run end-to-end proof. |
+| [27-add-basic-cleaning-normalization-and-validation-report.md](27-add-basic-cleaning-normalization-and-validation-report.md) | US-024 |  Done  | `text_normalized` and the six versioned cleaning rules, `ProcessingRun` and its count-only validation report, automatic processing after collection, and the shared run lifecycle. |
 | [26-purge-youtube-data-after-30-days.md](26-purge-youtube-data-after-30-days.md) | US-040 |  Done  | The `purge_youtube_data` command, what is deleted and kept, marking fully purged runs, one transaction with a rollback dry run, and not purging while collecting. |
 | [22-collect-top-level-comments-for-selected-videos.md](22-collect-top-level-comments-for-selected-videos.md) | US-021 |  Done  | Per-video comment limit on the saved query, the `commentThreads.list` step for videos collected in the run, `textOriginal` fallback, skipping disabled comments, and cycle-proof paging. |
 | [23-collect-comment-replies-with-pagination-and-resume-handling.md](23-collect-comment-replies-with-pagination-and-resume-handling.md) | US-022 |  Done  | Per-comment reply limit, the `comments.list` step for threads that report replies, skipping deleted parents, and resume as partial reporting plus an idempotent re-run. |
