@@ -66,6 +66,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 30. [28 - Store comment sentiment results (part A)](28-store-comment-sentiment-results.md).
 
+31. [29 - Add LLM query translation tests](29-add-llm-query-translation-tests.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -98,6 +100,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [28-store-comment-sentiment-results.md](28-store-comment-sentiment-results.md) | US-025 | Part A done | The `CommentSentiment` table, the classifier contract and result checks, the off-by-default `SENTIMENT_MODEL` switch with the `core.E001` check, and sentiment as its own processing run after a completed clean. Part B (the real model) is deferred. |
 | [25-show-results-summary-counts-and-card.md](25-show-results-summary-counts-and-card.md) | US-027 |  Done  | The project results summary endpoint and card, counting in the database, shared rows with project-scoped counts, and why the date range comes from run-video links. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
+| [29-add-llm-query-translation-tests.md](29-add-llm-query-translation-tests.md) | US-035 |  Done  | Tests-only: the worked-example table with exact expected drafts, deterministic requests, the draft endpoint through the real HTTP path, and a test that could not fail until review. |
 
 ## How to use this folder
 
