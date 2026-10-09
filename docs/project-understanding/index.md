@@ -80,6 +80,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 37. [35 - Show sentiment distribution chart](35-show-sentiment-distribution-chart.md).
 
+38. [36 - Export videos, channels and logs as CSV](36-export-videos-channels-and-logs-as-csv.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -115,6 +117,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [32-filter-results-by-date-and-video.md](32-filter-results-by-date-and-video.md) | US-029 |  Done  | Date and video filters for the Results card, filtering on the YouTube publish date by UTC day, the same honest project-scoped counts, a pure parameter parser, and small UI details the review caught. |
 | [35-show-sentiment-distribution-chart.md](35-show-sentiment-distribution-chart.md) | US-028 |  Done  | The per-model sentiment chart in the Results card: latest pass only, each comment once, never mixing models, dates from the counted comments, bars without a chart library, and the filters and purge. |
 | [33-filter-results-by-sentiment.md](33-filter-results-by-sentiment.md) | US-030 |  Done  | The sentiment label filter in the run detail: whole-pass counts as the baseline, never mixing models, strict input including repeated parameters, and when the dropdown appears. |
+| [36-export-videos-channels-and-logs-as-csv.md](36-export-videos-channels-and-logs-as-csv.md) | US-031 |  Done  | Three project CSV downloads, `collected_at` and `delete_by` from the purge's own rule, shared rows exported once, spreadsheet-safe escaping with a BOM, and what that means for pandas and id joins. |
 | [34-add-database-and-model-tests.md](34-add-database-and-model-tests.md) | US-033 |  Done  | Tests-only: a before-and-after snapshot of every table around the purge, the table of 20 delete rules, declared constraints checked in the database, and the schema-document drift it surfaced. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 | [29-add-llm-query-translation-tests.md](29-add-llm-query-translation-tests.md) | US-035 |  Done  | Tests-only: the worked-example table with exact expected drafts, deterministic requests, the draft endpoint through the real HTTP path, and a test that could not fail until review. |
