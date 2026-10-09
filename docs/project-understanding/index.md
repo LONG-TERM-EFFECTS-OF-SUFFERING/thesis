@@ -82,6 +82,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 38. [36 - Export videos, channels and logs as CSV](36-export-videos-channels-and-logs-as-csv.md).
 
+39. [37 - Validate the workflow with synthetic fixtures](37-validate-the-workflow-with-synthetic-fixtures.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -122,6 +124,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 | [29-add-llm-query-translation-tests.md](29-add-llm-query-translation-tests.md) | US-035 |  Done  | Tests-only: the worked-example table with exact expected drafts, deterministic requests, the draft endpoint through the real HTTP path, and a test that could not fail until review. |
 | [30-add-processing-tests.md](30-add-processing-tests.md) | US-036 |  Done  | Tests-only: worked normalization examples, a report-consistency check over five controlled corpora including a seeded generated one, processing on the real collection path, and the zero-width joiner finding. |
+| [37-validate-the-workflow-with-synthetic-fixtures.md](37-validate-the-workflow-with-synthetic-fixtures.md) | US-038 |  Done  | Tests-only: one offline pass from prompt to CSV over a synthetic corpus, faking only the network, a stage name on every failure, and the gaps the review closed. |
 
 ## How to use this folder
 
