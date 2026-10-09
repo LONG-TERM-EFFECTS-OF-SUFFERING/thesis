@@ -78,6 +78,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 36. [34 - Add database and model tests](34-add-database-and-model-tests.md).
 
+37. [35 - Show sentiment distribution chart](35-show-sentiment-distribution-chart.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -111,6 +113,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [31-show-sentiment-labels-scores-and-model-information.md](31-show-sentiment-labels-scores-and-model-information.md) | US-026 |  Done  | The run sentiment endpoint and Sentiment section, model name and version above the results, honest number formatting, counts that survive the purge, a message for every state, and a seeding recipe. |
 | [25-show-results-summary-counts-and-card.md](25-show-results-summary-counts-and-card.md) | US-027 |  Done  | The project results summary endpoint and card, counting in the database, shared rows with project-scoped counts, and why the date range comes from run-video links. |
 | [32-filter-results-by-date-and-video.md](32-filter-results-by-date-and-video.md) | US-029 |  Done  | Date and video filters for the Results card, filtering on the YouTube publish date by UTC day, the same honest project-scoped counts, a pure parameter parser, and small UI details the review caught. |
+| [35-show-sentiment-distribution-chart.md](35-show-sentiment-distribution-chart.md) | US-028 |  Done  | The per-model sentiment chart in the Results card: latest pass only, each comment once, never mixing models, dates from the counted comments, bars without a chart library, and the filters and purge. |
 | [33-filter-results-by-sentiment.md](33-filter-results-by-sentiment.md) | US-030 |  Done  | The sentiment label filter in the run detail: whole-pass counts as the baseline, never mixing models, strict input including repeated parameters, and when the dropdown appears. |
 | [34-add-database-and-model-tests.md](34-add-database-and-model-tests.md) | US-033 |  Done  | Tests-only: a before-and-after snapshot of every table around the purge, the table of 20 delete rules, declared constraints checked in the database, and the schema-document drift it surfaced. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
