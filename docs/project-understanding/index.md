@@ -84,6 +84,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 39. [37 - Validate the workflow with synthetic fixtures](37-validate-the-workflow-with-synthetic-fixtures.md).
 
+40. [38 - Export raw payloads, sentiment and metrics](38-export-raw-payloads-sentiment-and-metrics.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -120,6 +122,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [35-show-sentiment-distribution-chart.md](35-show-sentiment-distribution-chart.md) | US-028 |  Done  | The per-model sentiment chart in the Results card: latest pass only, each comment once, never mixing models, dates from the counted comments, bars without a chart library, and the filters and purge. |
 | [33-filter-results-by-sentiment.md](33-filter-results-by-sentiment.md) | US-030 |  Done  | The sentiment label filter in the run detail: whole-pass counts as the baseline, never mixing models, strict input including repeated parameters, and when the dropdown appears. |
 | [36-export-videos-channels-and-logs-as-csv.md](36-export-videos-channels-and-logs-as-csv.md) | US-031 |  Done  | Three project CSV downloads, `collected_at` and `delete_by` from the purge's own rule, shared rows exported once, spreadsheet-safe escaping with a BOM, and what that means for pandas and id joins. |
+| [38-export-raw-payloads-sentiment-and-metrics.md](38-export-raw-payloads-sentiment-and-metrics.md) | US-032 |  Done  | The dataset JSON and sentiment CSV: a named, versioned format, dates on every record and `null` where the purge keeps it, each run's latest pass of one model, a summary that cannot drift, and why numbers are no longer escaped. |
 | [34-add-database-and-model-tests.md](34-add-database-and-model-tests.md) | US-033 |  Done  | Tests-only: a before-and-after snapshot of every table around the purge, the table of 20 delete rules, declared constraints checked in the database, and the schema-document drift it surfaced. |
 | [15-add-youtube-collection-service-tests.md](15-add-youtube-collection-service-tests.md) | US-034 |  Done  | Auditing existing tests for gaps, faking only `urlopen` so the real HTTP path runs, documented-shape fixtures, tests that fail instead of hang, and the repeated page-token fix. |
 | [29-add-llm-query-translation-tests.md](29-add-llm-query-translation-tests.md) | US-035 |  Done  | Tests-only: the worked-example table with exact expected drafts, deterministic requests, the draft endpoint through the real HTTP path, and a test that could not fail until review. |

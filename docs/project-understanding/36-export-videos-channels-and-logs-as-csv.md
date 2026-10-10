@@ -4,6 +4,8 @@ Story: US-031, Export videos, channels and logs as CSV.
 
 Status note: this document describes the US-031 implementation **after** the code review of 2026-10-09 and the fixes that followed it.
 
+Later change (US-032, page 38): numbers are no longer escaped, only text cells, so a negative score stays a number. `delete_by` is now described as the date the data must be deleted by: the purge can remove a row earlier, together with its video.
+
 ## What this story added
 
 The **Results** panel has an **Export** group with three download links for the active project:
