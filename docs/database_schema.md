@@ -18,7 +18,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 
 - Numeric ranges and date ordering rules should be enforced with Django `CheckConstraint` objects where noted.
 
-- Retention: the YouTube API Services Developer Policies (III.E.4.d) allow API data to be stored for at most 30 calendar days. A purge command (US-040) deletes `youtube_channels`, `youtube_videos` and `youtube_comments` rows whose `last_fetched_at` is older than 30 days, `video_statistics_snapshots` by `captured_at`, and `derived_metrics` by `created_at`. Link tables, snapshots and sentiment records go with their parent rows through `ON DELETE CASCADE`. Researcher-authored and collection metadata tables (`research_projects`, `saved_queries`, `collection_runs`, `api_request_logs`, `processing_runs`) are kept; `api_request_logs` therefore stores no response bodies or YouTube resource identifiers.
+- Retention: the YouTube API Services Developer Policies (III.E.4.d) allow API data to be stored for at most 30 calendar days. A purge command (US-040) deletes `youtube_channels`, `youtube_videos` and `youtube_comments` rows whose `last_fetched_at` is older than 30 days, `video_statistics_snapshots` by `captured_at`. Link tables, snapshots and sentiment records go with their parent rows through `ON DELETE CASCADE`. Researcher-authored and collection metadata tables (`research_projects`, `saved_queries`, `collection_runs`, `api_request_logs`, `processing_runs`) are kept; `api_request_logs` therefore stores no response bodies or YouTube resource identifiers.
 
 ### Django authentication user (`auth_user`)
 
@@ -63,7 +63,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 
 - **Purpose**: stores reusable query definitions, including natural language requests and structured YouTube API parameters.
 
-- **Constraints and relationships**: each saved query belongs to one project and one creator user. The pair (`project_id`, `name`) must be unique. The date range check requires `published_before` to be equal to or later than `published_after` when both are present.
+- **Constraints and relationships**: each saved query belongs to one project and one creator user. The combination (`project_id`, `created_by_user_id`, `name`) must be unique. The API rejects a `published_before` earlier than `published_after` when both are present; this date range check is not a database constraint.
 
 |          column           | PostgreSQL type |                             Django field                              | null | key | description                                                                                            |
 | :-----------------------: | :-------------: | :-------------------------------------------------------------------: | :--: | :-: | :----------------------------------------------------------------------------------------------------- |
@@ -73,7 +73,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 |          `name`           | `VARCHAR(200)`  |                      `CharField(max_length=200)`                      |  NO  |  -  | User-defined name of the saved query.                                                                  |
 | `natural_language_prompt` |     `TEXT`      |                  `TextField(null=True, blank=True)`                   | YES  |  -  | Original natural language instruction used to build the query.                                         |
 |      `query_source`       |  `VARCHAR(20)`  |                `CharField(max_length=20, choices=...)`                |  NO  |  -  | Origin of the query definition. Allowed values are `manual` and `llm_generated`. Default: `manual`.    |
-|       `search_term`       |     `TEXT`      |                  `TextField(null=True, blank=True)`                   |  NO  |  -  | Keyword or phrase used for the search request.                                                         |
+|       `search_term`       |     `TEXT`      |                             `TextField()`                             |  NO  |  -  | Keyword or phrase used for the search request.                                                         |
 |     `published_after`     |  `TIMESTAMPTZ`  |                `DateTimeField(null=True, blank=True)`                 | YES  |  -  | Lower publication date bound used in the query.                                                        |
 |    `published_before`     |  `TIMESTAMPTZ`  |                `DateTimeField(null=True, blank=True)`                 | YES  |  -  | Upper publication date bound used in the query.                                                        |
 | `max_videos_to_discover`  |    `INTEGER`    |             `PositiveIntegerField(null=True, blank=True)`             | YES  |  -  | Optional total number of videos the saved query should try to discover during later collection.        |
@@ -101,8 +101,8 @@ This data dictionary describes the persistence layer for the YouTube research pl
 | :------------------------: | :-------------: | :---------------------------------------------------------: | :--: | :-: | :------------------------------------------------------------------------------------------------------------------------------------ |
 |            `id`            |     `UUID`      |                `UUIDField(primary_key=True)`                |  NO  | PK  | Internal unique identifier of the collection run. Generated by Django with `uuid.uuid4`.                                              |
 |        `project_id`        |     `UUID`      |           `ForeignKey(ResearchProject, CASCADE)`            |  NO  | FK  | Reference to the project in which the run was executed. References `research_projects(id)`, `ON DELETE CASCADE`.                      |
-|      `saved_query_id`      |     `UUID`      |        `ForeignKey(SavedQuery, SET_NULL, null=True)`        |  NO  | FK  | Reference to the saved query used to launch the run. References `saved_queries(id)`, `ON DELETE SET NULL`.                            |
-|   `initiated_by_user_id`   |    `INTEGER`    | `ForeignKey(settings.AUTH_USER_MODEL, SET_NULL, null=True)` |  NO  | FK  | Reference to the user who started the run. References Django's user table, `ON DELETE SET NULL`.                                      |
+|      `saved_query_id`      |     `UUID`      |        `ForeignKey(SavedQuery, SET_NULL, null=True)`        | YES  | FK  | Reference to the saved query used to launch the run. References `saved_queries(id)`, `ON DELETE SET NULL`.                            |
+|   `initiated_by_user_id`   |    `INTEGER`    | `ForeignKey(settings.AUTH_USER_MODEL, SET_NULL, null=True)` | YES  | FK  | Reference to the user who started the run. References Django's user table, `ON DELETE SET NULL`.                                      |
 |          `status`          |  `VARCHAR(20)`  |           `CharField(max_length=20, choices=...)`           |  NO  |  -  | Current execution status. Allowed values are `pending`, `running`, `completed`, `failed` and `cancelled`.                             |
 |     `effective_params`     |     `JSONB`     |                  `JSONField(default=dict)`                  |  NO  |  -  | Parameters copied from the saved query at start: `search_list`, `max_videos_to_discover`, `max_comments_per_video` and `max_replies_per_comment`. Never edited.  |
 | `requested_comment_limit`  |    `INTEGER`    |        `PositiveIntegerField(null=True, blank=True)`        | YES  |  -  | Top-level comments requested per selected video, copied from the saved query's `max_comments_per_video` at start; null collects none. |
@@ -240,7 +240,7 @@ This data dictionary describes the persistence layer for the YouTube research pl
 
 - **Purpose**: stores both top-level comments and replies collected from videos.
 
-- **Constraints and relationships**: the external `youtube_comment_id` is unique. Each comment belongs to one video. The self-reference `parent_comment_id` links replies to their parent comment. A database `CheckConstraint` should require top-level comments to have no parent and reply comments to have a parent. The `updated_at` field is maintained by Django.
+- **Constraints and relationships**: the external `youtube_comment_id` is unique. Each comment belongs to one video. The self-reference `parent_comment_id` links replies to their parent comment. A database `CheckConstraint` requires top-level comments to have no parent and reply comments to have a parent. The `updated_at` field is maintained by Django.
 
 |         column         | PostgreSQL type |                   Django field                    | null |  key   | description                                                                                                |
 | :--------------------: | :-------------: | :-----------------------------------------------: | :--: | :----: | :--------------------------------------------------------------------------------------------------------- |
@@ -323,25 +323,6 @@ This data dictionary describes the persistence layer for the YouTube research pl
 |   `language_code`   |  `VARCHAR(20)`  |           `CharField(max_length=20, null=True, blank=True)`           | YES  |  -  | Language code detected or used during sentiment analysis.                                              |
 |    `raw_payload`    |     `JSONB`     |                  `JSONField(null=True, blank=True)`                   | YES  |  -  | Raw model output stored in PostgreSQL as `JSONB`.                                                      |
 |    `created_at`     |  `TIMESTAMPTZ`  |                  `DateTimeField(auto_now_add=True)`                   |  NO  |  -  | Timestamp when the sentiment record was created.                                                       |
-
-### `derived_metrics`
-
-- **Django model**: `DerivedMetric`.
-
-- **Purpose**: stores aggregated or derived analytical metrics produced by processing runs.
-
-- **Constraints and relationships**: each metric belongs to one processing run. `metric_scope` is restricted to `project`, `collection_run`, `channel`, `video`, `comment` and `query`.
-
-|         column         | PostgreSQL type |                              Django field                              | null | key | description                                                                                     |
-| :--------------------: | :-------------: | :--------------------------------------------------------------------: | :--: | :-: | :---------------------------------------------------------------------------------------------- |
-|          `id`          |     `UUID`      |                     `UUIDField(primary_key=True)`                      |  NO  | PK  | Internal unique identifier of the derived metric record. Generated by Django with `uuid.uuid4`. |
-|  `processing_run_id`   |     `UUID`      |                  `ForeignKey(ProcessingRun, CASCADE)`                  |  NO  | FK  | Reference to the processing run that generated the metric. References `processing_runs(id)`.    |
-|     `metric_scope`     |  `VARCHAR(20)`  |                `CharField(max_length=20, choices=...)`                 |  NO  |  -  | Level at which the metric applies, such as project or video.                                    |
-|   `scope_record_id`    |     `UUID`      |                   `UUIDField(null=True, blank=True)`                   | YES  |  -  | Identifier of the record inside the selected scope, when applicable.                            |
-|     `metric_name`      | `VARCHAR(120)`  |                      `CharField(max_length=120)`                       |  NO  |  -  | Name of the derived metric.                                                                     |
-| `metric_value_numeric` | `NUMERIC(20,6)` | `DecimalField(max_digits=20, decimal_places=6, null=True, blank=True)` | YES  |  -  | Numeric value of the metric, when the result is quantitative.                                   |
-|  `metric_value_text`   |     `TEXT`      |                   `TextField(null=True, blank=True)`                   | YES  |  -  | Text value of the metric, when the result is descriptive.                                       |
-|      `created_at`      |  `TIMESTAMPTZ`  |                   `DateTimeField(auto_now_add=True)`                   |  NO  |  -  | Timestamp when the metric record was created.                                                   |
 
 ## ER diagram
 

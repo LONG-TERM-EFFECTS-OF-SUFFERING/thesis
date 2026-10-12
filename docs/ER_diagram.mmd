@@ -29,7 +29,6 @@ erDiagram
     YOUTUBE_COMMENTS ||--o{ COMMENT_SENTIMENTS : analyzed_as
 
     PROCESSING_RUNS ||--o{ COMMENT_SENTIMENTS : produces
-    PROCESSING_RUNS ||--o{ DERIVED_METRICS : produces
 
     AUTH_USER {
         INTEGER id PK
@@ -228,16 +227,5 @@ erDiagram
         DECIMAL confidence
         VARCHAR language_code
         JSONB raw_payload
-        TIMESTAMPTZ created_at
-    }
-
-    DERIVED_METRICS {
-        UUID id PK
-        UUID processing_run_id FK
-        VARCHAR metric_scope
-        UUID scope_record_id
-        VARCHAR metric_name
-        DECIMAL metric_value_numeric
-        TEXT metric_value_text
         TIMESTAMPTZ created_at
     }
