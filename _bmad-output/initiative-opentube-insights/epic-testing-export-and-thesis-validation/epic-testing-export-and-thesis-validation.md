@@ -15,7 +15,7 @@ created: 2026-10-02
 
 ## Description
 
-Component tests cover the database, the collection service, query translation, processing and the presentation layer; the dataset exports as CSV and JSON; and the complete workflow is proven first on synthetic fixtures and then on real YouTube topics, producing the evidence the thesis reports.
+Component tests cover the database, the collection service, query translation, processing and the presentation layer; the dataset exports as CSV and JSON; and the complete workflow is proven first on synthetic fixtures and then on two real YouTube topics, producing the evidence the thesis reports.
 
 ## Outcome
 
@@ -33,14 +33,14 @@ Transcribed from `docs/product_backlog.md`, each line keeping its `US-0NN` id so
 - US-036: Add processing tests — Tests cover processing run creation, normalization, validation counts and error reporting. (docs/product_backlog.md, User stories, priority must)
 - US-037: Add presentation smoke tests — Tests or smoke checks cover the main user path and key result screens. (docs/product_backlog.md, User stories, priority must)
 - US-038: Validate the workflow with synthetic fixtures — A fixture-based path proves query review, collection-like data, processing and visual output without relying on live API availability. (docs/product_backlog.md, User stories, priority must)
-- US-039: Validate the workflow with real YouTube topics — A validation run uses one or two real YouTube topics and records input, collection, processing and chart output within one 30-day retention window. (docs/product_backlog.md, User stories, priority must)
+- US-039: Validate the workflow with real YouTube topics — A validation run on each of two real YouTube topics records input, collection, processing and chart output within one 30-day retention window; a validation report checks the aggregate results against the requirements. (docs/product_backlog.md, User stories, priority must)
 
 ## Done when
 
 1. Videos, channels and logs export as CSV; raw payloads, sentiment and metrics export as JSON or CSV.
 2. Each layer has automated tests: database and models, the YouTube collection service, LLM query translation, processing, and a presentation smoke test.
 3. The workflow is validated end to end on synthetic fixtures with no live API calls.
-4. The workflow is then validated on real YouTube topics and the evidence recorded.
+4. The workflow is then validated on two real YouTube topics, and a validation report checks the aggregate results against the requirements.
 
 ## Boundaries
 
@@ -56,3 +56,5 @@ Automated tests, exports and the thesis validation evidence. Not new product beh
 ## Notes
 
 - Assumption: Done when was written from the backlog's epic row and its stories' done-when column; v6 had no epics.md stating epic-level checks. Confirm or correct it.
+- Decision (2026-10-16): US-039 validates exactly two real YouTube topics and adds a validation report against the requirements, because thesis activity A4.3 now reads "using real data from two YouTube topics" and its expected result asks for documentation of results against requirements. Backlog row and sprint 13 notes changed with it.
+- Open question (US-039): the researcher chooses the two topics, and the run needs live YouTube and OpenAI keys, so a person runs it; it is a recorded manual run, not an automated test, since no test may reach the live APIs. Whether the entry becomes `hitl = true` is the user's call.
