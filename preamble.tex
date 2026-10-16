@@ -54,6 +54,12 @@
 \usepackage{multirow}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{longtable}
+
+% Labels a table row so \ref prints its activity ID (e.g. A1.1) instead of the table number
+\makeatletter
+\newcommand{\activitylabel}[2]{\phantomsection\def\@currentlabel{#2}\label{#1}#2}
+\makeatother
 
 % ------------------------------- BIBLIOGRAPHY ------------------------------- %
 
@@ -71,6 +77,7 @@
 % ------------------------- GRAPHICS AND ASSETS PATH ------------------------- %
 
 \usepackage{pgfgantt}
+\usetikzlibrary{arrows.meta}
 \graphicspath{{assets/}}
 
 % ---------------------------------- COLORS ---------------------------------- %

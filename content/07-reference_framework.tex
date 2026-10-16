@@ -5,27 +5,19 @@
 \begin{itemize}
     \item \textbf{Methodological transparency}: a practice in research where the methods, procedures and analysis techniques are documented and shared in sufficient detail to allow other researchers to understand exactly how the study was conducted.
 
-    \item \textbf{API (Application Programming Interface)}: \enquote{a set of functions and procedures that allow the creation of applications which access the features or data of an operating system, application, or other service, enabling third parties to use the functionality of that software application}. \autocite{sciencedirect_api}
-
-    \item \textbf{LLM (Large Language Model)}: \enquote{a narrow artificial intelligence (AI) system that has been trained on a massive amount of text data to interpret natural language and generate human-like responses to text-based prompts or questions}. \autocite{almarie2023llm}
-
-    \item \textbf{Computational reproducibility}: \enquote{obtaining consistent results using the same input data, computational methods and conditions of analysis}. \autocite{nasem2019reproducibility} In the context of API-driven platforms, computational reproducibility applies to the data processing and analysis stages while the stored raw payloads exist; in OpenTube, platform terms limit that period to 30 days after collection (Subsection~\ref{subsec:ethics_privacy_and_terms_compliance}).
+    \item \textbf{Computational reproducibility}: \enquote{obtaining consistent results using the same input data, computational methods and conditions of analysis} \autocite{nasem2019reproducibility}. In the context of API-driven platforms, computational reproducibility applies to the data processing and analysis stages while the stored raw payloads exist; in OpenTube, platform terms limit that period to 30 days after collection (Subsection~\ref{subsec:ethics_privacy_and_terms_compliance}).
 
     \item \textbf{Data provenance (or documented provenance)}: the documented origin, chain of custody, execution context and transformation history of a dataset. In API data collection, provenance requires recording full request metadata—including query parameters, pagination tokens, execution timestamps and, for as long as platform terms permit, raw JSON responses—so that the way data were retrieved can be traced.
 
     \item \textbf{Methodological auditability}: the characteristic of a system or study that enables external reviewers to inspect, verify and trace every stage of data collection and processing through accessible logs, raw payloads retained for as long as platform terms permit and documented parameter configurations, even when underlying third-party endpoints exhibit temporal result decay.
 
-    \item \textbf{Replicability}: \enquote{an attempt by a second researcher to replicate a previous study is an effort to determine whether applying the same methods to the same scientific question produces similar results}. \autocite{nasem2019reproducibility}
+    \item \textbf{Social listening}: \enquote{monitoring and analyzing conversations that take place on social and digital channels to gain insights into customer opinions, preferences and trends. It involves tracking mentions of a brand, product, or relevant keywords and analyzing the sentiment and context of these conversations} \autocite{emplifi_sociallistening}.
 
-    \item \textbf{Social network site}: \enquote{a networked communication platform in which participants (a) have uniquely identifiable profiles that consist of user-supplied content, content provided by other users and/or system-level data; (b) can publicly articulate connections that can be viewed and traversed by others; and (c) can consume, produce and/or interact with streams of user-generated content provided by their connections on the site}. \autocite{aichner2021socialmedia}
-
-    \item \textbf{Social listening}: \enquote{monitoring and analyzing conversations that take place on social and digital channels to gain insights into customer opinions, preferences and trends. It involves tracking mentions of a brand, product, or relevant keywords and analyzing the sentiment and context of these conversations}. \autocite{emplifi_sociallistening}
-
-    \item \textbf{Sentiment analysis}: \enquote{can be stated as the procedure to identify, recognize and/or categorize the users' emotions or opinions for any service like movies, product issues, events, or any attribute as positive, negative, or neutral}. \autocite{bordoloi2023sentiment}
+    \item \textbf{Sentiment analysis}: \enquote{can be stated as the procedure to identify, recognize and/or categorize the users' emotions or opinions for any service like movies, product issues, events, or any attribute as positive, negative, or neutral} \autocite{bordoloi2023sentiment}.
 
 \end{itemize}
 
-\section{State of art}
+\section{State of the art}
 
 \subsection{LLM-based query generation}
 
@@ -103,7 +95,7 @@ Understanding the structure of interactions within YouTube as a social network i
 \textcite{sui2022youtube} identify three primary roles that individuals occupy within the YouTube social network, each representing progressively higher levels of platform engagement.
 
 \begin{itemize}
-    \item \textbf{Viewer}: represents represents the most basic level of engagement, consisting of individuals who interact with YouTube solely through passive video consumption. This role requires no account and represents the broadest, least specific form of platform engagement.
+    \item \textbf{Viewer}: represents the most basic level of engagement, consisting of individuals who interact with YouTube solely through passive video consumption. This role requires no account and represents the broadest, least specific form of platform engagement.
 
     \item \textbf{User}: extends beyond passive viewing to include active engagement mechanisms available through a Google account, such as leaving likes or dislikes on videos, posting comments, replying to existing comments, liking or disliking comments and subscribing to channels.
 
@@ -167,17 +159,3 @@ In the Colombian context, personal data handling is governed by Statutory Law 15
 
     \item \textbf{Scientific purpose exemption}: data processing is conducted strictly for public-interest academic research, directly supporting computational social science projects such as PROMUEVA at Universidad del Valle \autocite{promueva_project}. This exemption concerns personal data protection under Law 1581 only; it does not exempt OpenTube from the YouTube API Services Developer Policies described above.
 \end{itemize}
-
-\subsection{YouTube Data API limitations and computational reproducibility challenges}
-
-\label{subsec:youtube_data_api_limitations_and_computational reproducibility_challenges}
-
-Beyond the diversity of methodological approaches employed by researchers, the YouTube Data API itself presents inherent technical limitations that must be carefully considered to ensure research reproducibility. Crucially, all YouTube data collection tools, whether open-source or commercial, depend entirely on the YouTube Data API, which is controlled by Google and subject to unilateral modifications without academic input. The discontinuation of the \mintinline{text}{relatedToVideoId} parameter in August 2023, which was previously essential for expanding datasets through recommendation networks, exemplifies how platform decisions can retroactively invalidate established research methodologies and prevent replication of earlier studies.
-
-Recent empirical investigations reveal that the API's Search endpoint exhibits significant temporal variability in returned results. \textcite{efstratiou2025youtube} conducted a systematic audit by running identical queries at 5-day intervals over 12 weeks across six diverse topics, finding that Jaccard similarity between video sets declined substantially over time, demonstrating that datasets collected using the exact same historical query may differ vastly based solely on when queries are executed.
-
-In light of the temporal decay demonstrated by \textcite{efstratiou2025youtube}, true end-to-end computational reproducibility—defined as generating identical datasets from live API queries over time—is fundamentally unachievable on dynamic platforms like YouTube. Consequently, this work adopts a two-tiered methodological framework: (1) \textbf{Auditability and Documented Provenance} during data collection, achieved by permanently logging request parameters, pagination tokens and execution timestamps (\texttt{api\_request\_logs}, \texttt{collection\_runs}) and by retaining raw payloads for the 30 days permitted by the YouTube API Services Developer Policies; and (2) \textbf{Computational Reproducibility} during analysis, obtained by applying deterministic parsing routines and documented sentiment models to the raw data while it is retained. Because a stored dataset cannot outlive that window, the reproducible unit in OpenTube is the documented collection procedure—saved query, effective parameters and request logs—rather than the dataset itself; the temporal decay described above already means that re-running a query yields a different sample, so the procedure is what another researcher can verify. Tools and frameworks that systematically document API dependencies, timestamp data collection and maintain transparent records of all methodological decisions are essential for conducting replicable YouTube research within these known limitations.
-
-\subsection{Scrum}
-
-Scrum is an agile project management framework that facilitates team collaboration through iterative and incremental development \autocite{schwaber2020scrum}. The framework prescribes for teams to break work into goals completed within time-boxed iterations called sprints, typically lasting two to four weeks \autocite{schwaber2020scrum}. Scrum is based on three pillars (transparency, inspection and adaptation) and emphasizes self-organization, continuous feedback and flexibility in response to changing requirements \autocite{schwaber2020scrum}. Originally developed for software development, Scrum has since been successfully applied to various complex projects requiring iterative progress and stakeholder collaboration \autocite{schwaber2020scrum}.

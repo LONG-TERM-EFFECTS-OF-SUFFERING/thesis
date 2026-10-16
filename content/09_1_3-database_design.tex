@@ -1,10 +1,10 @@
 \subsection{Database design}
 
-The database was designed for the PostgreSQL DBMS selected in Activity A1.1~\ref{act:1.1} and for the Django-based backend defined in the technology stack. The schema supports the complete workflow of the application: project creation, query definition, YouTube data collection, API request traceability, data processing and visualization. In this design, Django model classes define the application entities and the ORM maps them to PostgreSQL tables, so the database structure remains close to the backend implementation.
+The database was designed for the PostgreSQL DBMS selected in Activity~\ref{act:1.1} and for the Django-based backend defined in the technology stack. The schema supports the complete workflow of the application: project creation, query definition, YouTube data collection, API request traceability, data processing and visualization. In this design, Django model classes define the application entities and the ORM maps them to PostgreSQL tables, so the database structure remains close to the backend implementation.
 
-The design also responds to Activity A1.3~\ref{act:1.3}, which requires storage for videos, comments, replies, user projects, API queries and processing metadata. For methodological transparency, the schema does not only store the final processed data. It also stores collection runs, request parameters, quota consumption, pagination information, raw API payloads and processing outputs, because these records describe the conditions under which the dataset was obtained and transformed. Raw payloads and every other record that holds YouTube API data are kept for at most 30 days after retrieval, as required by the YouTube API Services Developer Policies \autocite{youtube_api_services_developer_policies}; collection and processing metadata are kept permanently.
+The design also responds to Activity~\ref{act:1.3}, which requires storage for videos, comments, replies, user projects, API queries and processing metadata. For methodological transparency, the schema does not only store the final processed data. It also stores collection runs, request parameters, quota consumption, pagination information, raw API payloads and processing outputs, because these records describe the conditions under which the dataset was obtained and transformed. Raw payloads and every other record that holds YouTube API data are kept for at most 30 days after retrieval, as required by the YouTube API Services Developer Policies \autocite{youtube_api_services_developer_policies}; collection and processing metadata are kept permanently.
 
-The complete table definitions and ER diagram are in \href{https://github.com/LONG-TERM-EFFECTS-OF-SUFFERING/thesis/tree/main/docs/database_schema.md}{\texttt{database\_schema.md}}. The following sections summarize the design criteria, implementation model, main entities, relationships and integrity controls of the database schema.
+Figure~\ref{fig:er_diagram} shows the entity-relationship diagram; the complete table definitions, with every field and data type, are in \href{https://github.com/LONG-TERM-EFFECTS-OF-SUFFERING/thesis/tree/main/docs/database_schema.md}{\texttt{database\_schema.md}}. The following sections summarize the design criteria, implementation model, main entities and integrity controls of the database schema.
 
 \subsubsection{Design criteria}
 
@@ -49,61 +49,75 @@ PostgreSQL \texttt{JSONB} columns are represented in Django with \texttt{JSONFie
     \end{tabularx}
 \end{table}
 
-\subsubsection{Main entities}
+\subsubsection{Main entities and relationships}
+
+Figure~\ref{fig:er_diagram} shows the thirteen tables of the schema and the foreign keys between them. The following design decisions are not visible in the diagram.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tikzpicture}
+            [
+            entity/.style={draw, rounded corners=2pt, minimum height=0.65cm, font=\ttfamily\footnotesize},
+            fk/.style={-{Stealth[length=2mm]}},
+            nullable/.style={fk, dashed}
+            ]
+            \node[entity, minimum width=3.6cm] (user) at (0, 0) {auth\_user};
+            \node[entity, minimum width=3.6cm] (project) at (0, -2) {research\_projects};
+            \node[entity, minimum width=3.6cm] (processing) at (0, -5) {processing\_runs};
+            \node[entity, minimum width=3.6cm] (query) at (5, 0) {saved\_queries};
+            \node[entity, minimum width=3.6cm] (run) at (5, -2) {collection\_runs};
+            \node[entity, minimum width=3.6cm] (log) at (5, -4) {api\_request\_logs};
+            \node[entity, minimum width=4.6cm] (runvideo) at (10.2, -1) {collection\_run\_videos};
+            \node[entity, minimum width=4.6cm] (runcomment) at (10.2, -3.5) {collection\_run\_comments};
+            \node[entity, minimum width=4.6cm] (sentiment) at (10.2, -5.5) {comment\_sentiments};
+            \node[entity, minimum width=5.2cm] (channel) at (16, 0.5) {youtube\_channels};
+            \node[entity, minimum width=5.2cm] (video) at (16, -1) {youtube\_videos};
+            \node[entity, minimum width=5.2cm] (snapshot) at (16, -2.5) {video\_statistics\_snapshots};
+            \node[entity, minimum width=5.2cm] (comment) at (16, -4) {youtube\_comments};
+
+            \draw[fk] (project) -- (user);
+            \draw[fk] (query) -- (project);
+            \draw[fk] (run) -- (project);
+            \draw[nullable] (run) -- (query);
+            \draw[fk] (log) -- (run);
+            \draw[fk] (processing) -- (project);
+            \draw[nullable] (processing) -- (run);
+            \draw[fk] (runvideo) -- (run);
+            \draw[fk] (runvideo) -- (video);
+            \draw[fk] (runcomment) -- (run);
+            \draw[fk] (runcomment) -- (comment);
+            \draw[nullable] (video) -- (channel);
+            \draw[fk] (snapshot) -- (video);
+            \draw[nullable] (snapshot) -- (run);
+            \draw[fk] (comment.east) -- ++(0.4, 0) |- (video.east);
+            \draw[nullable] ([xshift=6mm]comment.south) -- ++(0, -0.5) -| ([xshift=14mm]comment.south);
+            \draw[fk] (sentiment) -- (processing);
+            \draw[fk] (sentiment) -- (comment);
+        \end{tikzpicture}
+        %
+    }
+    \caption[Entity-relationship diagram of the database schema]{Entity-relationship diagram of the database schema. Each arrow is a foreign key and points from the referencing table (many side) to the referenced table (one side); dashed arrows are nullable references. The loop on \texttt{youtube\_comments} links a reply to its top-level comment. References to \texttt{auth\_user} other than project ownership are omitted.}
+    \label{fig:er_diagram}
+\end{figure}
 
 \paragraph{User and project management}
 
-The project uses Django's \texttt{auth\_user} table for account management. The table \texttt{research\_projects} stores the research workspaces created by users, and each project belongs to one owner. The pair \texttt{owner\_user\_id} and \texttt{name} is unique so that a user cannot create two projects with the same name. The table \texttt{saved\_queries} stores reusable query definitions for each project. It includes the original natural language prompt (if there was one), the query source, date filters, regional and language filters, the number of videos to discover, the number of top-level comments to collect per video and of replies per comment, structured query parameters, LLM model metadata (if the query was generated by a LLM) and optional notes. A query name is unique for its creator within a project. This design connects the user-facing query process with the exact parameters later sent to the YouTube Data API.
+Each research project belongs to one owner. A saved query keeps the original natural language prompt (if there was one), the query source, the date, regional and language filters, the number of videos to discover and of comments and replies to collect, the structured query parameters and, when the query was generated by an LLM, the model metadata. This connects the user-facing query process with the exact parameters later sent to the YouTube Data API.
 
 \paragraph{Collection traceability}
 
-The table \texttt{collection\_runs} represents one execution of the data collection workflow. It stores the project, the saved query used when applicable, the user who initiated the run, execution status, start and finish timestamps, API request counts, quota units consumed, collected item counts and error information. When the run starts, the parameters of the saved query are copied into \texttt{effective\_\allowbreak params} and are never edited afterwards, and the comment and reply limits are copied into \texttt{requested\_\allowbreak comment\_\allowbreak limit} and \texttt{requested\_\allowbreak reply\_\allowbreak limit}. A later change to the saved query therefore does not alter the record of what a past run requested. The counter \texttt{total\_\allowbreak videos\_\allowbreak skipped} records search results that added no video, such as repeated video identifiers or channel and playlist results, so the discovered, skipped and collected counts can be reconciled. The table \texttt{api\_request\_logs} stores the detailed request history for each run. Each log records the request sequence, endpoint name, request parameters, \texttt{part} and \texttt{fields} parameters, pagination tokens, HTTP status, quota cost, number of returned items and possible errors. These tables make the collection process auditable instead of treating it as a black box.
+When a collection run starts, the parameters of the saved query are copied into \texttt{effective\_\allowbreak params} and the comment and reply limits into \texttt{requested\_\allowbreak comment\_\allowbreak limit} and \texttt{requested\_\allowbreak reply\_\allowbreak limit}, and none of them is edited afterwards. A later change to the saved query, or its deletion, therefore does not alter the record of what a past run requested. Each request of the run is stored in \texttt{api\_request\_logs} with its sequence number, endpoint name, request parameters, \texttt{part} and \texttt{fields} values, pagination tokens, HTTP status, quota cost, number of returned items and possible errors, so the collection process is auditable instead of a black box. The counter \texttt{total\_\allowbreak videos\_\allowbreak skipped} records search results that added no video, such as repeated video identifiers or channel and playlist results, so the discovered, skipped and collected counts can be reconciled.
 
 \paragraph{YouTube resources}
 
-The tables \texttt{youtube\_channels} and \texttt{youtube\_videos} store normalized metadata for channels and videos. Each channel keeps its original \texttt{youtube\_channel\_id}, title, description, country, publication date, statistics and raw payload. Each video keeps its original \texttt{youtube\_video\_id}, an optional channel reference, title, description, publication date, duration, language metadata, category, tags, live broadcast status and raw payload. Original YouTube identifiers are unique business keys, while UUID values are used internally for application relationships. Channels, videos and comments record their last retrieval time in \texttt{last\_\allowbreak fetched\_\allowbreak at}, which starts the 30-day retention window.
-
-Because the same video can appear in multiple collection runs, the many-to-many relationship between runs and videos is stored in \texttt{collection\_run\_videos}. This link table also stores discovery context, such as page number and discovery timestamp. Video statistics are stored in \texttt{video\_statistics\_snapshots} instead of only inside \texttt{youtube\_videos}, because values such as views, likes and comment counts can change over time. A collection run captures at most one snapshot per video, and a snapshot keeps its values with a null run reference if the run record is removed.
-
-The table \texttt{youtube\_comments} stores both top-level comments and replies. Each row belongs to one video and keeps the original \texttt{youtube\_comment\_id}, author channel identifier, displayed text, original text, normalized text (\texttt{text\_\allowbreak normalized}, written by the processing pipeline), like count, reply count, publication timestamps, collection timestamps and raw payload. Replies are represented by \texttt{parent\_comment\_id}, a self-referential foreign key that points from a reply to its parent top-level comment. The \texttt{comment\_level} field distinguishes \texttt{top\_level} comments from \texttt{reply} comments, and a check constraint enforces that replies have a parent while top-level comments do not. The table \texttt{collection\_run\_comments} links comments to the run that collected them and stores page and thread-position context.
+Original YouTube identifiers are unique business keys, while UUID values are used internally for relationships. Because the same video or comment can be found by several runs, \texttt{collection\_\allowbreak run\_\allowbreak videos} and \texttt{collection\_\allowbreak run\_\allowbreak comments} link them to each run, recording the result page and discovery time and, for comments, the position within the thread. Statistics are stored in \texttt{video\_\allowbreak statistics\_\allowbreak snapshots} rather than in \texttt{youtube\_videos} because views, likes and comment counts change over time. Replies are stored in \texttt{youtube\_comments} together with top-level comments, through the self-referential key \texttt{parent\_\allowbreak comment\_\allowbreak id}. Channels, videos and comments record their last retrieval time in \texttt{last\_\allowbreak fetched\_\allowbreak at}, which starts the 30-day retention window.
 
 \paragraph{Processing and analysis}
 
-The table \texttt{processing\_runs} stores each execution of the processing pipeline. It links processing output to a project and to the collection run used as input; the run reference is set to null if that collection run is removed. It also records status, rows read, rows written, a summary payload, error messages and execution timestamps. Two kinds of processing run share this table. A normalization run cleans the text of the collected comments and writes \texttt{text\_\allowbreak normalized}; its report stores the version of the normalization rules and the number of inputs, written rows and errors, and how many comments each rule changed. A sentiment run classifies the comments after a completed normalization run; its report stores the model name and version, the number of inputs, a count per sentiment label and the number of comments skipped for having no text. Both reports hold counts only, without comment text or YouTube identifiers.
+The table \texttt{processing\_runs} holds two kinds of run. A normalization run cleans the text of the collected comments and writes \texttt{text\_\allowbreak normalized}; its report stores the version of the normalization rules, the number of inputs, written rows and errors, and how many comments each rule changed. A sentiment run classifies the comments after a completed normalization run; its report stores the model name and version, a count per sentiment label and the number of comments skipped for having no text. Both reports hold counts only, without comment text or YouTube identifiers. Each row of \texttt{comment\_sentiments} stores the model name and version next to the label, score, confidence, language code and raw model output, so results from different versions of the same model are never mixed.
 
-The table \texttt{comment\_sentiments} stores the sentiment result produced for each comment within a processing run, including model name, model version, label, numeric score, confidence, language code and raw model output. The model version is stored next to the name so that results from different versions of the same model are never mixed, and a comment receives at most one result per model and version within a processing run.
-
-The initial design also included a \texttt{derived\_metrics} table for aggregated values by scope, such as project, collection run, channel, video or comment. It was not implemented. The results summary and the sentiment distribution shown by the visualization layer are computed from the stored rows when they are requested, using database aggregation. They therefore always reflect the data that remain after the purge, and no stored copy of aggregated YouTube data needs its own retention rule. The project export delivers the same values together with the raw payloads and sentiment results, and each exported record states its collection date and the date by which it must be deleted.
-
-\subsubsection{Relationship summary}
-
-The main entity relationships are the following:
-
-\begin{itemize}
-    \item One Django user can own many research projects.
-
-    \item One research project can contain many saved queries, collection runs and processing runs.
-
-    \item One saved query can be used by many collection runs. A collection run is started from a saved query and keeps its own copy of the query parameters, so the run remains documented if the saved query is later deleted.
-
-    \item One collection run can generate many API request logs.
-
-    \item One collection run can be linked to many videos through \texttt{collection\_run\_videos}, and one video can appear in many collection runs.
-
-    \item One channel can publish many videos.
-
-    \item One video can have many statistics snapshots and many comments.
-
-    \item One top-level comment can have many replies through the self-reference \texttt{parent\_\allowbreak comment\_\allowbreak id}.
-
-    \item One collection run can be linked to many comments through \texttt{collection\_\allowbreak run\_\allowbreak comments}, and one comment can appear in many collection runs.
-
-    \item One collection run can be the input of many processing runs, typically one normalization run followed by one or more sentiment runs.
-
-    \item One processing run can generate many sentiment records.
-
-    \item One comment can have many sentiment records when it is analyzed in different processing runs or by different models or model versions.
-\end{itemize}
+The initial design also included a \texttt{derived\_metrics} table for aggregated values, which was not implemented. Summaries and the sentiment distribution are computed from the stored rows on request, using database aggregation, so they always reflect the data that remain after the purge and need no retention rule of their own.
 
 \subsubsection{Integrity and reproducibility controls}
 
@@ -113,4 +127,4 @@ The reproducibility controls are equally important. Collection tables store the 
 
 \paragraph{Ethical and privacy controls}
 
-In accordance with Colombian Statutory Law 1581 of 2012 (\textit{Ley Estatutaria de Protección de Datos Personales}) \autocite{ley1581_2012} and YouTube API Services Developer Policies \autocite{youtube_api_services_developer_policies}, the database schema enforces data privacy protections. Author channel identifiers (\texttt{author\_channel\_id}) and text comments are restricted to internal database relations for research purposes. Aggregated values are computed on request rather than stored, and the only analytical values kept as records are the counts in processing reports, which contain no comment text, author identifier or YouTube resource identifier. This prevents the construction of individual user behavioral profiles or cross-platform tracking within research workspaces. Comments, author identifiers and the sentiment results computed from them are subject to the 30-day retention window, so no personal data from YouTube remains in the database after the purge.
+In accordance with Colombian Statutory Law 1581 of 2012 \autocite{ley1581_2012} and the YouTube API Services Developer Policies \autocite{youtube_api_services_developer_policies}, author channel identifiers (\texttt{author\_channel\_id}) and comment text are used only within internal database relations, and the only analytical values stored as records are the counts in processing reports, which contain no comment text, author identifier or YouTube resource identifier. This prevents the construction of individual behavioral profiles. Comments, author identifiers and the sentiment results computed from them fall under the 30-day retention window, so no personal data from YouTube remains in the database after the purge.
