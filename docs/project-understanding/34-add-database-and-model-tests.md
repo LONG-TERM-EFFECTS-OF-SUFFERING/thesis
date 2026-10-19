@@ -118,7 +118,7 @@ cd src
 docker compose up -d db
 cd api
 DATABASE_ENGINE=postgresql venv/bin/python manage.py test --noinput
-venv/bin/python manage.py test core.tests.PurgeCascadeTests core.tests.DeleteRuleTests core.tests.DatabaseConstraintTests
+venv/bin/python manage.py test core.tests.test_purge.PurgeCascadeTests core.tests.test_models.DeleteRuleTests core.tests.test_models.DatabaseConstraintTests
 ```
 
 Passing looks like `OK` (329 tests). The second command runs the three new classes on SQLite.

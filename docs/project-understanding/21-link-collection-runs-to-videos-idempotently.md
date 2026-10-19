@@ -96,7 +96,7 @@ cd src
 docker compose up -d db
 cd api
 DATABASE_ENGINE=postgresql venv/bin/python manage.py test --noinput
-venv/bin/python manage.py test core.tests.CollectRunsEndToEndTests core.tests.CollectionRunVideoModelTests
+venv/bin/python manage.py test core.tests.test_collection.CollectRunsEndToEndTests core.tests.test_models.CollectionRunVideoModelTests
 ```
 
 Passing looks like `OK` (189 tests). The second command runs only the tests this story touched.

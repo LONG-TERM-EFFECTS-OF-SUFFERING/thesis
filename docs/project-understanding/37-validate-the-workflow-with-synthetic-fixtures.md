@@ -111,7 +111,7 @@ cd src
 docker compose up -d db
 cd api
 DATABASE_ENGINE=postgresql venv/bin/python manage.py test --noinput
-venv/bin/python manage.py test core.tests.SyntheticWorkflowTests -v 2
+venv/bin/python manage.py test core.tests.test_workflow.SyntheticWorkflowTests -v 2
 ```
 
 Passing looks like `OK` (351 tests). The second command lists the three synthetic tests, each `ok`.
@@ -122,7 +122,7 @@ This story adds no screen. To see a stage fail:
 
 1. Break one stage on purpose. For example, in `collect_run` in `src/api/core/collection.py`, replace `process_collection_run(run)` with `None`, so cleaning never runs after collection.
 
-2. Run `venv/bin/python manage.py test core.tests.SyntheticWorkflowTests`. The first failure is reported under `stage=processing`. Sentiment fails too, because it only runs after a completed clean.
+2. Run `venv/bin/python manage.py test core.tests.test_workflow.SyntheticWorkflowTests`. The first failure is reported under `stage=processing`. Sentiment fails too, because it only runs after a completed clean.
 
 3. Restore the file with `git checkout core/collection.py`.
 

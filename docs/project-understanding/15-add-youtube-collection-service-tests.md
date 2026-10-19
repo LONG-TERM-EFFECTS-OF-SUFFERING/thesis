@@ -101,7 +101,7 @@ cd src
 docker compose up -d db
 cd api
 DATABASE_ENGINE=postgresql venv/bin/python manage.py test --noinput
-venv/bin/python manage.py test core.tests.CollectRunsEndToEndTests
+venv/bin/python manage.py test core.tests.test_collection.CollectRunsEndToEndTests
 ```
 
 Passing looks like `OK` (147 tests). The second command runs only the end-to-end class. If PostgreSQL refuses the connection, the database container is not running: `docker compose up -d db` starts it.

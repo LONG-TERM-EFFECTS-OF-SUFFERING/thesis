@@ -94,7 +94,7 @@ cd src
 docker compose up -d db
 cd api
 DATABASE_ENGINE=postgresql venv/bin/python manage.py test --noinput
-venv/bin/python manage.py test core.tests.NormalizationExampleTests core.tests.ProcessingReportConsistencyTests
+venv/bin/python manage.py test core.tests.test_normalization.NormalizationExampleTests core.tests.test_processing.ProcessingReportConsistencyTests
 ```
 
 Passing looks like `OK` (288 tests). The second command runs the example and consistency tests on their own.

@@ -147,7 +147,7 @@ cd src
 docker compose up -d db
 cd api
 DATABASE_ENGINE=postgresql venv/bin/python manage.py test --noinput
-venv/bin/python manage.py test core.tests.NormalizeCommentTextTests
+venv/bin/python manage.py test core.tests.test_normalization.NormalizeCommentTextTests
 ```
 
 Passing looks like `OK` (262 tests). The second command runs only the rule tests, which need no database setup beyond Django's.

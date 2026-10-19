@@ -115,7 +115,7 @@ cd src
 docker compose up -d db
 cd api
 DATABASE_ENGINE=postgresql venv/bin/python manage.py test --noinput
-venv/bin/python manage.py test core.tests.PurgeYouTubeDataTests
+venv/bin/python manage.py test core.tests.test_purge.PurgeYouTubeDataTests
 ```
 
 Passing looks like `OK` (240 tests). The second command runs only the purge tests. The command itself is described in [commands.md](commands.md), under 30-day purge.

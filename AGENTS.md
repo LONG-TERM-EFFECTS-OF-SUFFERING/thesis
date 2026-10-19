@@ -44,7 +44,7 @@ Undergraduate thesis: a web application that collects, processes and visualizes 
 
 ## Known pitfalls
 
-- A late or superseded async response overwrites newer React state. Patched in the US-005 review and again in US-006. Guard every fetch in `src/ui/src/App.tsx` with an `AbortController` held in a ref plus a controller-identity check before writing state.
+- A late or superseded async response overwrites newer React state. Patched in the US-005 review and again in US-006. Route every fetch that writes React state through `latestRequest` in `src/ui/src/latestRequest.ts`, which aborts the previous request on the same ref and drops every result but the latest. Only the per-query run-start map in `src/ui/src/QueriesSection.tsx` and the health retry loop in `src/ui/src/AppHeader.tsx` guard themselves.
 - Tests that pass for the wrong reason have shipped twice: an assertion on a substring the prompt already contained, and a transport faked in every test so the real HTTP path never ran. Delete the behavior and confirm the test fails before trusting it.
 - `isinstance(True, int)` is `True` in Python, so a bool slips through integer range checks on untrusted model or API output. Reject `bool` explicitly.
 
