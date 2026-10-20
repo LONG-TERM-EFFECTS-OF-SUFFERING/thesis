@@ -72,7 +72,7 @@ Writing the rules once means the three screens can never disagree about what is 
 
 Holds the rules. The important names:
 
-- `ALLOWED_SEARCH_PARAMS`: the nine YouTube parameters this app is allowed to send. Any other key is reported as `not_allowed`. Today the draft cannot contain another key, because Python builds it. The allowlist matters once US-008 lets a person edit the object, because then anything could be typed in.
+- `ALLOWED_SEARCH_PARAMS`: the YouTube parameters this app is allowed to send. It started as the nine a draft can fill; US-041 appended ten advanced filters a researcher sets by hand, such as `videoDuration` and `location`. Any other key is reported as `not_allowed`. Today the draft cannot contain another key, because Python builds it. The allowlist matters once US-008 lets a person edit the object, because then anything could be typed in.
 
 - `REQUIRED_SEARCH_PARAMS`: `part`, `type`, `q` and `maxResults`. An empty object therefore never validates clean.
 
@@ -82,20 +82,26 @@ Holds the rules. The important names:
 
 The rules, in the order they are checked:
 
-| parameter                            | rule                                                               |
-| :----------------------------------- | :----------------------------------------------------------------- |
-| any key                              | must be one of the nine allowed names                              |
-| `part`, `type`, `q`, `maxResults`    | must be present                                                    |
-| every key except `maxResults`        | must be a string, so a `null` is reported rather than sent         |
-| `part`                               | exactly `snippet`                                                  |
-| `type`                               | exactly `video`                                                    |
-| `q`                                  | not blank                                                          |
-| `maxResults`                         | a whole number from 0 to 50, and not `true`/`false`                |
-| `publishedAfter`, `publishedBefore`  | RFC 3339 with a time zone                                          |
-| `publishedAfter` / `publishedBefore` | the start is not later than the end, reported on `publishedBefore` |
-| `regionCode`                         | two capital letters                                                |
-| `relevanceLanguage`                  | a language code, optionally with a subtag such as `-Hans`          |
-| `order`                              | one of the six values YouTube accepts                              |
+| parameter                                                                                     | rule                                                               |
+| :-------------------------------------------------------------------------------------------- | :----------------------------------------------------------------- |
+| any key                                                                                       | must be one of the allowed names                                   |
+| `part`, `type`, `q`, `maxResults`                                                             | must be present                                                    |
+| every key except `maxResults`                                                                 | must be a string, so a `null` is reported rather than sent         |
+| `part`                                                                                        | exactly `snippet`                                                  |
+| `type`                                                                                        | exactly `video`                                                    |
+| `q`                                                                                           | not blank                                                          |
+| `maxResults`                                                                                  | a whole number from 0 to 50, and not `true`/`false`                |
+| `publishedAfter`, `publishedBefore`                                                           | RFC 3339 with a time zone                                          |
+| `publishedAfter` / `publishedBefore`                                                          | the start is not later than the end, reported on `publishedBefore` |
+| `regionCode`                                                                                  | two capital letters                                                |
+| `relevanceLanguage`                                                                           | a language code, optionally with a subtag such as `-Hans`          |
+| `order`                                                                                       | one of the six values YouTube accepts                              |
+| `eventType`, `safeSearch`, `videoCaption`, `videoDefinition`, `videoDuration`, `videoLicense` | one of the values YouTube accepts                                  |
+| `channelId`                                                                                   | `UC` followed by 22 letters, digits, `-` or `_`                    |
+| `videoCategoryId`                                                                             | digits only                                                        |
+| `location` / `locationRadius`                                                                 | set together; a `missing` finding names the absent one             |
+| `location`                                                                                    | `lat,long`, latitude -90..90, longitude -180..180                  |
+| `locationRadius`                                                                              | a number plus `m`, `km`, `ft` or `mi`, at most 1000 km             |
 
 The six `order` values and the limit of 50 are **imported** from `query_translation.py`, not written again. If YouTube changes either one, there is still only one place to edit.
 
@@ -117,7 +123,7 @@ The tests that matter most:
 
 - the parameter set `draft_from_response` actually builds validates clean. If the translation code and the validator ever drift apart, this fails.
 
-- a model draft with **every** field filled in, including `publishedBefore`, also validates clean and uses exactly the nine allowed names.
+- a model draft with **every** field filled in, including `publishedBefore`, also validates clean and uses exactly the nine names a draft can fill.
 
 - one broken example for every rule, each asserting the exact `(parameter, code)` list it should produce.
 
