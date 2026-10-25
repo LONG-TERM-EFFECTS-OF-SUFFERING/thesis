@@ -88,6 +88,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 41. [39 - Set advanced YouTube search filters](39-set-advanced-youtube-search-filters.md).
 
+42. [40 - Log in with a local account](40-log-in-with-a-local-account.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -131,6 +133,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [30-add-processing-tests.md](30-add-processing-tests.md) | US-036 |  Done  | Tests-only: worked normalization examples, a report-consistency check over five controlled corpora including a seeded generated one, processing on the real collection path, and the zero-width joiner finding. |
 | [37-validate-the-workflow-with-synthetic-fixtures.md](37-validate-the-workflow-with-synthetic-fixtures.md) | US-038 |  Done  | Tests-only: one offline pass from prompt to CSV over a synthetic corpus, faking only the network, a stage name on every failure, and the gaps the review closed. |
 | [39-set-advanced-youtube-search-filters.md](39-set-advanced-youtube-search-filters.md) | US-041 |  Done  | Ten hand-set `search.list` filters in a collapsed form group, kept in `structured_query_params` with no migration, one validator for drafts, saves and run starts, the location pair rule, and the UI's mirrored list of values. |
+| [40-log-in-with-a-local-account.md](40-log-in-with-a-local-account.md) | US-042 |  Done  | Django session login with admin-created accounts, the single anonymous gate in `resolve_project_owner`, the local-owner fallback flag, CSRF on login and every write, and the proxy Host fix the origin check needed. |
 
 ## How to use this folder
 
