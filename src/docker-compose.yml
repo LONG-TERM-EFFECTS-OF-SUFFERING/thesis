@@ -39,6 +39,9 @@ services:
       LLM_API_KEY: ${LLM_API_KEY:-}
       # No literal default here: settings.py owns it, so the model id lives in one place.
       LLM_MODEL: ${LLM_MODEL:-}
+      SENTIMENT_MODEL: ${SENTIMENT_MODEL:-}
+      SENTIMENT_LLM_URL: ${SENTIMENT_LLM_URL:-}
+      SENTIMENT_LLM_MODEL: ${SENTIMENT_LLM_MODEL:-}
     command: >
       sh -c "python manage.py migrate &&
              gunicorn -c gunicorn.conf.py opentube_insights_api.wsgi:application"
