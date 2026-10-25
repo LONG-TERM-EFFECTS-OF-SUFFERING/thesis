@@ -32,6 +32,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-opentube_insights}
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
+      # Blank reads as off: project requests need a logged-in account.
+      OPENTUBE_LOCAL_OWNER_FALLBACK: ${OPENTUBE_LOCAL_OWNER_FALLBACK:-}
       OPENTUBE_DEFAULT_OWNER_USERNAME: ${OPENTUBE_DEFAULT_OWNER_USERNAME:-local-researcher}
       GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
       GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-60}

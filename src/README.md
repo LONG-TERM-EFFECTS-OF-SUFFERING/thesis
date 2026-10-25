@@ -38,7 +38,9 @@ Useful Compose variables:
 
 - `WEB_HOST_PORT`: Nginx host port. Default: `8080`.
 
-- `OPENTUBE_DEFAULT_OWNER_USERNAME`: backend fallback owner for local unauthenticated project requests. Default: `local-researcher`.
+- `OPENTUBE_LOCAL_OWNER_FALLBACK`: off by default, so project requests need a logged-in account; `true` restores the anonymous fallback, for a single researcher on their own machine. Default: blank (off).
+
+- `OPENTUBE_DEFAULT_OWNER_USERNAME`: the owner anonymous requests act as when the fallback is on. Default: `local-researcher`.
 
 - `GUNICORN_WORKERS`: local Gunicorn worker count. Default: `2`.
 
@@ -58,6 +60,14 @@ WEB_HOST_PORT=8081 docker compose up --build
 curl "http://127.0.0.1:8081/"
 curl "http://127.0.0.1:8081/api/health/"
 ```
+
+Accounts: with the fallback off, the app shows a login screen. Create the administrator account once:
+
+```bash
+docker compose exec api python manage.py createsuperuser
+```
+
+Then add each researcher as a plain (non-staff) user from the Django admin's "Add user" page at `http://127.0.0.1:${API_HOST_PORT:-8000}/admin/`. Do not make researchers superusers: the admin lists every researcher's projects, runs and comments.
 
 Health check:
 
