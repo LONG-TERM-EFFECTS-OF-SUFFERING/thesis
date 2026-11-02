@@ -1,0 +1,40 @@
+This activity covers user story US-038. The functional tests prove each component in isolation, but components can each work and still fail to connect, for example if collection ignored the reviewed parameters or if normalization never ran after collection. An integration test therefore runs the complete workflow in a single pass, from a natural-language request to an exported file.
+
+\subsection{Synthetic corpus and test double}
+
+The test uses a synthetic corpus written for it: two videos from one channel, three top-level comments and one reply, with invented identifiers, author names and texts. The texts are chosen so that one comment exercises three normalization rules and so that the test classifier produces one positive, one negative and two neutral labels. Every response has the structure documented by YouTube and OpenAI.
+
+Only Python's \texttt{urlopen} is replaced. The fake answers by address: the OpenAI Responses endpoint returns the draft, and the YouTube search, videos, channels, comment threads and comments endpoints return the corpus. Any other address is recorded and refused, and the collection stage asserts that no such request was made. Everything above the network runs as in the application: the API views, the translation and validation code, the collection command, normalization, the sentiment step, the summary and the export. The sentiment model is the test classifier of Activity~\ref{act:3.3}, so this test proves the path, not the quality of a model.
+
+\subsection{Stages and results}
+
+The workflow is checked in the eight stages of Table~\ref{tab:integration_stages}, each through the same entry point the application uses.
+
+\begingroup
+\setstretch{1.0}
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \caption{Stages of the integration test}
+    \label{tab:integration_stages}
+    \begin{tabularx}
+        {\textwidth}{>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{4.6cm}X}
+        \toprule
+        \textbf{Stage} & \textbf{Entry point}                    & \textbf{Verified result}                                                                             \\
+        \midrule
+        Draft          & Draft endpoint of the project's queries & The exact expected draft, after one request to the LLM                                               \\
+        Save           & Saved-query endpoint                    & Query stored as \texttt{llm\_generated} with its parameters and provenance                           \\
+        Start          & Run start endpoint                      & A \texttt{pending} run with the parameter snapshot                                                   \\
+        Collection     & \texttt{collect\_runs} command          & Run \texttt{completed}, all counters and the requests in order; the search used the saved parameters \\
+        Processing     & Automatic after collection              & The complete normalization report and the expected normalized text                                   \\
+        Sentiment      & Automatic after processing              & The model name and the count per label                                                               \\
+        Summary        & Results summary endpoint                & The project's counts and the sentiment chart data                                                    \\
+        Export         & Videos CSV export                       & Two rows whose deletion date is 30 days after their collection date                                  \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\endgroup
+
+The first three stages stop the test at once if they fail, and the remaining ones are reported as named sub-tests, so a failure identifies the stage where the workflow broke instead of producing errors in every later stage. Each stage was broken on purpose once to confirm that its check fails, for example by dropping the saved search terms during collection, by skipping replies or by setting the retention period to 29 days. The export stage compares against a literal 30 days rather than the application's constant, so a change of the retention policy must be made deliberately. Two additional tests verify that the fake refuses any address outside the corpus and that running the collection command again, with no pending run, sends no request and changes no row.
+
+The test passes as part of the backend suite of Activity~\ref{act:4.1}. It does not render the interface: it verifies the data the summary card and the chart display, while the screens are covered by the smoke tests of US-037. The repetition of this workflow with real YouTube topics and the live APIs is the subject of Activity~\ref{act:4.3}.

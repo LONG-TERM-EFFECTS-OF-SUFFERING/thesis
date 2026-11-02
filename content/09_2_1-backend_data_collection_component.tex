@@ -1,0 +1,55 @@
+This activity covers user stories US-010 to US-016 and US-021 to US-023 of the product backlog. The component turns an approved saved query into collected YouTube data and records every request it makes, so the collection can be audited after the data itself has been deleted.
+
+\subsection{Collection runs}
+
+A collection is represented by an explicit record, the collection run, created when the researcher starts a saved query. At that moment the parameters of the query are copied into the run (\texttt{effective\_\allowbreak params}) together with its limits on videos, comments and replies. The run therefore keeps a snapshot, not a reference: a later edit or deletion of the saved query cannot change what a past run requested. The parameters are validated again before the run is created, with the same validator used for generated queries (Activity~\ref{act:2.2}), so a run never records parameters that YouTube would reject.
+
+Each run follows the lifecycle \texttt{pending} $\rightarrow$ \texttt{running} $\rightarrow$ \texttt{completed}, \texttt{failed} or \texttt{cancelled}, where the last three states are final. Every status change goes through a single model method that checks the transition, sets the start and finish timestamps and writes the new status only if the stored status is still the expected one. This compare-and-set update prevents an outdated copy of a run from overwriting a newer state. A failed run must carry an error message, and PostgreSQL check constraints restrict the status to its allowed values and the finish time to a value not earlier than the start.
+
+\subsection{Execution of a run}
+
+Runs are executed by a Django management command, \texttt{collect\_runs}, which processes the pending runs from oldest to newest. Collecting inside the web request was discarded because several YouTube calls could exceed the Gunicorn worker timeout, and a job queue was discarded because it would add a dependency and a message broker to a local research tool. A run is claimed by moving it from \texttt{pending} to \texttt{running} with the compare-and-set update described above, so two executions of the command never collect the same run twice.
+
+Collection is performed in five steps, summarized in Table~\ref{tab:collection_steps}. Only the first step is expensive in quota; once the video identifiers are known, the remaining steps use the one-unit methods, as recommended in Activity~\ref{act:1.2}.
+
+\begingroup
+\setstretch{1.0}
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \caption{Steps of a collection run}
+    \label{tab:collection_steps}
+    \begin{tabularx}
+        {\textwidth}{>{\raggedright\arraybackslash}p{0.4cm}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{1.6cm}X}
+        \toprule
+        \textbf{\#} & \textbf{Method}                          & \textbf{Quota}    & \textbf{Behavior}                                                                                                                                                   \\
+        \midrule
+        1           & \texttt{search.\allowbreak list}         & 100 per page      & Discovers videos with the saved parameters. Each page requests only the videos still needed, and paging stops at the run's cap or when no further page is returned. \\
+        \midrule
+        2           & \texttt{videos.\allowbreak list}         & 1 per 50 videos   & Retrieves details and statistics; a discovered video missing from the response, because it was deleted or made private, is not collected.                           \\
+        \midrule
+        3           & \texttt{channels.\allowbreak list}       & 1 per 50 channels & Retrieves each distinct channel of the collected videos once per run.                                                                                               \\
+        \midrule
+        4           & \texttt{commentThreads.\allowbreak list} & 1 per page        & Collects up to the requested number of top-level comments per collected video, as plain text.                                                                       \\
+        \midrule
+        5           & \texttt{comments.\allowbreak list}       & 1 per page        & Collects up to the requested number of replies, only for top-level comments whose reply count is greater than zero.                                                 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\endgroup
+
+The comment and reply limits are part of the saved query and are empty by default, so comment collection, and its quota cost, is an explicit choice of the researcher. Paging stops at the limit, at the last page, at an empty page or when YouTube returns a page token already used for the same video or thread. The last rule was added after a test showed that a repeated token could make the collector request the same page until the daily quota was exhausted.
+
+Storage is idempotent. Original YouTube identifiers are unique, videos, channels and comments are created or updated in place and each run receives its own links to the resources it collected, so running the same query again refreshes the data and its retention timestamp without duplicating rows. Video statistics are the exception: each run adds a new snapshot, because engagement values change over time.
+
+\subsection{Authentication, quota accounting and request logging}
+
+The application reads only public data, so it authenticates with an API key taken from the environment; OAuth 2.0 is not needed. All YouTube requests go through a single function, \texttt{call\_\allowbreak youtube}, which rejects an unknown endpoint, a missing key or a key placed among the parameters before sending anything. For every accepted call it creates the request log row \emph{before} the HTTP request, with its sequence number within the run, the endpoint, the parameters, the page token and the quota cost taken from a fixed table of method costs. A request that never finishes therefore leaves evidence of its start. After the response, the row is completed with the HTTP status, the number of items, the next page token and the finish time.
+
+The run's totals of requests and quota units are incremented in the same database transaction that creates the log row, with an update computed by PostgreSQL rather than in Python, so the totals always equal the sum of the logs, even with concurrent writers. Failed requests are counted at full cost, because YouTube also charges them.
+
+Request logs are permanent methodological records, while YouTube data may be kept for only 30 days. The logs therefore store no YouTube data: response bodies are not kept, resource identifiers such as \texttt{videoId} or \texttt{parentId} are replaced by their count, and an error is recorded only as the HTTP status and YouTube's reason code, such as \texttt{HTTP 403: quotaExceeded}. The API key never reaches the logs or the application log.
+
+\subsection{Error handling}
+
+Errors are classified by their effect on the dataset. A video with comments disabled (\texttt{commentsDisabled}) or a parent comment deleted between steps 4 and 5 is an expected condition: it is skipped, its request log keeps the error and the run continues. Any other error, such as an exhausted quota, ends the run as \texttt{failed} with that message. The data stored before the failure is kept, and the run's counters of discovered, skipped and collected videos, comments and replies are written in a \texttt{finally} block, so a failed run reports exactly what it stored. Resuming is done by starting the same saved query again: thanks to idempotent storage, the new run completes the dataset without duplicating what the failed run had already collected.

@@ -1,0 +1,33 @@
+This activity covers user stories US-014, US-016, US-026 and US-028 to US-032. The presentation layer is a React single-page application that consumes the backend's REST API.
+
+\subsection{Structure of the interface}
+
+The interface is divided into four sections, selected from a sidebar: \emph{Projects}, \emph{Queries}, \emph{Runs} and \emph{Results}. The active section is kept in the URL fragment, so the browser's back button and links to a section work without a routing library. The visual style is shared with Polarizómetro, a web application for measuring polarization, and a light or dark theme can be chosen. % TODO: state Polarizómetro's relation to PROMUEVA if it belongs to the same research group. Charts, filters and date inputs use native HTML elements and CSS; no component or chart library was added.
+
+Every request whose response updates the screen goes through a shared helper that aborts the previous request of the same kind and discards any response but the latest. Without it, a slow response for a project the researcher has already left could overwrite the data of the current one, an error found twice during the code reviews.
+
+\subsection{Run detail}
+
+The \emph{Runs} section lists the collection runs of the active project with their status, number of requests, quota units and videos. Because runs are executed outside the web application, a \emph{Refresh} button reloads the list and the open run. The detail of a run has three parts:
+
+\begin{itemize}
+    \item \textbf{Discovery}: the numbers of discovered, skipped and collected videos and the list of discovered videos, each linked to YouTube. A skipped result is a repeated video or a search result that is not a video. The counts are read from the run record, so after the purge they remain and the list is replaced by the date on which the data was purged.
+
+    \item \textbf{Sentiment}: the model name and version of the run's latest sentiment pass, always above its results, the count per label, taken from the pass report so that it survives the purge, and a paginated table of comments with their label, score, confidence and language. A filter shows the comments of one label while the counts keep describing the whole pass. A missing score or confidence is shown as a dash, never as zero.
+
+    \item \textbf{Requests}: the request log of the run in sequence order, with the endpoint, the page token, the HTTP status, the number of items, the quota cost and the error, with failed requests highlighted.
+\end{itemize}
+
+\subsection{Results}
+
+The \emph{Results} section summarizes the active project with the descriptive metrics of Activity~\ref{act:3.3} and a sentiment distribution chart. Two filters narrow every count: a range of YouTube publication dates, interpreted as whole days in UTC with both ends included, and a single video, listed by title and publication date because channels often reuse titles. Invalid filters are rejected by the backend instead of being guessed, and the sentence that describes the active filters is built from the filters echoed by the server, so it cannot contradict the numbers.
+
+The sentiment chart shows, for each label, a horizontal bar together with the count and the percentage written as text, so the information does not depend on color or bar length, and the bars are hidden from screen readers. It counts only the latest sentiment pass of each run, each comment once and only the rows of the model named by that pass. If the project's runs used different models, one chart is drawn per model, because a label from one model is not the same measurement as a label from another. Each chart states the period in which the counted comments were collected.
+
+% TODO(US-039): add screenshots of the run detail and the Results section, taken on the real-topic validation data.
+
+\subsection{Data export}
+
+Five downloads let the researcher continue the analysis outside the application: CSV files with the project's videos, channels, request logs and sentiment results, and a JSON dataset with the raw payloads of videos, channels and comments, the statistics snapshots, the sentiment results, the processing reports and the same summary shown in the \emph{Results} section. The JSON file declares its format name and version, and its schema is documented in the backend's documentation, so a script can detect a format change instead of misreading the file.
+
+The retention limit follows the data out of the application: every exported record of YouTube data includes the moment it was collected and the date by which it must be deleted, 30 days later, computed from the same constant the purge uses. CSV cells that start with a character a spreadsheet would interpret as a formula are prefixed with an apostrophe, following the OWASP recommendation against CSV injection \autocite{owasp_csv_injection}, because titles and comments are untrusted text; numbers are not escaped, since they cannot be formulas.

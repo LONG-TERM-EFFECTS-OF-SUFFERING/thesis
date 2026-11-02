@@ -1,0 +1,59 @@
+This activity covers user stories US-033 to US-036; the presentation smoke tests of US-037 are pending. Each component was tested on its own with controlled data, and the tests are part of the source code, so any reader can run them again: \texttt{python manage.py test} for the backend and \texttt{npm test} for the frontend.
+
+\subsection{Test design}
+
+Four rules were applied to every test:
+
+\begin{itemize}
+    \item \textbf{No live services.} No test contacts the YouTube Data API or the OpenAI API. Services that call them receive the network function as a parameter, and the end-to-end tests replace only Python's \texttt{urlopen}, so the real code that builds URLs, sets timeouts, decodes responses and maps errors is exercised.
+
+    \item \textbf{Documented shapes.} Fake responses follow the structure documented for each API, including pagination tokens and error bodies such as \texttt{quotaExceeded}, and the identifiers and texts are invented.
+
+    \item \textbf{Exact expectations.} Results are compared as whole values, not by searching for a substring, after a test was found that passed because the expected text was already part of its input.
+
+    \item \textbf{Tests that can fail.} A test was accepted only after the behavior it covers was broken on purpose and the test failed, as described in Section~\ref{sec:ai_assisted_workflow}. Fake services also raise an error when they receive an unexpected request, so a defect that repeats requests ends the test instead of hanging it.
+\end{itemize}
+
+\subsection{Backend tests}
+
+The backend suite contains 365 tests, grouped by component in Table~\ref{tab:backend_tests}.
+
+\begingroup
+\setstretch{1.0}
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \caption{Backend tests by component}
+    \label{tab:backend_tests}
+    \begin{tabularx}
+        {\textwidth}{>{\raggedright\arraybackslash}p{3.4cm}>{\raggedleft\arraybackslash}p{1.0cm}X}
+        \toprule
+        \textbf{Component}         & \textbf{Tests} & \textbf{Main evidence}                                                                                                                                                                                                    \\
+        \midrule
+        Data collection            & 97             & Every collection step and stop condition, request logging and quota totals, skipped videos and threads, failure and resume, idempotent re-collection, and an audit run whose log rows contain no YouTube data or API key. \\
+        \midrule
+        Query translation          & 65             & A table of five worked translation examples with their exact drafts, identical requests for identical input, the error statuses, and one invalid example per validation rule.                                             \\
+        \midrule
+        Processing                 & 20             & Ten worked normalization examples and a report consistency check over five sets of comments, including 200 generated with a fixed random seed.                                                                            \\
+        \midrule
+        Database and purge         & 50             & Lifecycles, constraints present in the database, the deletion rule of every foreign key and a complete comparison of all tables before and after a purge.                                                                 \\
+        \midrule
+        Analysis                   & 61             & Result validation, a sentiment pass with a test classifier, metric scoping across projects and owners, and the filters.                                                                                                   \\
+        \midrule
+        API endpoints and exports  & 54             & Ownership, status codes, response shapes and the content of every export file.                                                                                                                                            \\
+        \midrule
+        Configuration and workflow & 18             & Settings read from the environment and the integration tests of Activity~\ref{act:4.2}.                                                                                                                                   \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\endgroup
+
+The tests also found defects in code that had already been reviewed. The collection tests showed that a repeated page token could make the collector request the same page of \texttt{search.\allowbreak list} until the daily quota was exhausted, which led to the stop rule of Activity~\ref{act:2.1}. The processing tests showed that rule 3 splits emoji built with the zero-width joiner (Activity~\ref{act:3.1}), and the database tests showed two differences between the schema document and the implemented constraints, which were corrected in the document.
+
+\subsection{Frontend tests}
+
+The frontend suite contains 104 tests, run with Node.js's built-in test runner. They cover the logic that the interface depends on, extracted into plain TypeScript modules: building the saved-query request from the form, applying a draft and converting dates between UTC and local time, under a fixed non-UTC time zone so that a confusion between the two cannot pass; merging and discarding responses for the active project; sentiment formatting and distribution; filter parsing; navigation and theme selection. The API client functions are tested with a stubbed \texttt{fetch}, including the runtime checks that reject a response whose shape differs from the expected one.
+
+The components themselves are not rendered by any test, because the project has no browser test environment; the forms, tables and chart were verified manually during each story. This gap is the subject of US-037, planned for the last sprint.
+
+% TODO(US-037): add the presentation smoke tests and their results.

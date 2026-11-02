@@ -1,0 +1,42 @@
+This activity covers user story US-024 and the field mapping of US-017 to US-019. Processing happens at two levels: structured fields are typed and checked when they are collected, and comment text is normalized after the collection run completes.
+
+\subsection{Structuring at ingestion}
+
+Every API response is stored twice: the complete item, unchanged, in a \texttt{raw\_\allowbreak payload} column, and the fields needed for analysis in typed columns. The raw payload allows any column to be checked against what YouTube actually sent, within the 30-day retention window. Each typed field is narrowed individually, so one unexpected value empties that field instead of failing the run. YouTube sends counts such as views and subscribers as strings; they are accepted only as ASCII digit strings within the range of a PostgreSQL \texttt{BIGINT}, and Boolean values are rejected explicitly, while hidden or unreadable counts are stored as empty, never as zero. Search snippets arrive HTML-escaped and are unescaped before storage, and lists such as video tags keep only their text entries.
+
+\subsection{Comment text normalization}
+
+Comments are kept exactly as YouTube returns them, and a cleaned copy is written to a separate column, \texttt{text\_\allowbreak normalized}, which is the input of the sentiment analysis (Activity~\ref{act:3.3}). The cleaning is performed by pure functions that apply the six rules of Table~\ref{tab:normalization_rules} in order, so the same input always produces the same output. Rules 1 and 6 apply Unicode canonical composition, the NFC normalization form \autocite{unicode_normalization_forms}, so that the same visible text is always stored with the same characters. Letter case and emoji are preserved on purpose, because current sentiment models use them as signals of intensity and polarity.
+
+\begingroup
+\setstretch{1.0}
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \caption{Comment normalization rules, version \texttt{comment-text-v2}}
+    \label{tab:normalization_rules}
+    \begin{tabularx}
+        {\textwidth}{>{\raggedright\arraybackslash}p{0.4cm}>{\raggedright\arraybackslash}p{6.4cm}X}
+        \toprule
+        \textbf{\#} & \textbf{Rule}                                                                   & \textbf{Example}                                                                                          \\
+        \midrule
+        1           & Unicode NFC normalization                                                       & A letter followed by a combining accent becomes one character                                             \\
+        2           & Decoding of HTML entities                                                       & \texttt{isn\&\#39;t} becomes \texttt{isn't}                                                               \\
+        3           & Removal of invisible and control characters; tabs and line breaks become spaces & A zero-width space is removed                                                                             \\
+        4           & Replacement of URLs that start a word with \texttt{<URL>}, in any letter case   & \texttt{see https://x.co} becomes \texttt{see <URL>}                                                      \\
+        5           & Collapse of repeated whitespace and trimming                                    & \texttt{\textvisiblespace{}a\textvisiblespace\textvisiblespace{}b} becomes \texttt{a\textvisiblespace{}b} \\
+        6           & Unicode NFC normalization again                                                 & Accents produced by rule 2 are composed                                                                   \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\endgroup
+
+The rule set has a version identifier, \texttt{comment-text-v2}, that changes whenever a rule changes, so each result can be traced to the exact rules that produced it. The second version came from the code review: the first version did not compose accents produced by decoded entities and replaced URL-like fragments inside words.
+
+\subsection{Processing runs and the validation report}
+
+Each execution of the pipeline is recorded as a processing run with the same lifecycle as collection runs. It starts automatically when a collection run completes, and it processes only the comments of that run. A comment that cannot be cleaned is counted, not fatal: a comment without text is reported as \texttt{missing\_\allowbreak text}, and one left empty by the rules, for example a comment made only of invisible characters, as \texttt{empty\_\allowbreak text}. The run stores a validation report with the version of the rules, the number of input and written comments by level, the number of errors by type and the number of comments each rule changed.
+
+The report contains counts only, without comment text or YouTube identifiers, because processing runs are kept after the 30-day purge as part of the methodological record. A failure during processing marks only the processing run as failed: the collection run remains completed and the comments cleaned before the failure keep their normalized text.
+
+One limitation remains open. Rule 3 also removes the zero-width joiner, so emoji composed of several emoji, such as a family, are split into their parts; keeping the joiner between emoji would require a new version of the rules.

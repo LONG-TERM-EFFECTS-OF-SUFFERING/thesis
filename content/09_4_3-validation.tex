@@ -1,0 +1,75 @@
+This activity covers user story US-039. The integration test of Activity~\ref{act:4.2} proves the workflow on synthetic data with the external services replaced; this validation repeats it on two real YouTube topics, with the live YouTube Data API and the live LLM, and checks the aggregate results against the requirements of the application. Because no automated test may call the live APIs, the validation is a recorded manual procedure rather than a test.
+
+% TODO(US-039): name the two topics, why each was chosen, and the dates of the validation runs.
+
+\subsection{Procedure}
+
+Both topics followed the same procedure, carried out through the user interface and the two management commands, within a single 30-day retention window:
+
+\begin{enumerate}
+    \item Create one research project per topic.
+
+    \item Write the research question in natural language, generate a draft, review and, where needed, correct the parameters, and save the query, recording the draft, its validation findings and the corrections made.
+
+    \item Start a collection run and execute it with \texttt{collect\_runs}, with limits on videos, comments and replies chosen to keep each run within the daily quota.
+
+    \item Inspect the run detail: the discovery summary, the request log and the sentiment section.
+
+    \item Read the \emph{Results} section, its sentiment chart and at least one filtered view, and download the CSV and JSON exports.
+\end{enumerate}
+
+Only aggregate results are reported: counts, quota consumption, processing reports, label distributions and the parameters used. No comment text, author identifier or individual video is reproduced, in accordance with the ethical controls of Section~\ref{subsec:ethics_privacy_and_terms_compliance}. After the 30-day window the YouTube data of both runs is deleted by the purge, while the projects, saved queries, effective parameters, request logs and processing reports remain, so the procedure reported here can still be inspected and repeated.
+
+\subsection{Results}
+
+% TODO(US-039): one table per topic, or one table with a column per topic, with:
+% - the natural-language request, the generated parameters, the validation findings and the researcher's corrections;
+% - requests and quota units per endpoint, from the request log;
+% - videos discovered, skipped and collected, channels, comments and replies;
+% - the normalization report (inputs, written, errors and the rules applied);
+% - the sentiment model and version and the count per label;
+% - any failed or skipped request and its reason.
+% Then the sentiment chart of each topic as a figure.
+
+\subsection{Validation against the requirements}
+
+Table~\ref{tab:validation_requirements} checks the outcome of both validation runs against the requirements of the application, grouped by specific objective.
+
+\begingroup
+\setstretch{1.0}
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \caption{Validation of the requirements on two real YouTube topics}
+    \label{tab:validation_requirements}
+    \begin{tabularx}
+        {\textwidth}{>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{6.2cm}X}
+        \toprule
+        \textbf{Objective}                                                  & \textbf{Requirement}                                                                                                        & \textbf{Evidence and result} \\
+        \midrule
+        Objective~\ref{obj:implement_collection}                            & A natural-language request becomes validated, researcher-approved parameters without writing API syntax.                    &                              % TODO(US-039)
+        \\
+        \midrule
+        Objective~\ref{obj:implement_collection}                            & Each run records its effective parameters, request log, quota cost, counts, timestamps and errors.                          &                              % TODO(US-039)
+        \\
+        \midrule
+        Objective~\ref{obj:implement_collection}                            & Videos, channels, comments and replies are collected within the requested limits and the daily quota.                       &                              % TODO(US-039)
+        \\
+        \midrule
+        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Comment text is normalized and every processing run reports its inputs, outputs and errors.                                 &                              % TODO(US-039)
+        \\
+        \midrule
+        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Comments are labeled by one pre-trained sentiment model whose name and version are stored with every result.                &                              % TODO(US-039)
+        \\
+        \midrule
+        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Results are readable as a summary, a sentiment chart and filters, and exportable as CSV and JSON with their deletion dates. &                              % TODO(US-039)
+        \\
+        \midrule
+        Objective~\ref{obj:test}                                            & The complete workflow runs from a natural-language request to a chart and an export on real data.                           &                              % TODO(US-039)
+        \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\endgroup
+
+% TODO(US-039): one paragraph on what the validation showed that the synthetic test could not, e.g. real quota use, videos removed between search and details, disabled comments, and how stable the draft parameters were.

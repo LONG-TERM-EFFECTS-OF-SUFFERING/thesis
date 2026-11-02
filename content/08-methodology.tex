@@ -28,6 +28,25 @@ The sprint retrospective provides an opportunity to plan ways to increase qualit
 
 Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner} and \textbf{developers} \autocite{schwaber2020scrum}, this project adapts its core principles to the context of individual thesis development. The emphasis remains on the empirical pillars of \textbf{transparency}, \textbf{inspection} and \textbf{adaptation} \autocite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
 
+\section{AI-assisted development workflow}
+\label{sec:ai_assisted_workflow}
+
+The software was implemented with the BMAD Method \autocite{bmad_method}, an open-source framework that organizes software development with AI agents around explicit planning artifacts, and with Claude Code \autocite{claude_code}, an AI coding agent developed by Anthropic. BMAD does not replace the adapted Scrum framework: it operates inside each sprint, at the level of a single user story.
+
+The product backlog remains the source of requirements. BMAD mirrors it as a ticket tree with one initiative for the application, one epic per backlog epic and one story per user story, each citing the backlog identifiers it covers. Every story followed the same cycle:
+
+\begin{enumerate}
+    \item \textbf{Plan.} The agent drafts a plan with the problem, the approach, the constraints that must always or never hold and a matrix of expected behavior for normal and edge cases. The author reviews and approves it; from then on the approved intent is frozen and changes only through an explicit renegotiation recorded in the plan.
+
+    \item \textbf{Implement.} The agent implements the plan, with its tests, on a branch named after the user story.
+
+    \item \textbf{Review.} A structured review compares the change with the plan. Each finding is fixed before the story closes, recorded in a shared deferred-work log or returned to the author as a problem with the plan.
+
+    \item \textbf{Verify and document.} The backend and frontend test suites, the migration check and the production build run before the story closes, and a beginner-oriented explanation of the reviewed code is added to the project documentation.
+\end{enumerate}
+
+In this cycle the author acts as product owner and technical reviewer: defining and approving the intent of each story, deciding every deferred or ambiguous item, reviewing the changes and merging them. The plans, review triage logs and deferred-work log are kept in the repository, so the development process is documented with the same transparency the application seeks for data collection. Because generated tests can pass for the wrong reason, a test was trusted only after the behavior it covers had been broken on purpose and the test had been seen to fail.
+
 \section{Activities to be carried out}
 
 Table~\ref{tab:activities} lists the activities planned for each specific objective and the expected result of each one.

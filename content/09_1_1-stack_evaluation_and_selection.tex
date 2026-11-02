@@ -48,10 +48,60 @@ The scope~\ref{chap:project_scope} states the use of a lightweight server such a
 
 \subsubsection{LLM API integration approach}
 
-% % TODO: Add exact LLM model
+The query translation component calls a hosted LLM through the OpenAI Responses API, constrained by a strict JSON schema through the Structured Outputs feature \autocite{openai_structured_outputs}. As with the YouTube Data API, the request is a direct HTTP call made with the Python standard library, so no vendor SDK is added. The model is a configuration value (\texttt{LLM\_MODEL}, \texttt{gpt-5.6-luna} by default) that can be changed without modifying code. A hosted model is used instead of a locally executed one because the scope excludes training or fine-tuning models and because it keeps the deployment free of GPU requirements.
 
 To support transparency and reproducibility, the backend should also store the generated query parameters and timestamps, because API-based data collection can vary over time and requires consistent documentation of conditions.
 
 \subsubsection{Practical considerations and alternative stacks}
 
 This application could also be implemented with other mainstream stacks. However, this specific stack is selected because it matches the architecture principles defined in the project scope, supports maintainability in the institutional context and reduces implementation risk due to prior familiarity with the selected technologies.
+
+\subsection{Resulting architecture}
+
+Figure~\ref{fig:architecture} shows how the selected technologies are combined in the application. The four services run as Docker Compose containers. Nginx is the single entry point for the browser: it forwards the requests under \texttt{/api/} to the backend and every other request to the frontend. The backend is the only service that reaches the database and the external APIs, and it contains the data collection and the processing and analysis components of objective~\ref{obj:design}; the visualization component is the React frontend, which reads the results through the backend API. Collection runs and the 30-day purge are executed by Django management commands instead of inside web requests (Activities~\ref{act:2.1} and~\ref{act:3.2}).
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tikzpicture}
+            [
+            box/.style={draw, rounded corners=2pt, align=center, font=\footnotesize, inner sep=4pt},
+            component/.style={box, font=\scriptsize, text width=5cm},
+            external/.style={box, fill=gray!10, font=\scriptsize, text width=3.6cm},
+            flow/.style={-{Stealth[length=2mm]}},
+            note/.style={font=\scriptsize, align=center}
+            ]
+            \draw[rounded corners=4pt, gray] (2.0, 3.6) rectangle (12.4, -6.0);
+            \node[note, anchor=north west, gray] at (2.1, 3.55) {Docker Compose};
+
+            \node[box, text width=2.4cm] (browser) at (-0.8, 0) {Researcher's\\web browser};
+            \node[box, text width=2.6cm] (web) at (3.8, 0) {\textbf{web}\\Nginx\\reverse proxy};
+            \node[box, text width=2.6cm] (ui) at (3.8, -4.6) {\textbf{ui}\\React + Vite\\forms, tables\\and charts};
+
+            \draw[rounded corners=2pt] (6.4, 3.0) rectangle (12.0, -3.5);
+            \node[box, draw=none, anchor=north] at (9.2, 3.0) {\textbf{api}: Django REST Framework\\on Gunicorn};
+            \node[component] (collection) at (9.2, 1.35) {\textbf{Data collection}\\query translation and validation,\\YouTube client with request log};
+            \node[component] (processing) at (9.2, -0.15) {\textbf{Processing and analysis}\\comment normalization, sentiment\\classification, descriptive metrics};
+            \node[component] (results) at (9.2, -1.65) {\textbf{Projects, results and exports}\\accounts, projects and saved queries,\\summaries, CSV and JSON exports};
+            \node[note, anchor=north] at (9.2, -2.4) {management commands:\\\texttt{collect\_runs}, \texttt{purge\_youtube\_data}};
+
+            \node[box, text width=2.6cm] (db) at (9.2, -5.0) {\textbf{db}\\PostgreSQL 18};
+
+            \node[note, anchor=south] at (15.0, 2.6) {External services};
+            \node[external] (openai) at (15.0, 2.0) {\textbf{OpenAI Responses API}\\prompt to search parameters};
+            \node[external] (youtube) at (15.0, 0.6) {\textbf{YouTube Data API v3}\\videos, comments\\and statistics};
+            \node[external, dashed] (sentiment) at (15.0, -0.9) {\textbf{Sentiment chat model}\\OpenAI or a local server};
+
+            \draw[flow] (browser) -- node[note, above] {HTTP} (web);
+            \draw[flow] (web) -- node[note, right] {\texttt{/}} (ui);
+            \draw[flow] (web.east) -- node[note, above] {\texttt{/api/}} (6.4, 0);
+            \draw[flow] (9.2, -3.5) -- node[note, right] {Django ORM} (db);
+            \draw[flow] (collection.east) -- (openai.west);
+            \draw[flow] (collection.east) -- (youtube.west);
+            \draw[flow, dashed] (processing.east) -- (sentiment.west);
+        \end{tikzpicture}
+        %
+    }
+    \caption[General architecture of the application]{General architecture of the application. The gray frame holds the four Docker Compose services: \texttt{web}, \texttt{ui}, \texttt{api} and \texttt{db}. Arrows point from the side that starts each request. The browser loads the React application from \texttt{ui} and sends its API calls through Nginx to \texttt{api}. The sentiment model is optional and is used only when one is configured.}
+    \label{fig:architecture}
+\end{figure}
