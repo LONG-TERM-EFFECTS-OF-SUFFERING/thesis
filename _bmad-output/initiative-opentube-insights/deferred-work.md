@@ -29,3 +29,12 @@ Items raised during review that are real but not actionable in the story that su
 - source_plan: `_bmad-output/initiative-opentube-insights/epic-results-visualization-and-analysis/story-filter-results-by-sentiment-plan.md`
   summary: `parse_results_filters` (US-029) reads repeated `date_from`, `date_to` or `video` parameters with `QueryDict.get`, silently using the last value instead of rejecting the request.
   evidence: Found while reviewing US-030, whose `parse_sentiment_filter` now rejects repeated values. The same `getlist` check applies to `views.parse_results_filters`, with `QueryDict`-based parser tests.
+- source_plan: none
+  summary: US-044 — execute a collection run from the app when it is started, instead of waiting for the `collect_runs` management command.
+  evidence: Split by the human on 2026-11-08 from a three-item thesis-review request; built next in the same session after US-043.
+- source_plan: none
+  summary: US-045 — add a Spanish/English interface language toggle with Spanish as the default.
+  evidence: Split by the human on 2026-11-08 from a three-item thesis-review request; built last so it translates the strings US-043 and US-044 add.
+- source_plan: `_bmad-output/initiative-opentube-insights/plan-us-044-execute-runs-from-the-app.md`
+  summary: Researcher-started runs can now overlap a scheduled `purge_youtube_data`, which the documented operating rule ("never purge during a collection") can no longer prevent.
+  evidence: Before US-044 the operator ran both `collect_runs` and the purge, so they could keep them apart; now a run starts whenever Start run is clicked. The consequences are the ones page 26 already describes (a freshly refreshed video can still be deleted, or the purge rolls back), with no corruption. Fix with a lock shared by the purge and `collect_run`, or by having the purge skip while any run is `running`.
