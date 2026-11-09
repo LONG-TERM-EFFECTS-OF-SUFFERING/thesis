@@ -19,7 +19,7 @@ The schema was defined using the following criteria:
 
     \item Support \textbf{reproducibility} by keeping original YouTube identifiers and raw JSON payloads for the 30-day retention window, and query parameters, timestamps and processing metadata permanently.
 
-    \item Support later \textbf{analysis and visualization} through normalized comment text, sentiment results, processing reports and stable relationships between projects, collection runs, videos and comments.
+    \item Support later \textbf{analysis and visualization} through normalized comment text, sentiment results, processing reports and foreign keys that tie every video and comment to the collection runs and projects that obtained it.
 \end{itemize}
 
 \subsubsection{Implementation model}
@@ -107,7 +107,7 @@ Each research project belongs to one owner. A saved query keeps the original nat
 
 \paragraph{Collection traceability}
 
-When a collection run starts, the parameters of the saved query are copied into \texttt{effective\_\allowbreak params} and the comment and reply limits into \texttt{requested\_\allowbreak comment\_\allowbreak limit} and \texttt{requested\_\allowbreak reply\_\allowbreak limit}, and none of them is edited afterwards. A later change to the saved query, or its deletion, therefore does not alter the record of what a past run requested. Each request of the run is stored in \texttt{api\_request\_logs} with its sequence number, endpoint name, request parameters, \texttt{part} and \texttt{fields} values, pagination tokens, HTTP status, quota cost, number of returned items and possible errors, so the collection process is auditable instead of a black box. The counter \texttt{total\_\allowbreak videos\_\allowbreak skipped} records search results that added no video, such as repeated video identifiers or channel and playlist results, so the discovered, skipped and collected counts can be reconciled.
+When a collection run starts, the parameters of the saved query are copied into \texttt{effective\_\allowbreak params} and the comment and reply limits into \texttt{requested\_\allowbreak comment\_\allowbreak limit} and \texttt{requested\_\allowbreak reply\_\allowbreak limit}, and none of them is edited afterwards. Saved queries cannot be edited from the application, and a change made by an administrator, or the deletion of the query, therefore does not alter the record of what a past run requested. Each request of the run is stored in \texttt{api\_request\_logs} with its sequence number, endpoint name, request parameters, \texttt{part} and \texttt{fields} values, pagination tokens, HTTP status, quota cost, number of returned items and possible errors, so the collection process is auditable instead of a black box. The counter \texttt{total\_\allowbreak videos\_\allowbreak skipped} records search results that added no video, such as repeated video identifiers or channel and playlist results, so the discovered, skipped and collected counts can be reconciled.
 
 \paragraph{YouTube resources}
 
@@ -117,7 +117,7 @@ Original YouTube identifiers are unique business keys, while UUID values are use
 
 The table \texttt{processing\_runs} holds two kinds of run. A normalization run cleans the text of the collected comments and writes \texttt{text\_\allowbreak normalized}; its report stores the version of the normalization rules, the number of inputs, written rows and errors, and how many comments each rule changed. A sentiment run classifies the comments after a completed normalization run; its report stores the model name and version, a count per sentiment label and the number of comments skipped for having no text. Both reports hold counts only, without comment text or YouTube identifiers. Each row of \texttt{comment\_sentiments} stores the model name and version next to the label, score, confidence, language code and raw model output, so results from different versions of the same model are never mixed.
 
-The initial design also included a \texttt{derived\_metrics} table for aggregated values, which was not implemented. Summaries and the sentiment distribution are computed from the stored rows on request, using database aggregation, so they always reflect the data that remain after the purge and need no retention rule of their own.
+Aggregated values have no table of their own: summaries and the sentiment distribution are computed from the stored rows on request, using database aggregation, so they always reflect the data that remain after the purge and need no retention rule of their own.
 
 \subsubsection{Integrity and reproducibility controls}
 
@@ -127,4 +127,4 @@ The reproducibility controls are equally important. Collection tables store the 
 
 \paragraph{Ethical and privacy controls}
 
-In accordance with Colombian Statutory Law 1581 of 2012 \autocite{ley1581_2012} and the YouTube API Services Developer Policies \autocite{youtube_api_services_developer_policies}, author channel identifiers (\texttt{author\_channel\_id}) and comment text are used only within internal database relations, and the only analytical values stored as records are the counts in processing reports, which contain no comment text, author identifier or YouTube resource identifier. This prevents the construction of individual behavioral profiles. Comments, author identifiers and the sentiment results computed from them fall under the 30-day retention window, so no personal data from YouTube remains in the database after the purge.
+In accordance with Colombian Statutory Law 1581 of 2012 \autocite{ley1581_2012} and the YouTube API Services Developer Policies \autocite{youtube_api_services_developer_policies}, author channel identifiers (\texttt{author\_channel\_id}) are stored only as keys and are never shown in the interface, no metric is computed per author, and the only analytical values kept after the purge are the counts in processing reports, which contain no comment text, author identifier or YouTube resource identifier. This prevents the construction of individual behavioral profiles inside the application. The dataset export does include author identifiers and raw payloads (Activity~\ref{act:3.4}), each record with the date by which it must be deleted. Comments, author identifiers and the sentiment results computed from them fall under the 30-day retention window, so no personal data from YouTube remains in the database after the purge.

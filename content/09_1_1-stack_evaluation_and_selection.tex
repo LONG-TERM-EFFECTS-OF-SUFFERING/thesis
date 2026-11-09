@@ -4,7 +4,7 @@ The application must automate the \textbf{collection}, \textbf{processing}, \tex
 
 From an architectural point of view, the system must follow these principles: a backend built with a \textbf{modern web framework} and a \textbf{relational database}, a frontend served as static assets by a lightweight \textbf{web server} and full \textbf{containerization} for reproducible deployment.
 
-Finally, the project explicitly excludes training or fine-tuning NLP models; it will integrate \textbf{existing}, \textbf{pre-trained models} for query translation.
+Finally, the project explicitly excludes training or fine-tuning NLP models; it integrates \textbf{existing}, \textbf{pre-trained models} for query translation.
 
 \subsection{Selected technology stack}
 
@@ -50,15 +50,15 @@ The scope~\ref{chap:project_scope} states the use of a lightweight server such a
 
 The query translation component calls a hosted LLM through the OpenAI Responses API, constrained by a strict JSON schema through the Structured Outputs feature \autocite{openai_structured_outputs}. As with the YouTube Data API, the request is a direct HTTP call made with the Python standard library, so no vendor SDK is added. The model is a configuration value (\texttt{LLM\_MODEL}, \texttt{gpt-5.6-luna} by default) that can be changed without modifying code. A hosted model is used instead of a locally executed one because the scope excludes training or fine-tuning models and because it keeps the deployment free of GPU requirements.
 
-To support transparency and reproducibility, the backend should also store the generated query parameters and timestamps, because API-based data collection can vary over time and requires consistent documentation of conditions.
+To support transparency and reproducibility, the backend also stores the generated query parameters, the model name, the prompt version and timestamps, because API-based data collection can vary over time and requires consistent documentation of conditions.
 
 \subsubsection{Practical considerations and alternative stacks}
 
-This application could also be implemented with other mainstream stacks. However, this specific stack is selected because it matches the architecture principles defined in the project scope, supports maintainability in the institutional context and reduces implementation risk due to prior familiarity with the selected technologies.
+This application could also be implemented with other mainstream stacks. However, this specific stack is selected because it matches the architecture principles defined in the project scope, relies on widely used open-source technologies that other students and researchers can maintain, and reduces implementation risk because the author was already familiar with them.
 
 \subsection{Resulting architecture}
 
-Figure~\ref{fig:architecture} shows how the selected technologies are combined in the application. The four services run as Docker Compose containers. Nginx is the single entry point for the browser: it forwards the requests under \texttt{/api/} to the backend and every other request to the frontend. The backend is the only service that reaches the database and the external APIs, and it contains the data collection and the processing and analysis components of objective~\ref{obj:design}; the visualization component is the React frontend, which reads the results through the backend API. Collection runs and the 30-day purge are executed by Django management commands instead of inside web requests (Activities~\ref{act:2.1} and~\ref{act:3.2}).
+Figure~\ref{fig:architecture} shows how the selected technologies are combined in the application. The five services run as Docker Compose containers. Nginx is the single entry point for the browser: it forwards the requests under \texttt{/api/} to the backend and every other request to the frontend. The backend code is the only code that reaches the database, and the \texttt{api} service is the only one that reaches the external APIs; it contains the data collection and the processing and analysis components of objective~\ref{obj:design}; the visualization component is the React frontend, which reads the results through the backend API. A started collection run is executed by a background thread of the \texttt{api} service after the request that started it has been answered, and the \texttt{purge} service, built from the same image, runs the 30-day purge every hour (Activities~\ref{act:2.1} and~\ref{act:3.2}).
 
 \begin{figure}[htbp]
     \centering
@@ -83,25 +83,27 @@ Figure~\ref{fig:architecture} shows how the selected technologies are combined i
             \node[component] (collection) at (9.2, 1.35) {\textbf{Data collection}\\query translation and validation,\\YouTube client with request log};
             \node[component] (processing) at (9.2, -0.15) {\textbf{Processing and analysis}\\comment normalization, sentiment\\classification, descriptive metrics};
             \node[component] (results) at (9.2, -1.65) {\textbf{Projects, results and exports}\\accounts, projects and saved queries,\\summaries, CSV and JSON exports};
-            \node[note, anchor=north] at (9.2, -2.4) {management commands:\\\texttt{collect\_runs}, \texttt{purge\_youtube\_data}};
+            \node[note, anchor=north] at (9.2, -2.4) {one background thread per started run;\\recovery command: \texttt{collect\_runs}};
 
-            \node[box, text width=2.6cm] (db) at (9.2, -5.0) {\textbf{db}\\PostgreSQL 18};
+            \node[box, text width=2.6cm] (db) at (8.0, -5.0) {\textbf{db}\\PostgreSQL 18};
+            \node[box, text width=1.9cm] (purge) at (11.0, -5.0) {\textbf{purge}\\hourly purge};
 
             \node[note, anchor=south] at (15.0, 2.6) {External services};
             \node[external] (openai) at (15.0, 2.0) {\textbf{OpenAI Responses API}\\prompt to search parameters};
             \node[external] (youtube) at (15.0, 0.6) {\textbf{YouTube Data API v3}\\videos, comments\\and statistics};
-            \node[external, dashed] (sentiment) at (15.0, -0.9) {\textbf{Sentiment chat model}\\OpenAI or a local server};
+            \node[external, dashed] (sentiment) at (15.0, -0.9) {\textbf{Sentiment chat model}\\OpenAI Chat Completions};
 
             \draw[flow] (browser) -- node[note, above] {HTTP} (web);
             \draw[flow] (web) -- node[note, right] {\texttt{/}} (ui);
             \draw[flow] (web.east) -- node[note, above] {\texttt{/api/}} (6.4, 0);
-            \draw[flow] (9.2, -3.5) -- node[note, right] {Django ORM} (db);
+            \draw[flow] (8.0, -3.5) -- node[note, right] {Django ORM} (db);
+            \draw[flow] (purge) -- (db);
             \draw[flow] (collection.east) -- (openai.west);
             \draw[flow] (collection.east) -- (youtube.west);
             \draw[flow, dashed] (processing.east) -- (sentiment.west);
         \end{tikzpicture}
         %
     }
-    \caption[General architecture of the application]{General architecture of the application. The gray frame holds the four Docker Compose services: \texttt{web}, \texttt{ui}, \texttt{api} and \texttt{db}. Arrows point from the side that starts each request. The browser loads the React application from \texttt{ui} and sends its API calls through Nginx to \texttt{api}. The sentiment model is optional and is used only when one is configured.}
+    \caption[General architecture of the application]{General architecture of the application. The gray frame holds the five Docker Compose services: \texttt{web}, \texttt{ui}, \texttt{api}, \texttt{db} and \texttt{purge}, which runs the purge command every hour with the \texttt{api} image. Arrows point from the side that starts each request. The browser loads the React application from \texttt{ui} and sends its API calls through Nginx to \texttt{api}. The sentiment model is optional and is used only when one is configured.}
     \label{fig:architecture}
 \end{figure}

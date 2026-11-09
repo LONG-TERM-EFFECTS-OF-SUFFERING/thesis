@@ -1,4 +1,4 @@
-This activity covers user stories US-010 to US-016 and US-021 to US-023 of the product backlog. The component turns an approved saved query into collected YouTube data and records every request it makes, so the collection can be audited after the data itself has been deleted.
+This activity covers user stories US-010 to US-016, US-021 to US-023 and US-044 of the product backlog. The component turns an approved saved query into collected YouTube data and records every request it makes, so the collection can be audited after the data itself has been deleted.
 
 \subsection{Collection runs}
 
@@ -8,7 +8,7 @@ Each run follows the lifecycle \texttt{pending} $\rightarrow$ \texttt{running} $
 
 \subsection{Execution of a run}
 
-Runs are executed by a Django management command, \texttt{collect\_runs}, which processes the pending runs from oldest to newest. Collecting inside the web request was discarded because several YouTube calls could exceed the Gunicorn worker timeout, and a job queue was discarded because it would add a dependency and a message broker to a local research tool. A run is claimed by moving it from \texttt{pending} to \texttt{running} with the compare-and-set update described above, so two executions of the command never collect the same run twice.
+Runs are executed by the application itself, because its users are researchers, not server operators. The start endpoint creates the run as \texttt{pending} and answers at once; when the database transaction that created the run commits, the run is handed to a background thread of the API process, which collects it while the interface shows its progress. Collecting inside the web request was discarded because several YouTube calls could exceed the Gunicorn worker timeout, and a job queue was discarded because it would add a dependency and a message broker to a local research tool. Without a configured YouTube API key the start is rejected with HTTP 503 and no run is created. A run is claimed by moving it from \texttt{pending} to \texttt{running} with the compare-and-set update described above, so the same run is never collected twice. A management command, \texttt{collect\_runs}, remains as a recovery tool: it collects, from oldest to newest, any run left \texttt{pending}, for example because the process stopped before the run's thread started.
 
 Collection is performed in five steps, summarized in Table~\ref{tab:collection_steps}. Only the first step is expensive in quota; once the video identifiers are known, the remaining steps use the one-unit methods, as recommended in Activity~\ref{act:1.2}.
 
@@ -42,9 +42,9 @@ The comment and reply limits are part of the saved query and are empty by defaul
 
 Storage is idempotent. Original YouTube identifiers are unique, videos, channels and comments are created or updated in place and each run receives its own links to the resources it collected, so running the same query again refreshes the data and its retention timestamp without duplicating rows. Video statistics are the exception: each run adds a new snapshot, because engagement values change over time.
 
-\subsection{Authentication, quota accounting and request logging}
+\subsection{API key authentication, quota accounting and request logging}
 
-The application reads only public data, so it authenticates with an API key taken from the environment; OAuth 2.0 is not needed. All YouTube requests go through a single function, \texttt{call\_\allowbreak youtube}, which rejects an unknown endpoint, a missing key or a key placed among the parameters before sending anything. For every accepted call it creates the request log row \emph{before} the HTTP request, with its sequence number within the run, the endpoint, the parameters, the page token and the quota cost taken from a fixed table of method costs. A request that never finishes therefore leaves evidence of its start. After the response, the row is completed with the HTTP status, the number of items, the next page token and the finish time.
+The application reads only public data, so it authenticates to YouTube with an API key taken from the environment; OAuth 2.0 is not needed. This is the application's authentication to YouTube, not the researchers' login, which is described in Activity~\ref{act:3.5}. All YouTube requests go through a single function, \texttt{call\_\allowbreak youtube}, which rejects an unknown endpoint, a missing key or a key placed among the parameters before sending anything. For every accepted call it creates the request log row \emph{before} the HTTP request, with its sequence number within the run, the endpoint, the parameters, the page token and the quota cost taken from a fixed table of method costs. A request that never finishes therefore leaves evidence of its start. After the response, the row is completed with the HTTP status, the number of items, the next page token and the finish time.
 
 The run's totals of requests and quota units are incremented in the same database transaction that creates the log row, with an update computed by PostgreSQL rather than in Python, so the totals always equal the sum of the logs, even with concurrent writers. Failed requests are counted at full cost, because YouTube also charges them.
 

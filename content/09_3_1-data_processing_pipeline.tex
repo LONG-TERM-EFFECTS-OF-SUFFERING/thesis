@@ -31,7 +31,7 @@ Comments are kept exactly as YouTube returns them, and a cleaned copy is written
 \end{table}
 \endgroup
 
-The rule set has a version identifier, \texttt{comment-text-v2}, that changes whenever a rule changes, so each result can be traced to the exact rules that produced it. The second version came from the code review: the first version did not compose accents produced by decoded entities and replaced URL-like fragments inside words.
+The rule set has a version identifier, \texttt{comment-text-v2}, that changes whenever a rule changes, so each result can be traced to the exact rules that produced it.
 
 \subsection{Processing runs and the validation report}
 
@@ -39,4 +39,4 @@ Each execution of the pipeline is recorded as a processing run with the same lif
 
 The report contains counts only, without comment text or YouTube identifiers, because processing runs are kept after the 30-day purge as part of the methodological record. A failure during processing marks only the processing run as failed: the collection run remains completed and the comments cleaned before the failure keep their normalized text.
 
-One limitation remains open. Rule 3 also removes the zero-width joiner, so emoji composed of several emoji, such as a family, are split into their parts; keeping the joiner between emoji would require a new version of the rules.
+Rule 3 also removes the zero-width joiner (U+200D), an invisible character that glues several emoji into one picture, so a family emoji made of a man, a woman and a child is stored as three separate emoji. This was accepted on purpose: every emoji of the sequence is kept, so the signal a sentiment model reads is not lost, and keeping the joiner only between emoji would need a rule that recognizes emoji sequences, which Python's standard library cannot do. Such a rule would be a new version of the rule set.

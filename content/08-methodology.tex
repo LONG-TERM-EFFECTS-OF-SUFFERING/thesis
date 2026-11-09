@@ -1,37 +1,37 @@
 \chapter{Methodology}
 
-Scrum is an agile framework for iterative and incremental development in which work is broken into goals completed within time-boxed iterations called sprints, typically lasting two to four weeks \autocite{schwaber2020scrum}. This project adopts an adapted Scrum framework to guide the software development process. While Scrum is traditionally designed for team-based development, this thesis applies specific Scrum artifacts and events that provide particular value for individual academic software projects, especially in maintaining transparency and systematic progress tracking.
+Scrum is an agile framework for iterative and incremental development in which work is broken into goals completed within time-boxed iterations called sprints, typically lasting two to four weeks \autocite{schwaber2020scrum}. This project adopted an adapted Scrum framework to guide the software development process. While Scrum is traditionally designed for team-based development, this thesis applied the Scrum artifacts and events that provide particular value for individual academic software projects, especially in maintaining transparency and systematic progress tracking.
 
-The choice of Scrum is motivated by two primary factors: its \textbf{flexibility} through iterative development and its emphasis on \textbf{structured documentation} through artifacts. This aligns well with the exploratory nature of thesis development, where requirements may evolve as the research progresses.
+The choice of Scrum was motivated by two primary factors: its \textbf{flexibility} through iterative development and its emphasis on \textbf{structured documentation} through artifacts. This aligned well with the exploratory nature of thesis development, where requirements may evolve as the research progresses.
 
 \section{Scrum artifacts adapted for this project}
 
 \subsection{Product backlog}
 
-The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \autocite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} will document all planned features, technical requirements and improvements for the web application. This artifact provides transparency in planning and allows for systematic prioritization of development tasks based on their contribution to thesis objectives.
+The product backlog serves as an emergent, ordered list of what is needed to improve the product and functions as the single source of work for the project \autocite{schwaber2020scrum}. For this thesis, the \textbf{product backlog} documents all planned features, technical requirements and improvements for the web application. This artifact provided transparency in planning and allowed development tasks to be prioritized by their contribution to the thesis objectives.
 
 \subsection{Sprint backlog}
 
-Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items and an actionable plan for delivering an increment \autocite{schwaber2020scrum}, the \textbf{sprint backlog} will serve as the operational plan for each development iteration. For this individual project, sprints will be two-week periods during which specific functionality will be developed and integrated into the application.
+Composed of the \textbf{sprint goal}, selected \textbf{product backlog} items and an actionable plan for delivering an increment \autocite{schwaber2020scrum}, the \textbf{sprint backlog} of each development iteration was its share of the sprint plan described below: a goal and the product backlog items assigned to it. For this individual project, sprints were two-week periods during which specific functionality was developed and integrated into the application.
 
 \section{Scrum events adapted for this project}
 
-While Scrum events are designed for team collaboration, certain events will be adapted to provide structure and facilitate self-reflection.
+Scrum events are designed for team collaboration and recur in every sprint; this project held sprint planning once, at the start, and replaced the retrospective.
 
 \subsection{Sprint planning}
 
-At the beginning of each sprint, sprint planning will determine what can be delivered in the upcoming sprint and how that work will be achieved \autocite{schwaber2020scrum}. This will involve selecting \textbf{product backlog} items and defining a clear \textbf{sprint goal}.
+Sprint planning determines what can be delivered in a sprint and how that work will be achieved \autocite{schwaber2020scrum}. In this project it was done once, before the first sprint: a single plan distributed the \textbf{product backlog} items across all thirteen sprints, with a \textbf{sprint goal}, dates and an estimate in points for each. The plan is kept in the sprint planning document described in Chapter~\ref{chap:development}.
 
 \subsection{Sprint retrospective}
 
-The sprint retrospective provides an opportunity to plan ways to increase quality and effectiveness \autocite{schwaber2020scrum}. For this individual project, retrospectives will be conducted at the end of each sprint to reflect on what went well, what challenges were encountered and what adjustments should be made for subsequent sprints. This practice supports continuous improvement and systematic documentation of the development process.
+The sprint retrospective provides an opportunity to plan ways to increase quality and effectiveness \autocite{schwaber2020scrum}. In this project, retrospectives were not held as separate events at the end of each sprint. The inspection they provide happened at the level of each user story instead: every story ended with a structured review whose findings were fixed, deferred or returned to the plan (Section~\ref{sec:ai_assisted_workflow}), and problems that the reviews found more than once were added to the instructions the AI agent reads before every story, so later stories avoided them.
 
-Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner} and \textbf{developers} \autocite{schwaber2020scrum}, this project adapts its core principles to the context of individual thesis development. The emphasis remains on the empirical pillars of \textbf{transparency}, \textbf{inspection} and \textbf{adaptation} \autocite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
+Although Scrum is traditionally conceived as a framework for teams, with defined roles including \textbf{Scrum master}, \textbf{product owner} and \textbf{developers} \autocite{schwaber2020scrum}, this project adapted its core principles to the context of individual thesis development. The emphasis remained on the empirical pillars of \textbf{transparency}, \textbf{inspection} and \textbf{adaptation} \autocite{schwaber2020scrum}, which are particularly valuable for maintaining rigor and documentation in academic software development projects.
 
 \section{AI-assisted development workflow}
 \label{sec:ai_assisted_workflow}
 
-The software was implemented with the BMAD Method \autocite{bmad_method}, an open-source framework that organizes software development with AI agents around explicit planning artifacts, and with Claude Code \autocite{claude_code}, an AI coding agent developed by Anthropic. BMAD does not replace the adapted Scrum framework: it operates inside each sprint, at the level of a single user story.
+The software was implemented with the BMAD Method \autocite{bmad_method}, an open-source framework that organizes software development with AI agents around explicit planning artifacts, and with Claude Code \autocite{claude_code}, an AI coding agent developed by Anthropic. BMAD did not replace the adapted Scrum framework: it operated inside each sprint, at the level of a single user story.
 
 The product backlog remains the source of requirements. BMAD mirrors it as a ticket tree with one initiative for the application, one epic per backlog epic and one story per user story, each citing the backlog identifiers it covers. Every story followed the same cycle:
 
@@ -45,18 +45,18 @@ The product backlog remains the source of requirements. BMAD mirrors it as a tic
     \item \textbf{Verify and document.} The backend and frontend test suites, the migration check and the production build run before the story closes, and a beginner-oriented explanation of the reviewed code is added to the project documentation.
 \end{enumerate}
 
-In this cycle the author acts as product owner and technical reviewer: defining and approving the intent of each story, deciding every deferred or ambiguous item, reviewing the changes and merging them. The plans, review triage logs and deferred-work log are kept in the repository, so the development process is documented with the same transparency the application seeks for data collection. Because generated tests can pass for the wrong reason, a test was trusted only after the behavior it covers had been broken on purpose and the test had been seen to fail.
+In this cycle the author acts as product owner and technical reviewer: defining and approving the intent of each story, deciding every deferred or ambiguous item, reviewing the changes and merging them. The plans, the review logs, which record how each finding was classified and resolved, and the deferred-work log are kept in the repository, so every development decision can be inspected later, as every collection request can. Because generated tests can pass for the wrong reason, a test was trusted only after the code it covers had been broken on purpose, for example by removing the check under test, and the test had been seen to fail; the code was then restored.
 
-\section{Activities to be carried out}
+\section{Activities carried out}
 
-Table~\ref{tab:activities} lists the activities planned for each specific objective and the expected result of each one.
+Table~\ref{tab:activities} lists the activities carried out for each specific objective and the result expected from each one; Chapter~\ref{chap:development} reports one section per activity.
 
 \begingroup
 \setstretch{1.0}
 \footnotesize
 \begin{longtable}
     {>{\raggedright\arraybackslash}p{1.2cm}>{\raggedright\arraybackslash}p{7.8cm}>{\raggedright\arraybackslash}p{6.2cm}}
-    \caption{Activities to be carried out for each specific objective}
+    \caption{Activities carried out for each specific objective}
     \label{tab:activities}                                                                                                                                                                                                                                                                                                                                                                   \\
     \toprule
     \textbf{ID}                   & \textbf{Activity}                                                                                                                                                                                                  & \textbf{Expected result}                                                                                                            \\

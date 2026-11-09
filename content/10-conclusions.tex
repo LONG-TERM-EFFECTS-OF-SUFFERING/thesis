@@ -9,10 +9,10 @@ The general objective was to develop a web application that automates the collec
 
 \paragraph{Data collection with a natural language interface (objective~\ref{obj:implement_collection}).} Restricting the LLM to a fixed set of typed fields, and building the API parameters in the application, made the translation predictable: the model cannot produce an invalid parameter name, and a single validator applied to drafts, saved queries and run starts keeps invalid values from consuming quota. Keeping the researcher in the loop, with an editable draft and a record of its provenance, preserves the researcher's authority over the criteria. On the collection side, a single logged entry point for all API calls made quota accounting and auditing a property of the architecture rather than a discipline of each caller.
 
-\paragraph{Processing, analysis and visualization (objective~\ref{obj:implement_processing_analysis_and_visualization}).} Comment text is normalized by versioned, deterministic rules, and each processing run reports its inputs, outputs and errors with counts that outlive the purge. Sentiment analysis was built against a contract that records the model name and version with every result, so results of different models are never mixed in the run detail, the chart or the exports. % TODO(US-025 part B): name the model and summarize what its integration showed.
+\paragraph{Processing, analysis and visualization (objective~\ref{obj:implement_processing_analysis_and_visualization}).} Comment text is normalized by versioned, deterministic rules, and each processing run reports its inputs, outputs and errors with counts that outlive the purge. Sentiment analysis was built against a contract that records the model name and version with every result, so results of different models are never mixed in the run detail, the chart or the exports. The registered model is a chat LLM prompted on a three-level polarity scale, and every label also stores the prompt version and the model snapshot that served it, because a hosted model can change behind the same name. % TODO(US-039): summarize what the real-topic runs showed about the model.
 The presentation layer shows each figure together with its context: the model behind a label, the period a count covers and the filters that produced it.
 
-\paragraph{Testing (objective~\ref{obj:test}).} The backend and frontend suites, with 365 and 104 tests, cover each component without calling external services, and an integration test runs the complete workflow on a synthetic corpus. Requiring every test to fail when its behavior is broken on purpose found defects that review alone had missed, such as a pagination loop that could exhaust the daily quota. % TODO(US-039): summarize the validation on the two real topics.
+\paragraph{Testing (objective~\ref{obj:test}).} The backend and frontend suites, with 396 and 124 tests, cover each component without calling external services, and an integration test runs the complete workflow on a synthetic corpus. Requiring every test to fail when its behavior is broken on purpose found defects that review alone had missed, such as a pagination loop that could exhaust the daily quota. % TODO(US-039): summarize the validation on the two real topics.
 
 Finally, the development process followed the same principle as the application: with an AI coding agent implementing the stories, the approved plans, review logs and deferred-work records keep every decision attributable and open to inspection.
 
@@ -23,9 +23,11 @@ Finally, the development process followed the same principle as the application:
 
     \item \textbf{Validation of form, not existence.} Parameters are checked for their format but not against external lists; a nonexistent country code with a valid form is accepted.
 
-    \item \textbf{Local, single-user deployment.} The API has no authentication or rate limiting and attributes requests to a configured local owner, which is adequate only while the application listens on the local machine.
+    \item \textbf{Shared keys and no rate limiting.} Each researcher has an account and sees only their own projects, but all accounts spend the same YouTube and LLM keys, configured by the operator, with no per-user quota or rate limit.
 
-    \item \textbf{Operator duties.} Collection runs and the 30-day purge are executed by management commands that the operator must run or schedule, and the purge must not run during a collection.
+    \item \textbf{Runs left running.} A run whose process stops in the middle of a collection, for example because the server restarts, stays \texttt{running}: the interface keeps polling it and the hourly purge skips until an administrator marks the run as failed.
+
+    \item \textbf{Sentiment from a hosted model.} Temperature 0 and a fixed prompt make the labels repeatable in practice, but not guaranteed: the provider can change the model behind the same name. The stored snapshot name makes such a change visible, not reversible.
 
     \item \textbf{Interface testing.} The interface logic is tested, but the components are not rendered by automated tests. % TODO(US-037): update once the smoke tests exist.
 \end{itemize}
@@ -33,11 +35,11 @@ Finally, the development process followed the same principle as the application:
 \section{Future work}
 
 \begin{itemize}
-    \item Add authentication, per-user quotas and rate limiting, so the application can be deployed as a shared service for a research group.
+    \item Add per-user quotas and rate limiting, or let each researcher use their own API keys, so the application can be deployed as a shared service for a research group.
 
-    \item Schedule collection runs and the purge within the application, with a lock that prevents them from overlapping.
+    \item Recover runs left \texttt{running} after a crash automatically, and share a lock between the purge and the collector so the two can never overlap.
 
-    \item Compare several sentiment models on the same comments, which the data model already supports because every result records its model and version.
+    \item Test a local sentiment model served behind the same kind of endpoint, which the classifier was built to accept, and compare it with the hosted model on the same comments; the data model already supports the comparison because every result records its model and version.
 
     \item Extend the analysis to the channel level, using the channel metadata already collected, and to the evolution of engagement across runs, using the statistics snapshots each run records.
 
