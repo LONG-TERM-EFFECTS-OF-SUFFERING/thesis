@@ -98,6 +98,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 46. [44 - Purge YouTube data automatically](44-purge-youtube-data-automatically.md).
 
+47. [45 - Explain each query field](45-explain-each-query-field.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -146,6 +148,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [42-execute-collection-runs-from-the-app.md](42-execute-collection-runs-from-the-app.md) | US-044 |  Done  | Start run hands the committed run to a background thread that calls `collect_run`; a missing key is a `503`; the UI polls runs while one is active and reloads results when one finishes; `collect_runs` remains as recovery. |
 | [43-switch-the-interface-language.md](43-switch-the-interface-language.md) | US-045 |  Done  | A Spanish-default ES/EN toggle with no library: a typed dictionary keyed by the English text, so a missing translation fails the build; the choice is stored like the theme; server messages and API values stay untranslated. |
 | [44-purge-youtube-data-automatically.md](44-purge-youtube-data-automatically.md) | US-046 |  Done  | A Compose `purge` service and a `run-local.sh` job run the 30-day purge every hour with a plain shell loop; the command skips while any run is `running`; a stuck run blocks the purge until it is failed by hand. |
+| [45-explain-each-query-field.md](45-explain-each-query-field.md) | US-047 |  Done  | Every saved-query field shows a hint above it on hover, focus or tap, naming its YouTube parameter; focus wins and Escape hides them; order and advanced options show readable names but still send the API value. |
 
 ## How to use this folder
 
