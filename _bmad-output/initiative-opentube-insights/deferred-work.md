@@ -38,3 +38,7 @@ Items raised during review that are real but not actionable in the story that su
 - source_plan: `_bmad-output/initiative-opentube-insights/plan-us-044-execute-runs-from-the-app.md`
   summary: Researcher-started runs can now overlap a scheduled `purge_youtube_data`, which the documented operating rule ("never purge during a collection") can no longer prevent.
   evidence: Before US-044 the operator ran both `collect_runs` and the purge, so they could keep them apart; now a run starts whenever Start run is clicked. The consequences are the ones page 26 already describes (a freshly refreshed video can still be deleted, or the purge rolls back), with no corruption. Fix with a lock shared by the purge and `collect_run`, or by having the purge skip while any run is `running`.
+
+- source_plan: `_bmad-output/initiative-opentube-insights/plan-us-046-purge-youtube-data-automatically.md`
+  summary: A collection run left `running` by a dead thread (US-044 ceiling) now blocks the hourly purge indefinitely, and only a Django shell `.update()` can clear it.
+  evidence: US-046 review pass 1 (medium). `CollectionRunAdmin` keeps `status` read-only, no view or command fails a run, and `collect_runs` only picks up `pending` runs. Fix: a stale-run sweep that marks `running` runs older than a cutoff as `failed`, or an admin action to fail a run, which also stops the UI from polling forever.
