@@ -218,7 +218,7 @@ It now has two main areas:
 
 The saved-query form uses native controls:
 
-- text inputs for name, search term, region and language.
+- text inputs for name, search term and region, and a language menu (Not set, Spanish, English; page 41).
 
 - `datetime-local` inputs for publication date bounds.
 

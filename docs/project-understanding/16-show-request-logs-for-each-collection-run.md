@@ -39,6 +39,8 @@ Runs are collected outside the web app, by `manage.py collect_runs` (US-015). Th
 
 Polling (asking the server every few seconds) was left out on purpose: it adds timers and cleanup for a local research tool where a button is enough.
 
+**Update (US-044, page 42):** runs are now collected by the API itself, so the runs list polls every 3 s while a run is `pending` or `running`. An open run's details are not polled; when its row's status changes, a "This run is now …" notice offers **Reload details**. Refresh still works as described.
+
 ## Key concept: late responses (the AGENTS.md pitfall)
 
 A request started for project A can come back after you have switched to project B. If its result were written to the screen, you would see A's runs under B. This bug has hit this project twice before, so every fetch in the panel follows the same rule:
@@ -137,7 +139,7 @@ If you are logged into `/admin/`, open it on `127.0.0.1` and the UI on `localhos
 
 ## Common errors
 
-- **The run stays `pending` after Refresh.** Nobody ran `collect_runs` yet.
+- **The run stays `pending` after Refresh.** Since US-044 the API collects it at once. A run that stays `pending` was started before US-044, or the API stopped before its thread began. Run `collect_runs` once to collect it.
 
 - **`404` when opening a run.** The run belongs to another project or owner, or was deleted along with its project.
 

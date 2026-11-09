@@ -90,6 +90,12 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 42. [40 - Log in with a local account](40-log-in-with-a-local-account.md).
 
+43. [41 - Pick a language from a selector](41-pick-a-language-from-a-selector.md).
+
+44. [42 - Execute collection runs from the app](42-execute-collection-runs-from-the-app.md).
+
+45. [43 - Switch the interface language](43-switch-the-interface-language.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -134,6 +140,9 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [37-validate-the-workflow-with-synthetic-fixtures.md](37-validate-the-workflow-with-synthetic-fixtures.md) | US-038 |  Done  | Tests-only: one offline pass from prompt to CSV over a synthetic corpus, faking only the network, a stage name on every failure, and the gaps the review closed. |
 | [39-set-advanced-youtube-search-filters.md](39-set-advanced-youtube-search-filters.md) | US-041 |  Done  | Ten hand-set `search.list` filters in a collapsed form group, kept in `structured_query_params` with no migration, one validator for drafts, saves and run starts, the location pair rule, and the UI's mirrored list of values. |
 | [40-log-in-with-a-local-account.md](40-log-in-with-a-local-account.md) | US-042 |  Done  | Django session login with admin-created accounts, the single anonymous gate in `resolve_project_owner`, the local-owner fallback flag, CSRF on login and every write, and the proxy Host fix the origin check needed. |
+| [41-pick-a-language-from-a-selector.md](41-pick-a-language-from-a-selector.md) | US-043 |  Done  | The project and query language inputs became a Spanish/English select fed by one list, which keeps an unlisted drafted code visible instead of showing Not set. |
+| [42-execute-collection-runs-from-the-app.md](42-execute-collection-runs-from-the-app.md) | US-044 |  Done  | Start run hands the committed run to a background thread that calls `collect_run`; a missing key is a `503`; the UI polls runs while one is active and reloads results when one finishes; `collect_runs` remains as recovery. |
+| [43-switch-the-interface-language.md](43-switch-the-interface-language.md) | US-045 |  Done  | A Spanish-default ES/EN toggle with no library: a typed dictionary keyed by the English text, so a missing translation fails the build; the choice is stored like the theme; server messages and API values stay untranslated. |
 
 ## How to use this folder
 

@@ -222,14 +222,14 @@ Replace `<query-id>` with an `id` from the saved query list response.
 curl -sS -X POST "http://127.0.0.1:${API_HOST_PORT:-8000}/api/projects/<project-id>/queries/<query-id>/runs/"
 ```
 
-Starts a collection run from one saved query. The run is created as `pending` with a copy of the query's parameters (US-011).
+Starts a collection run from one saved query. The run is created as `pending` with a copy of the query's parameters (US-011), and since US-044 the API collects it at once in a background thread (page 42). Without `YOUTUBE_API_KEY` the start returns `503` and creates no run.
 
 ```bash
 cd src/api
 venv/bin/python manage.py collect_runs
 ```
 
-Collects every `pending` run, oldest first: it pages through YouTube `search.list` and stores the discovered videos (US-015). It needs `YOUTUBE_API_KEY` in `src/api/.env` and stops with `YOUTUBE_API_KEY is not configured.` without it. Each search page costs 100 quota units.
+A recovery tool since US-044: Start run already collects each run. Use it only for runs left `pending` (for example, started before US-044, or when the API stopped before the thread began). Collects every `pending` run, oldest first: it pages through YouTube `search.list` and stores the discovered videos (US-015). It needs `YOUTUBE_API_KEY` in `src/api/.env` and stops with `YOUTUBE_API_KEY is not configured.` without it. Each search page costs 100 quota units.
 
 ```bash
 cd src
@@ -238,7 +238,7 @@ docker compose exec api python manage.py collect_runs
 
 The same command inside the running Compose `api` container.
 
-With `./run-local.sh` running in one terminal, run `collect_runs` from `src/api` in a second terminal, then click **Refresh** in the Collection runs panel. Nothing collects a run automatically: "Start run" only queues it as `pending`.
+Before US-044, "Start run" only queued a run and an operator had to run `collect_runs`. Now the Runs table updates every 3 s while a run is `pending` or `running`, so no command and no Refresh are needed.
 
 ## 30-day purge
 

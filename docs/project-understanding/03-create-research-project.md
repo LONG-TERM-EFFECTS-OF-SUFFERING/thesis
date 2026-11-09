@@ -42,7 +42,7 @@ Important fields:
 
 - `status`: either `active` or `archived`.
 
-- `default_language`: optional language hint, such as `es`.
+- `default_language`: optional language hint, such as `es`, picked from a menu since US-043 (page 41).
 
 - `created_at` and `updated_at`: timestamps managed by Django.
 

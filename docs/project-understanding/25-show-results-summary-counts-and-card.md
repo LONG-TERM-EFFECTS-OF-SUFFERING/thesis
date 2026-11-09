@@ -125,7 +125,7 @@ Passing looks like `OK` (226 tests), `pass 64`, a finished build and no lint out
 
 - **`relation "youtube_videos" does not exist`.** The database you are using is behind on migrations. Run `manage.py migrate` against it (see step 1).
 
-- **The card says "No data collected yet" but runs exist.** The runs are still `pending`, or found nothing. Run `collect_runs`, then click Refresh.
+- **The card says "No data collected yet" but runs exist.** The runs are still `pending` or `running`, or found nothing. Since US-044 the card reloads by itself when a run finishes. A run stuck `pending` needs `collect_runs` once (page 42).
 
 - **The numbers look lower than the admin's totals.** The admin shows every project's and every owner's rows. The card shows only the active project's.
 
