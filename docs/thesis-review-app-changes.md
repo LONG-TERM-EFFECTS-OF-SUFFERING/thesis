@@ -7,13 +7,15 @@ App fixes made while the thesis document was under review. The LaTeX in `content
 | US-043 | Language fields become an ES/EN selector | merged into `src/ui` `develop` (PR #22) |
 | US-044 | Collection runs execute from the app | merged into `develop` (`src/api` PR #43, `src/ui` PR #23) |
 | US-045 | Interface language toggle, Spanish default | merged into `src/ui` `develop` (PR #24) |
-| US-046 | 30-day purge runs automatically | built, reviewed twice, committed locally (`src/api` on `feature/US-046`; Compose and `run-local.sh` in the thesis repo) |
+| US-046 | 30-day purge runs automatically | built, reviewed twice; Compose and `run-local.sh` on thesis `main`; `src/api` PR #44 open |
 
 ## US-043 — language selector
 
 **What changed.** The project's *Default language* and the saved query's *Language* are now a `<select>` with Not set, Spanish (`es`) and English (`en`), fed from one list (`LANGUAGE_OPTIONS` in `src/ui/src/savedQueryForm.ts`). When an LLM draft applies a code that is not in the list (for example `pt`), the menu adds it as an extra option, so the screen never says "Not set" while saving another code. The API did not change and still accepts any well-formed language tag. Explainer: `docs/project-understanding/41-pick-a-language-from-a-selector.md`.
 
 **Document follow-ups:**
+
+*Applied to `content/` on 2026-11-09 in thesis review round 2 (`docs/thesis-review-round-2.md`).*
 - `content/09_3_5-user_project_management.tex`: the Projects and Queries paragraphs can say the language is chosen from a Spanish/English menu.
 - `content/09_2_2-LLM_integration_component.tex`, line 31 ("free text typed by a user"): the interface now offers a menu, but the API still stores free text, so the tag-shape guard on the hint still matters. Reword it rather than delete it.
 - `content/09_3_4-data_visualization_components.tex` ("native HTML elements"): still true, since the menu is a native `<select>`.
@@ -33,6 +35,8 @@ Reviewer note: the document argues against executing runs from the web client; g
 Decision taken in review: a run counts as finished when *collection* ends. Normalization and sentiment then continue in the same thread, so the Results sentiment area may be empty for a while. It says so, and Apply checks again. `status` and `finished_at` keep their current meaning.
 
 **Document follow-ups:**
+
+*Applied to `content/` on 2026-11-09 in thesis review round 2 (`docs/thesis-review-round-2.md`).*
 - `content/09_2_1-backend_data_collection_component.tex`, line 11: rewrite the paragraph.
   - Runs are now collected by a background thread started after the run's row is committed.
   - Collecting *inside the request* is still rejected, for the same Gunicorn-timeout reason.
@@ -63,6 +67,8 @@ Decision taken in review: a run counts as finished when *collection* ends. Norma
 Reviewed: 3 findings fixed in `src/ui` 200ce9b. Explainer: `docs/project-understanding/43-switch-the-interface-language.md`. The browser check (form values survive a switch; reload keeps the choice) is still for you to do by hand.
 
 **Document follow-ups:**
+
+*Applied to `content/` on 2026-11-09 in thesis review round 2 (`docs/thesis-review-round-2.md`).*
 - `content/09_3_4-data_visualization_components.tex` (interface paragraph): add the Spanish/English toggle, its Spanish default and its stored choice, next to the theme sentence. "No component library was added" still holds, because no i18n library was added either.
 - Say that server messages and API vocabulary remain in English. Translating them would need Django `LocaleMiddleware` and gettext.
 
@@ -80,6 +86,8 @@ Reviewed twice: pass 1 moved the local loop to purge first (a session under an h
 Known limit: a run stuck in `running` (US-044 ceiling) blocks every purge until it is failed by hand. A stale-run sweep is in `deferred-work.md`.
 
 **Document follow-ups:**
+
+*Applied to `content/` on 2026-11-09 in thesis review round 2 (`docs/thesis-review-round-2.md`).*
 - `content/09_3_2-database_layer.tex` line 17: the purge is no longer only an operator command. It runs every hour, and it skips while a run is collecting.
 - `content/09_1_1-stack_evaluation_and_selection.tex`: line 61 and the diagram add a fifth Compose service, `purge`.
 - `content/10-conclusions.tex`: remove "Operator duties" from Limitations, and drop the scheduling item from Future work. Add the stuck-run limit if the stale-run sweep is not built.
