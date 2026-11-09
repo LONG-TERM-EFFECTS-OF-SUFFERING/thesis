@@ -35,6 +35,18 @@ trap 'exit 143' TERM
 ) &
 pids+=("$!")
 
+# Hourly 30-day purge (US-040); the first sleep lets the API job's migrate finish.
+(
+  cd "$root/api"
+  export DATABASE_ENGINE="${DATABASE_ENGINE:-sqlite}"
+  sleep 60
+  while true; do
+    "$python_bin" manage.py purge_youtube_data || true
+    sleep 3600
+  done
+) &
+pids+=("$!")
+
 (
   cd "$root/ui"
   if [[ ! -d node_modules ]]; then

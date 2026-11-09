@@ -1,3 +1,26 @@
+x-api-env: &api-env
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-only-change-me}
+  DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
+  DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,0.0.0.0,api}
+  DATABASE_ENGINE: postgresql
+  POSTGRES_DB: ${POSTGRES_DB:-opentube_insights}
+  POSTGRES_USER: ${POSTGRES_USER:-opentube_insights}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-opentube_insights}
+  POSTGRES_HOST: db
+  POSTGRES_PORT: 5432
+  # Blank reads as off: project requests need a logged-in account.
+  OPENTUBE_LOCAL_OWNER_FALLBACK: ${OPENTUBE_LOCAL_OWNER_FALLBACK:-}
+  OPENTUBE_DEFAULT_OWNER_USERNAME: ${OPENTUBE_DEFAULT_OWNER_USERNAME:-local-researcher}
+  GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+  GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-60}
+  YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
+  LLM_API_KEY: ${LLM_API_KEY:-}
+  # No literal default here: settings.py owns it, so the model id lives in one place.
+  LLM_MODEL: ${LLM_MODEL:-}
+  SENTIMENT_MODEL: ${SENTIMENT_MODEL:-}
+  SENTIMENT_LLM_URL: ${SENTIMENT_LLM_URL:-}
+  SENTIMENT_LLM_MODEL: ${SENTIMENT_LLM_MODEL:-}
+
 services:
   db:
     image: postgres:18-alpine
@@ -23,27 +46,7 @@ services:
     build:
       context: ./api
     environment:
-      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-only-change-me}
-      DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
-      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,0.0.0.0,api}
-      DATABASE_ENGINE: postgresql
-      POSTGRES_DB: ${POSTGRES_DB:-opentube_insights}
-      POSTGRES_USER: ${POSTGRES_USER:-opentube_insights}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-opentube_insights}
-      POSTGRES_HOST: db
-      POSTGRES_PORT: 5432
-      # Blank reads as off: project requests need a logged-in account.
-      OPENTUBE_LOCAL_OWNER_FALLBACK: ${OPENTUBE_LOCAL_OWNER_FALLBACK:-}
-      OPENTUBE_DEFAULT_OWNER_USERNAME: ${OPENTUBE_DEFAULT_OWNER_USERNAME:-local-researcher}
-      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
-      GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-60}
-      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
-      LLM_API_KEY: ${LLM_API_KEY:-}
-      # No literal default here: settings.py owns it, so the model id lives in one place.
-      LLM_MODEL: ${LLM_MODEL:-}
-      SENTIMENT_MODEL: ${SENTIMENT_MODEL:-}
-      SENTIMENT_LLM_URL: ${SENTIMENT_LLM_URL:-}
-      SENTIMENT_LLM_MODEL: ${SENTIMENT_LLM_MODEL:-}
+      <<: *api-env
     command: >
       sh -c "python manage.py migrate &&
              gunicorn -c gunicorn.conf.py opentube_insights_api.wsgi:application"
@@ -62,6 +65,19 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  # Hourly 30-day purge (US-040); the command skips while a collection run is running.
+  purge:
+    build:
+      context: ./api
+    environment:
+      <<: *api-env
+    command: sh -c "while true; do python manage.py purge_youtube_data || true; sleep 3600; done"
+    # sh as PID 1 ignores SIGTERM; an init process lets `docker compose stop` end the loop at once.
+    init: true
+    depends_on:
+      api:
+        condition: service_healthy
 
   ui:
     build:
