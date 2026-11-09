@@ -66,7 +66,7 @@ To override the default ports, you can use the following environment variables:
 docker compose ps
 ```
 
-Shows whether the `api`, `db`, `ui` and `web` services are running and which ports are exposed.
+Shows whether the `api`, `db`, `purge`, `ui` and `web` services are running and which ports are exposed.
 
 ```bash
 docker compose logs web
@@ -248,7 +248,9 @@ venv/bin/python manage.py purge_youtube_data --dry-run
 venv/bin/python manage.py purge_youtube_data
 ```
 
-Deletes YouTube data (channels, videos, comments, replies, statistics snapshots) fetched more than 30 days ago, as the YouTube API Services Developer Policies require (US-040). Runs, saved queries and request logs are kept. `--dry-run` prints what would be deleted and changes nothing. Run it at least once a day, and **not while `collect_runs` is running**: a video refreshed during the purge could still be deleted.
+Deletes YouTube data (channels, videos, comments, replies, statistics snapshots) fetched more than 30 days ago, as the YouTube API Services Developer Policies require (US-040). Runs, saved queries and request logs are kept. `--dry-run` prints what would be deleted and changes nothing. While any collection run is `running`, it prints `Skipped: a collection run is running.` and changes nothing.
+
+Since US-046 you do not need to run it: the Compose `purge` service and `run-local.sh` run it every hour (page 44). `docker compose logs purge` shows each pass.
 
 ## Django admin
 

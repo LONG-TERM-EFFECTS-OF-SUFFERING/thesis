@@ -4,10 +4,10 @@ App fixes made while the thesis document was under review. The LaTeX in `content
 
 | id | change | status |
 | :-: | :-- | :-- |
-| US-043 | Language fields become an ES/EN selector | built, reviewed, committed locally (`src/ui` e162b3a on `feature/US-043`) |
-| US-044 | Collection runs execute from the app | built, reviewed twice, committed locally (`src/api` f86841d, `src/ui` b1c3ed7 on `feature/US-044`) |
-| US-045 | Interface language toggle, Spanish default | built, reviewed, committed locally (`src/ui` 28cf0a2 + 01adff2 on `feature/US-045`) |
-| US-046 | 30-day purge runs automatically | planned, ready for development (`_bmad-output/initiative-opentube-insights/plan-us-046-purge-youtube-data-automatically.md`) |
+| US-043 | Language fields become an ES/EN selector | merged into `src/ui` `develop` (PR #22) |
+| US-044 | Collection runs execute from the app | merged into `develop` (`src/api` PR #43, `src/ui` PR #23) |
+| US-045 | Interface language toggle, Spanish default | merged into `src/ui` `develop` (PR #24) |
+| US-046 | 30-day purge runs automatically | built, reviewed twice, committed locally (`src/api` on `feature/US-046`; Compose and `run-local.sh` in the thesis repo) |
 
 ## US-043 — language selector
 
@@ -67,13 +67,19 @@ Reviewed: 3 findings fixed in 01adff2. Explainer: `docs/project-understanding/43
 - Say that server messages and API vocabulary remain in English. Translating them would need Django `LocaleMiddleware` and gettext.
 
 
-## US-046 — automatic 30-day purge (planned, not built)
+## US-046 — automatic 30-day purge
 
-**Plan:**
-- A Compose `purge` service and a `run-local.sh` background job run `purge_youtube_data` every hour.
-- The command skips while a collection run is `running`.
+**What changed.**
+- A Compose `purge` service runs `purge_youtube_data` every hour with a plain shell loop. It shares the `api` settings through a YAML anchor and starts once `api` is healthy.
+- `run-local.sh` runs the same loop in the background, with a first pass after 60 s.
+- The command skips, with one log line, while any collection run is `running`, so the purge and a collection no longer overlap in the usual case.
+- No scheduler library, no cron, no thread in the API.
 
-**Document follow-ups, once built:**
-- `content/09_3_2-database_layer.tex` line 17: the purge is no longer only an operator command.
+Reviewed twice: pass 1 moved the local loop to purge first (a session under an hour never purged) and added `init: true`; pass 2 found nothing to fix. Explainer: `docs/project-understanding/44-purge-youtube-data-automatically.md`. Watching `docker compose logs purge` on a live stack is still for you to do; it really deletes data older than 30 days.
+
+Known limit: a run stuck in `running` (US-044 ceiling) blocks every purge until it is failed by hand. A stale-run sweep is in `deferred-work.md`.
+
+**Document follow-ups:**
+- `content/09_3_2-database_layer.tex` line 17: the purge is no longer only an operator command. It runs every hour, and it skips while a run is collecting.
 - `content/09_1_1-stack_evaluation_and_selection.tex`: line 61 and the diagram add a fifth Compose service, `purge`.
-- `content/10-conclusions.tex`: remove "Operator duties" from Limitations, and drop the scheduling item from Future work.
+- `content/10-conclusions.tex`: remove "Operator duties" from Limitations, and drop the scheduling item from Future work. Add the stuck-run limit if the stale-run sweep is not built.

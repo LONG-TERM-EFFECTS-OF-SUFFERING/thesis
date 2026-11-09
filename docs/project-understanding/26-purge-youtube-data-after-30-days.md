@@ -60,7 +60,7 @@ All deletes and all run marks happen inside one `transaction.atomic()`. If anyth
 
 The cascades above are done by **Django**, not by the database. Django first finds the old rows, then deletes them by ID, without looking at their dates again. If `collect_runs` refreshes one of those videos in between, the purge still deletes it. Or, if the collector has just linked it to a new run, the purge fails at commit and rolls back completely.
 
-Neither outcome corrupts anything, but the first loses fresh data. The rule is simple: **do not run `purge_youtube_data` while `collect_runs` is running.** Run the purge on its own, at least once a day. commands.md says the same.
+Neither outcome corrupts anything, but the first loses fresh data. The rule is simple: **do not run `purge_youtube_data` while `collect_runs` is running.** Since US-046 the command enforces it: it skips while any run is `running`, and an hourly loop runs it (page 44).
 
 ## File-by-file explanation
 
@@ -150,8 +150,8 @@ Passing looks like `OK` (240 tests). The second command runs only the purge test
 
 ## Known gaps
 
-- Nothing schedules the command. Run it daily yourself, or with an operating-system scheduler such as `cron`.
+- Nothing scheduled the command at first. US-046 added an hourly loop (page 44).
 
-- There is no lock between the purge and `collect_runs`. The operating rule above covers it.
+- There is no lock between the purge and `collect_runs`. Since US-046 the command skips while a run is `running`, but the check and the purge are not atomic (page 44).
 
 - Cleaned comment text (US-024, page 27) is a column on the comment row, so this command already removes it with the comment. Sentiment (US-025) extends the command if it adds tables holding derived YouTube data.
