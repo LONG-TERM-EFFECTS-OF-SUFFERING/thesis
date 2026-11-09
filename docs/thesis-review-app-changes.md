@@ -60,7 +60,7 @@ Decision taken in review: a run counts as finished when *collection* ends. Norma
 - There is no library: there is one typed Spanish dictionary keyed by the English text (`src/ui/src/i18n.ts`), so a missing translation fails the build.
 - Server-written messages, YouTube data and API values (e.g. `relevance`, `negative`) are not translated.
 
-Reviewed: 3 findings fixed in 01adff2. Explainer: `docs/project-understanding/43-switch-the-interface-language.md`. The browser check (form values survive a switch; reload keeps the choice) is still for you to do by hand.
+Reviewed: 3 findings fixed in `src/ui` 200ce9b. Explainer: `docs/project-understanding/43-switch-the-interface-language.md`. The browser check (form values survive a switch; reload keeps the choice) is still for you to do by hand.
 
 **Document follow-ups:**
 - `content/09_3_4-data_visualization_components.tex` (interface paragraph): add the Spanish/English toggle, its Spanish default and its stored choice, next to the theme sentence. "No component library was added" still holds, because no i18n library was added either.
