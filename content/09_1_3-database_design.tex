@@ -36,22 +36,22 @@ PostgreSQL \texttt{JSONB} columns are represented in Django with \texttt{JSONFie
     \begin{tabularx}
         {\textwidth}{>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{5.0cm}X}
         \toprule
-        \textbf{Functional area}    & \textbf{Tables}                                                                                                                                                                                                                                                       & \textbf{Purpose}                                                                                                                                                                                               \\
+        \textbf{Functional area}    & \textbf{Tables}                                                                                                                                                                                                                                                       & \textbf{Purpose}                                                                                                                                                                                                                                             \\
         \midrule
-        User and project management & \texttt{auth\_user}, \texttt{research\_projects}, \texttt{saved\_queries}                                                                                                                                                                                             & Stores users, research workspaces and reusable query definitions. Saved queries keep both the natural language request and the structured YouTube API parameters generated manually or through the LLM module. \\
+        User and project management & \texttt{auth\_user}, \texttt{researcher\_settings}, \texttt{research\_projects}, \texttt{saved\_queries}                                                                                                                                                              & Stores users, each researcher's API keys and model choices, research workspaces and reusable query definitions. Saved queries keep both the natural language request and the structured YouTube API parameters generated manually or through the LLM module. \\
         \midrule
-        Collection traceability     & \texttt{collection\_runs}, \texttt{api\_request\_logs}                                                                                                                                                                                                                & Documents each collection execution, including status, counts, timestamps, quota usage, endpoint names, request parameters, pagination tokens and API response metadata.                                       \\
+        Collection traceability     & \texttt{collection\_runs}, \texttt{api\_request\_logs}                                                                                                                                                                                                                & Documents each collection execution, including status, counts, timestamps, quota usage, endpoint names, request parameters, pagination tokens and API response metadata.                                                                                     \\
         \midrule
-        YouTube resources           & \texttt{youtube\_channels}, \texttt{youtube\_videos}, \texttt{collection\_\allowbreak run\_\allowbreak videos}, \texttt{video\_\allowbreak statistics\_\allowbreak snapshots}, \texttt{youtube\_comments}, \texttt{collection\_\allowbreak run\_\allowbreak comments} & Stores normalized platform data and the linking records that explain which videos and comments were discovered or collected during each run.                                                                   \\
+        YouTube resources           & \texttt{youtube\_channels}, \texttt{youtube\_videos}, \texttt{collection\_\allowbreak run\_\allowbreak videos}, \texttt{video\_\allowbreak statistics\_\allowbreak snapshots}, \texttt{youtube\_comments}, \texttt{collection\_\allowbreak run\_\allowbreak comments} & Stores normalized platform data and the linking records that explain which videos and comments were discovered or collected during each run.                                                                                                                 \\
         \midrule
-        Processing and analysis     & \texttt{processing\_runs}, \texttt{comment\_sentiments}                                                                                                                                                                                                               & Stores executions of the processing pipeline with their reports and the model-based sentiment results. Charts and summary views compute their aggregates from these rows on request.                           \\
+        Processing and analysis     & \texttt{processing\_runs}, \texttt{comment\_sentiments}                                                                                                                                                                                                               & Stores executions of the processing pipeline with their reports and the model-based sentiment results. Charts and summary views compute their aggregates from these rows on request.                                                                         \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
 \subsubsection{Main entities and relationships}
 
-Figure~\ref{fig:er_diagram} shows the thirteen tables of the schema and the foreign keys between them. The following design decisions are not visible in the diagram.
+Figure~\ref{fig:er_diagram} shows the fourteen tables of the schema and the foreign keys between them. The following design decisions are not visible in the diagram.
 
 \begin{figure}[htbp]
     \centering
@@ -66,6 +66,7 @@ Figure~\ref{fig:er_diagram} shows the thirteen tables of the schema and the fore
             \node[entity, minimum width=3.6cm] (project) at (0, -2) {research\_projects};
             \node[entity, minimum width=3.6cm] (processing) at (0, -5) {processing\_runs};
             \node[entity, minimum width=3.6cm] (query) at (5, 0) {saved\_queries};
+            \node[entity, minimum width=3.6cm] (usersettings) at (0, 1.6) {researcher\_settings};
             \node[entity, minimum width=3.6cm] (run) at (5, -2) {collection\_runs};
             \node[entity, minimum width=3.6cm] (log) at (5, -4) {api\_request\_logs};
             \node[entity, minimum width=4.6cm] (runvideo) at (10.2, -1) {collection\_run\_videos};
@@ -77,6 +78,7 @@ Figure~\ref{fig:er_diagram} shows the thirteen tables of the schema and the fore
             \node[entity, minimum width=5.2cm] (comment) at (16, -4) {youtube\_comments};
 
             \draw[fk] (project) -- (user);
+            \draw[fk] (usersettings) -- (user);
             \draw[fk] (query) -- (project);
             \draw[fk] (run) -- (project);
             \draw[nullable] (run) -- (query);
@@ -97,7 +99,7 @@ Figure~\ref{fig:er_diagram} shows the thirteen tables of the schema and the fore
         \end{tikzpicture}
         %
     }
-    \caption[Entity-relationship diagram of the database schema]{Entity-relationship diagram of the database schema. Each arrow is a foreign key and points from the referencing table (many side) to the referenced table (one side); dashed arrows are nullable references. The loop on \texttt{youtube\_comments} links a reply to its top-level comment. References to \texttt{auth\_user} other than project ownership are omitted.}
+    \caption[Entity-relationship diagram of the database schema]{Entity-relationship diagram of the database schema. Each arrow is a foreign key and points from the referencing table (many side) to the referenced table (one side); dashed arrows are nullable references. The loop on \texttt{youtube\_comments} links a reply to its top-level comment. References to \texttt{auth\_user} other than project ownership and researcher settings are omitted.}
     \label{fig:er_diagram}
 \end{figure}
 

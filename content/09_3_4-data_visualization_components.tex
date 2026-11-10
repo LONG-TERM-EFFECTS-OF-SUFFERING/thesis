@@ -18,6 +18,15 @@ The \emph{Runs} section lists the collection runs of the active project with the
     \item \textbf{Requests}: the request log of the run in sequence order, with the endpoint, the page token, the HTTP status, the number of items, the quota cost and the error, with failed requests highlighted.
 \end{itemize}
 
+Figure~\ref{fig:run_detail} shows the run list and the aggregate part of a run detail for one validation topic.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{screenshots/run-detail.png}
+    \caption[The run list and run detail]{The \emph{Runs} section with a completed run of the validation topic on the MIO mass transit system: request and quota totals, discovery counts and the sentiment pass with its model, prompt version and counts. The list of discovered videos and the table of comments are left out of the figure, in line with the ethical controls of Section~\ref{subsec:ethics_privacy_and_terms_compliance}.}
+    \label{fig:run_detail}
+\end{figure}
+
 \subsection{Results}
 
 The \emph{Results} section summarizes the active project with the descriptive metrics of Activity~\ref{act:3.3}, a sentiment distribution chart, a table of sentiment by channel and two word clouds. Three filters narrow every figure: a range of YouTube publication dates, interpreted as whole days in UTC with both ends included, a single channel and a single video, listed by title and publication date because channels often reuse titles. Invalid filters are rejected by the backend instead of being guessed, and the sentence that describes the active filters is built from the filters the server reports it applied, not from what was typed in the form, so it cannot contradict the numbers.
@@ -26,7 +35,14 @@ The sentiment chart shows, for each label, a horizontal bar together with the co
 
 The table of sentiment by channel lists, for each model, the fifteen channels with the most classified comments, each with a stacked bar and the count and percentage of every label written as text. The two word clouds show the thirty most frequent tags of the collected videos and the thirty most frequent words of the normalized comment text, after removing a short list of Spanish and English function words; the size of each word grows with its count, and the count is written next to it. To keep the response fast, the comment words are counted over at most the 5,000 most recently collected comments, and the page says when that limit applied. Like every other figure, the table and the clouds are computed from the project's own runs when the page is opened and are never stored.
 
-% TODO(US-039): add screenshots of the run detail and the Results section, taken on the real-topic validation data.
+Figure~\ref{fig:results_screen} shows the section for the first validation topic.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{screenshots/results.png}
+    \caption[The Results section]{The \emph{Results} section of the validation topic on the MIO mass transit system (real data, November 10, 2026): filters and exports, the summary counts, the sentiment chart, sentiment by channel and the clouds of video tags and comment words.}
+    \label{fig:results_screen}
+\end{figure}
 
 \subsection{Data export}
 

@@ -12,7 +12,7 @@ The general objective was to develop a web application that automates the collec
 \paragraph{Processing, analysis and visualization (objective~\ref{obj:implement_processing_analysis_and_visualization}).} Comment text is normalized by versioned, deterministic rules, and each processing run reports its inputs, outputs and errors with counts that outlive the purge. Sentiment analysis was built against a contract that records the model name and version with every result, so results of different models are never mixed in the run detail, the chart or the exports. The registered model is a chat LLM prompted on a three-level polarity scale, and every label also stores the prompt version and the model snapshot that served it, because a hosted model can change behind the same name. On the two real validation topics it returned a known label for every one of 363 comments.
 The presentation layer shows each figure together with its context: the model behind a label, the period a count covers and the filters that produced it.
 
-\paragraph{Testing (objective~\ref{obj:test}).} The backend and frontend suites, with 396 and 124 tests, cover each component without calling external services, and an integration test runs the complete workflow on a synthetic corpus. Requiring every test to fail when its behavior is broken on purpose found defects that review alone had missed, such as a pagination loop that could exhaust the daily quota. The validation on two real topics, the MIO mass transit system and the 2021 National Strike in Cali, repeated the whole path with the live YouTube Data API and OpenAI models at 127 and 136 quota units per run, with no validation findings and no failed request.
+\paragraph{Testing (objective~\ref{obj:test}).} The backend and frontend suites, with 457 and 148 tests, cover each component without calling external services, and an integration test runs the complete workflow on a synthetic corpus. Requiring every test to fail when its behavior is broken on purpose found defects that review alone had missed, such as a pagination loop that could exhaust the daily quota. The validation on two real topics, the MIO mass transit system and the 2021 National Strike in Cali, repeated the whole path with the live YouTube Data API and OpenAI models at 127 and 136 quota units per run, with no validation findings and no failed request.
 
 Finally, the development process followed the same principle as the application: with an AI coding agent implementing the stories, the approved plans, review logs and deferred-work records keep every decision attributable and open to inspection.
 
@@ -23,7 +23,7 @@ Finally, the development process followed the same principle as the application:
 
     \item \textbf{Validation of form, not existence.} Parameters are checked for their format but not against external lists; a nonexistent country code with a valid form is accepted.
 
-    \item \textbf{Shared keys and no rate limiting.} Each researcher has an account and sees only their own projects, but all accounts spend the same YouTube and LLM keys, configured by the operator, with no per-user quota or rate limit.
+    \item \textbf{Keys at rest and no rate limiting.} Each researcher can use their own API keys, but they are stored in the database in plain text, so whoever administers the database can read them, and there is no rate limiting for researchers who use the operator's keys.
 
     \item \textbf{Runs left running.} A run whose process stops in the middle of a collection, for example because the server restarts, stays \texttt{running}: the interface keeps polling it and the hourly purge skips until an administrator marks the run as failed.
 
@@ -35,7 +35,7 @@ Finally, the development process followed the same principle as the application:
 \section{Future work}
 
 \begin{itemize}
-    \item Add per-user quotas and rate limiting, or let each researcher use their own API keys, so the application can be deployed as a shared service for a research group.
+    \item Encrypt the stored API keys and add rate limiting, so the application can be deployed as a shared service for a research group.
 
     \item Recover runs left \texttt{running} after a crash automatically, and share a lock between the purge and the collector so the two can never overlap.
 

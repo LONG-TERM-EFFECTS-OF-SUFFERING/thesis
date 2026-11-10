@@ -16,7 +16,7 @@ Four rules were applied to every test:
 
 \subsection{Backend tests}
 
-The backend suite contains 396 tests, grouped by component in Table~\ref{tab:backend_tests}.
+The backend suite contains 457 tests, grouped by component in Table~\ref{tab:backend_tests}.
 
 \begingroup
 \setstretch{1.0}
@@ -30,21 +30,21 @@ The backend suite contains 396 tests, grouped by component in Table~\ref{tab:bac
         \toprule
         \textbf{Component}         & \textbf{Tests} & \textbf{Main evidence}                                                                                                                                                                                                    \\
         \midrule
-        Data collection            & 97             & Every collection step and stop condition, request logging and quota totals, skipped videos and threads, failure and resume, idempotent re-collection, and an audit run whose log rows contain no YouTube data or API key. \\
+        Data collection            & 98             & Every collection step and stop condition, request logging and quota totals, skipped videos and threads, failure and resume, idempotent re-collection, and an audit run whose log rows contain no YouTube data or API key. \\
         \midrule
         Query translation          & 65             & A table of five worked translation examples with their exact drafts, identical requests for identical input, the error statuses, and one invalid example per validation rule.                                             \\
         \midrule
         Processing                 & 20             & Ten worked normalization examples and a report consistency check over five sets of comments, including 200 generated with a fixed random seed.                                                                            \\
         \midrule
-        Database and purge         & 51             & Lifecycles, constraints present in the database, the deletion rule of every foreign key and a complete comparison of all tables before and after a purge, and the hourly purge skipping while a run is collecting.        \\
+        Database and purge         & 57             & Lifecycles, constraints present in the database, the deletion rule of every foreign key and a complete comparison of all tables before and after a purge, and the hourly purge skipping while a run is collecting.        \\
         \midrule
-        Analysis                   & 70             & Result validation, a sentiment pass with a test classifier, the chat-model classifier against a fake endpoint, metric scoping across projects and owners, and the filters.                                                \\
+        Analysis                   & 87             & Result validation, a sentiment pass with a test classifier, the chat-model classifier against a fake endpoint, metric scoping across projects and owners, and the filters.                                                \\
         \midrule
-        API endpoints and exports  & 57             & Ownership, status codes, response shapes, a started run collected by a background thread only after its row is committed, and the content of every export file.                                                           \\
+        API endpoints and exports  & 78             & Ownership, status codes, response shapes, a started run collected by a background thread only after its row is committed, and the content of every export file.                                                           \\
         \midrule
-        Accounts and login         & 13             & Login and logout, one message for every failed login, the CSRF token on the login and on every write, and the rejection of requests without a session.                                                                    \\
+        Accounts, login and keys   & 28             & Login and logout, one message for every failed login, the CSRF token on the login and on every write, the rejection of requests without a session, and per-researcher API keys that never appear in any response or log.  \\
         \midrule
-        Configuration and workflow & 23             & Settings read from the environment, the demo data command and the integration tests of Activity~\ref{act:4.2}.                                                                                                            \\
+        Configuration and workflow & 24             & Settings read from the environment, the demo data command and the integration tests of Activity~\ref{act:4.2}.                                                                                                            \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -54,7 +54,7 @@ The tests also found defects in code that had already been reviewed. The collect
 
 \subsection{Frontend tests}
 
-The frontend suite contains 124 tests, run with Node.js's built-in test runner. They cover the logic that the interface depends on, extracted into plain TypeScript modules: building the saved-query request from the form, applying a draft and converting dates between UTC and local time, under a fixed non-UTC time zone so that a confusion between the two cannot pass; merging and discarding responses for the active project; sentiment formatting and distribution; filter parsing; the detection of active and finished runs that drives the automatic reload; the login requests; navigation, theme and interface language, including a check that every Spanish translation keeps the placeholders of its English text. The API client functions are tested with a stubbed \texttt{fetch}, including the runtime checks that reject a response whose shape differs from the expected one.
+The frontend suite contains 148 tests, run with Node.js's built-in test runner. They cover the logic that the interface depends on, extracted into plain TypeScript modules: building the saved-query request from the form, applying a draft and converting dates between UTC and local time, under a fixed non-UTC time zone so that a confusion between the two cannot pass; merging and discarding responses for the active project; sentiment formatting and distribution; filter parsing; the detection of active and finished runs that drives the automatic reload; the login requests; navigation, theme and interface language, including a check that every Spanish translation keeps the placeholders of its English text. The API client functions are tested with a stubbed \texttt{fetch}, including the runtime checks that reject a response whose shape differs from the expected one.
 
 The components themselves are not rendered by any test, because the project has no browser test environment; the forms, tables and chart were verified manually during each story. This gap is the subject of US-037, planned for the last sprint.
 
