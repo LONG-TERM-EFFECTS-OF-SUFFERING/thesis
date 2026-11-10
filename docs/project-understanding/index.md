@@ -106,6 +106,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 50. [48 - Edit a saved query until its first run](48-edit-a-saved-query-until-its-first-run.md).
 
+51. [49 - Richer results](49-richer-results.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -158,6 +160,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [46-configure-the-retention-period.md](46-configure-the-retention-period.md) | US-048 |  Done  | `YOUTUBE_RETENTION_DAYS` (default 30, 0 = no purge, max 36500) drives the purge and the export deletion dates; `core.W001` warns above 30 or at 0; tests pin the default. |
 | [47-edit-and-archive-projects.md](47-edit-and-archive-projects.md) | US-049 |  Done  | Project cards get Edit and Archive/Unarchive over the existing PATCH; archived projects are hidden unless shown, the active one stays in the header; no in-app delete, to keep the record. |
 | [48-edit-a-saved-query-until-its-first-run.md](48-edit-a-saved-query-until-its-first-run.md) | US-050 |  Done  | A saved query is editable, with create's validation, until its first run; then the API answers 409 and the card hides Edit; a changed prompt drops the LLM provenance on the server too. |
+| [49-richer-results.md](49-richer-results.md) | US-051 |  Done  | Results adds a comment-author count, sentiment by channel, a channel filter on every figure and tag and word clouds, all computed on request through the project's own runs. |
 
 ## How to use this folder
 
