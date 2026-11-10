@@ -104,6 +104,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 49. [47 - Edit and archive projects](47-edit-and-archive-projects.md).
 
+50. [48 - Edit a saved query until its first run](48-edit-a-saved-query-until-its-first-run.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -155,6 +157,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [45-explain-each-query-field.md](45-explain-each-query-field.md) | US-047 |  Done  | Every saved-query field shows a hint above it on hover, focus or tap, naming its YouTube parameter; focus wins and Escape hides them; order and advanced options show readable names but still send the API value. |
 | [46-configure-the-retention-period.md](46-configure-the-retention-period.md) | US-048 |  Done  | `YOUTUBE_RETENTION_DAYS` (default 30, 0 = no purge, max 36500) drives the purge and the export deletion dates; `core.W001` warns above 30 or at 0; tests pin the default. |
 | [47-edit-and-archive-projects.md](47-edit-and-archive-projects.md) | US-049 |  Done  | Project cards get Edit and Archive/Unarchive over the existing PATCH; archived projects are hidden unless shown, the active one stays in the header; no in-app delete, to keep the record. |
+| [48-edit-a-saved-query-until-its-first-run.md](48-edit-a-saved-query-until-its-first-run.md) | US-050 |  Done  | A saved query is editable, with create's validation, until its first run; then the API answers 409 and the card hides Edit; a changed prompt drops the LLM provenance on the server too. |
 
 ## How to use this folder
 
