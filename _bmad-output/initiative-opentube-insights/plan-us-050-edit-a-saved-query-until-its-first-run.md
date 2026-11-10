@@ -3,13 +3,13 @@ title: 'US-050 Edit a saved query until its first run'
 type: 'feature'
 ticket: ''
 created: '2026-11-09'
-status: 'ready-for-dev'
-baseline_revision: ''
+status: 'done'
+baseline_revision: 'api=122943fa113abce30e2727ae28a1d90b86781cca ui=ea61084ea42173671922475a5de2222be25f8462'
 route: 'full'
 route_source: 'auto'
-review: ''
-review_source: ''
-lenses_ran: []
+review: 'quick'
+review_source: 'pinned'
+lenses_ran: ['quick']
 review_loop_iteration: 0
 context: []
 ---
@@ -70,15 +70,25 @@ context: []
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] Backend: the view, the URL, `has_runs` and the tests.
-- [ ] `apiClient.ts`: `updateSavedQuery`, the type and tests.
-- [ ] `savedQueryForm.ts`: `savedQueryToForm`, with the round-trip test.
-- [ ] `savedQueryState.ts`: replace-by-id helper, with a test.
-- [ ] `QueriesSection.tsx` and `i18n.ts`: edit mode and the Edit button.
+- [x] Backend: the view, the URL, `has_runs` and the tests.
+- [x] `apiClient.ts`: `updateSavedQuery`, the type and tests.
+- [x] `savedQueryForm.ts`: `savedQueryToForm`, with the round-trip test.
+- [x] `savedQueryState.ts`: replace-by-id helper, with a test.
+- [x] `QueriesSection.tsx` and `i18n.ts`: edit mode and the Edit button.
 
 **Acceptance Criteria:**
 - Given a query edited before its first run, when a run then starts, then the run's `effective_params` hold the edited values.
 - Given a query with a run, when the UI loads it, then no Edit button is shown and the API refuses a `PATCH`.
+
+## Review Triage Log
+
+Pass 1 (quick), 5 findings: 3 patch, 2 reject.
+
+- **medium, patch.** Edit mode outlives the query's first run. Clicking Edit and then *Start run* on the same card leaves the form in "Edit query" with a save that can only return 409, and a 409 (a run started elsewhere) leaves `has_runs` stale and shows the raw English detail. Fix: leave edit mode when a run starts on the query being edited, and on 409 mark the query `has_runs`, leave edit mode and show a translated message.
+- **low, patch.** The rule "editing the prompt drops the provenance" is enforced only in the UI. A PATCH that changes the prompt and resends the stored provenance stays `llm_generated`. Fix: on update, when the prompt differs from the stored one and the submitted provenance equals the stored provenance, clear it, and add an API test.
+- **low, patch.** `updateSavedQuery`'s JSDoc starts uppercase, against AGENTS.md.
+- **low, reject.** `savedQueryToForm` cannot represent values only the admin or API can store (sub-second dates, a `maxResults` that does not match, params missing from the columns), so saving such a query normalizes them. That is rare, and the save validates what it writes.
+- **low, reject.** PATCH acts as a full replace. This is deliberate, documented and tested; the frozen intent names PATCH, and a partial update would run the date-range and provenance checks on half the data.
 
 ## Verification
 
