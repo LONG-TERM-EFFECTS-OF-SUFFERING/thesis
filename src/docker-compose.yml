@@ -20,6 +20,8 @@ x-api-env: &api-env
   SENTIMENT_MODEL: ${SENTIMENT_MODEL:-}
   SENTIMENT_LLM_URL: ${SENTIMENT_LLM_URL:-}
   SENTIMENT_LLM_MODEL: ${SENTIMENT_LLM_MODEL:-}
+  # Blank means 30 days; settings.py owns the default (US-048).
+  YOUTUBE_RETENTION_DAYS: ${YOUTUBE_RETENTION_DAYS:-}
 
 services:
   db:
@@ -66,7 +68,8 @@ services:
       retries: 5
       start_period: 10s
 
-  # Hourly 30-day purge (US-040); the command skips while a collection run is running.
+  # Hourly purge of data older than YOUTUBE_RETENTION_DAYS (US-040, US-048); the command
+  # skips while a collection run is running.
   purge:
     build:
       context: ./api
