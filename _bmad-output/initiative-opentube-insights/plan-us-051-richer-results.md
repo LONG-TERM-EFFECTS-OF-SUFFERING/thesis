@@ -3,13 +3,13 @@ title: 'US-051 Richer results'
 type: 'feature'
 ticket: ''
 created: '2026-11-09'
-status: 'ready-for-dev'
-baseline_revision: ''
+status: 'done'
+baseline_revision: 'api=4d558a28872fef9c21dbabf0fec929ebd762ffe5 ui=f7b5611bf419b8d4feaacfa9273cb94fa6db4195'
 route: 'full'
 route_source: 'auto'
-review: ''
-review_source: ''
-lenses_ran: []
+review: 'quick'
+review_source: 'pinned'
+lenses_ran: ['quick']
 review_loop_iteration: 0
 context: []
 ---
@@ -81,10 +81,10 @@ Everything is drawn with native HTML and CSS, as today.
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `results.py` and the tests: the filter, authors, by-channel, `top_terms` and `top_tags`.
-- [ ] `views.py` and `urls.py`: the channel list endpoint, with a test.
-- [ ] `apiClient.ts` and `resultsFilters.ts`: types, guards and filter, with tests.
-- [ ] `ResultsSection.tsx` and `i18n.ts`: the new card value, the select, the table and the clouds.
+- [x] `results.py` and the tests: the filter, authors, by-channel, `top_terms` and `top_tags`.
+- [x] `views.py` and `urls.py`: the channel list endpoint, with a test.
+- [x] `apiClient.ts` and `resultsFilters.ts`: types, guards and filter, with tests.
+- [x] `ResultsSection.tsx` and `i18n.ts`: the new card value, the select, the table and the clouds.
 
 **Acceptance Criteria:**
 - Given a project with two channels, when the researcher picks one channel, then every number on the Results page changes to that channel only, and the sentence describing the filters names it.
@@ -94,6 +94,16 @@ Everything is drawn with native HTML and CSS, as today.
 
 - **Policy:** the YouTube developer policies (III.E.4.h) restrict derived metrics. These figures are aggregates computed on request and never stored, like the existing counts and the sentiment chart. 6.3.2 of the thesis should name the clouds and the by-channel table next to sentiment.
 - **Order if time runs short:** the filter and authors first, then by-channel, then the clouds. Each part is useful on its own.
+
+## Review Triage Log
+
+Pass 1 (quick), 5 findings: 4 patch, 1 handled.
+
+- **medium, patch.** The word clouds render as a one-column list. They sit inside `.sentiment-chart`, whose `ul` and `li` rules (specificity 0,1,1) beat `.word-cloud` (0,1,0). Fix: scope the cloud rules higher, or use a separate section class.
+- **low, patch.** The top-15 cut is never exercised: only 15 channels have labels in the latest pass, so deleting the slice keeps every test green. Fix: a test with 16 or more counted channels.
+- **low, patch.** The 5,000-comment sample orders by `first_collected_at`, which is shared across projects. That breaks "every figure goes through the project's run links". Fix: order by this project's `CollectionRunComment.discovered_at`, with a test where the two dates disagree.
+- **low, patch.** "Top 1 channels" / "Los 1 canales" when the filter leaves one channel. Fix: a singular form.
+- **handled.** 6.3.2, 8.8.1 and 8.9.3 of the thesis were updated in the thesis repo (prose commit).
 
 ## Verification
 
