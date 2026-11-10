@@ -17,7 +17,7 @@ Ground rules: the stack versions in `AGENTS.md`, no new dependency without a sta
 | 9 | Edit and archive projects in the UI | advisor: projects have no edit or delete | S | done: US-049, `api` PR #46, `ui` PR #28 |
 | 10 | Edit a saved query until its first run | advisor: queries should be editable, at least before a search | S | done: US-050, `api` PR #47, `ui` PR #29 |
 | 11 | Configurable retention period, or no purge | advisor: deletion should be configurable for future policy changes | S | done: US-048, `api` PR #45, `ui` PR #27 |
-| 12 | Richer Results: authors, sentiment by channel, channel filter, tag cloud | advisor: the visualization is very basic | M–L | to plan |
+| 12 | Richer Results: authors, sentiment by channel, channel filter, tag cloud | advisor: the visualization is very basic | M–L | planned: US-051, ready-for-dev |
 | 13 | Screenshots in the thesis, plus an annex | advisor: no evidence of what was built; add a figure for 8.5.1 | M | after 9–12 |
 
 Not on this list on purpose: engagement metrics (views per like and similar). Clause III.E.4.h of the YouTube developer policies forbids creating new or derived metrics from API data, and the statistics snapshots are already stored and exported for anyone who needs them.
