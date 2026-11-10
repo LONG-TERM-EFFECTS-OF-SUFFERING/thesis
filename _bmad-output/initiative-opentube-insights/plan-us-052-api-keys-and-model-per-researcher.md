@@ -3,13 +3,13 @@ title: 'US-052 API keys and model per researcher'
 type: 'feature'
 ticket: ''
 created: '2026-11-10'
-status: 'in-progress'
+status: 'done'
 baseline_revision: 'api=53c54fc88fa05c1ad347442acf3650ce4be97a69 ui=4aede2a9f78907f12f890d570228747430b52b13 thesis=7f11aa04a28babd0a626940d594d09c18e38de82'
 route: 'full'
 route_source: 'auto'
-review: ''
-review_source: ''
-lenses_ran: []
+review: 'quick'
+review_source: 'pinned'
+lenses_ran: ['quick']
 review_loop_iteration: 0
 context: []
 ---
@@ -90,11 +90,11 @@ context: []
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] Model, migration, `keys.py` and its tests.
-- [ ] Settings endpoint and serializer, with tests.
-- [ ] Draft, run start and sentiment use the resolved keys; quiet skip; tests.
-- [ ] `SENTIMENT_MODEL=llm` defaults in Compose and `.env.example`.
-- [ ] UI: the client, navigation, `SettingsSection` and i18n, with tests.
+- [x] Model, migration, `keys.py` and its tests.
+- [x] Settings endpoint and serializer, with tests.
+- [x] Draft, run start and sentiment use the resolved keys; quiet skip; tests.
+- [x] `SENTIMENT_MODEL=llm` defaults in Compose and `.env.example`.
+- [x] UI: the client, navigation, `SettingsSection` and i18n, with tests.
 
 **Acceptance Criteria:**
 - Given researcher A with their own keys and researcher B without any, when each starts a run, then A's run uses A's keys and B's run uses the environment's.
@@ -111,6 +111,19 @@ context: []
 - 9.2: replace "Shared keys"; keep "no rate limiting".
 - 8.3 and 8.7: one more table (`researcher_settings`) in Figure 8.2, and the table and migration counts.
 - 8.8.2: sentiment is on by default.
+
+## Review Triage Log
+
+Pass 1 (quick), 8 findings: 7 patch, 1 partly deferred.
+
+- **high, patch.** A saved key with a line break passes `CharField` trimming. `http.client` then rejects the `Authorization` header with a `ValueError` that contains the key, and `logger.exception` prints the chained traceback. The reviewer reproduced it. Fix: reject whitespace and control characters inside keys.
+- **medium, patch.** The researcher's OpenAI key is sent to `SENTIMENT_LLM_URL`, which may be a local or plain-`http` server. Fix: send the researcher's key only when that URL is OpenAI's endpoint; otherwise use the operator's environment key.
+- **medium, patch.** One model list serves both purposes, so `SENTIMENT_LLM_MODEL=llama3` becomes a valid query model and drafting fails with 502. Fix: separate query and sentiment lists, in the API and the UI.
+- **medium, patch.** The quiet skip logs at `info`, which no handler shows (there is no `LOGGING` setting), so a missing key silently disables sentiment. Fix: `logger.warning`.
+- **medium, patch.** The leak acceptance test avoids a live call only because the fake YouTube transport returns no comments, and it never covers the sentiment path or a failure path. Fix: patch `urlopen`, include a comment, and add an upstream-failure case.
+- **low, patch.** The help text says "A blank key uses the server's", but blank keeps the saved key.
+- **low, patch.** *Remove* resets unsaved model choices.
+- **low, patch and defer.** `docs/ER_diagram.mmd` lacks the new table. Fix: update the `.mmd`. Regenerating the `.svg` needs the Mermaid CLI, a new tool, so it is deferred.
 
 ## Verification
 
