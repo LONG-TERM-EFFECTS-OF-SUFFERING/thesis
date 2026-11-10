@@ -3,13 +3,13 @@ title: 'US-049 Edit and archive projects'
 type: 'feature'
 ticket: ''
 created: '2026-11-09'
-status: 'ready-for-dev'
-baseline_revision: ''
+status: 'done'
+baseline_revision: 'api=122943fa113abce30e2727ae28a1d90b86781cca ui=ea61084ea42173671922475a5de2222be25f8462'
 route: 'full'
 route_source: 'auto'
-review: ''
-review_source: ''
-lenses_ran: []
+review: 'quick'
+review_source: 'pinned'
+lenses_ran: ['quick']
 review_loop_iteration: 0
 context: []
 ---
@@ -59,15 +59,26 @@ context: []
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] Backend: owner context on the detail view, if missing, plus a duplicate-rename test.
-- [ ] `apiClient.ts`: `updateResearchProject`, with a test.
-- [ ] `projectState.ts`: replace-by-id helper, with a test.
-- [ ] `ProjectsSection.tsx` and `App.tsx`: edit mode, the archive toggle and the Show archived filter.
-- [ ] `i18n.ts`: the new Spanish entries.
+- [x] Backend: owner context on the detail view, if missing, plus a duplicate-rename test.
+- [x] `apiClient.ts`: `updateResearchProject`, with a test.
+- [x] `projectState.ts`: replace-by-id helper, with a test.
+- [x] `ProjectsSection.tsx` and `App.tsx`: edit mode, the archive toggle and the Show archived filter.
+- [x] `i18n.ts`: the new Spanish entries.
 
 **Acceptance Criteria:**
 - Given an archived project, when Show archived is off, then it is not listed, and the API still returns it.
 - Given `npm run build`, then a new text without a Spanish entry fails.
+
+## Review Triage Log
+
+Pass 1 (quick), 6 findings: 5 patch, 1 reject.
+
+- **low, patch.** With every project archived and Show archived off, the list is blank: the empty-state check uses the unfiltered list. Fix: an "all archived" message.
+- **medium, patch.** The header's Active project select still lists archived projects, so the frozen "hidden unless Show archived is ticked" holds only in one section. Fix: the header lists active projects plus the currently active one.
+- **low, patch.** A field edit and an archive on the same project can be in flight together. DRF's full `save()` can write a stale `status`. Fix: disable the status buttons while a save is pending, and Edit/Save while a status change is pending.
+- **low, patch.** `ResearchProjectDetailView` lacks the create view's `IntegrityError` → 400 mapping, so two concurrent renames to one name return 500, against the "never a 500" rule. Fix: a `perform_update` mirroring `perform_create`.
+- **low, patch.** The Show archived filter is an inline expression with no test, so the matrix row Archive ("the card disappears") has none. Fix: a pure helper in `projectState.ts` with a test, which the header reuses.
+- **low, reject.** Edit overwrites an unsaved create draft. It is rarely met, and keeping a second draft state is more than a direct correction.
 
 ## Verification
 
