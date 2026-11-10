@@ -1,10 +1,10 @@
 This activity covers user story US-039. The integration test of Activity~\ref{act:4.2} proves the workflow on synthetic data with the external services replaced; this validation repeats it on two real YouTube topics, with the live YouTube Data API and the live LLM, and checks the aggregate results against the requirements of the application. Because no automated test may call the live APIs, the validation is a recorded manual procedure rather than a test.
 
-% TODO(US-039): name the two topics, why each was chosen, and the dates of the validation runs.
+Both topics come from the context of the PROMUEVA project, which studies polarization in Valle del Cauca and Cali \autocite{promueva_project}. The first, the MIO mass transit system of Cali, is an everyday civic topic with current discussion; the second, the 2021 National Strike (\textit{Paro Nacional}) in Cali, is a past and strongly polarizing event, which exercises the date filters on a closed historical window. Both validation runs were carried out on November 10, 2026, with the query model \texttt{gpt-6-astra} and the sentiment model \texttt{gpt-6-luna}.
 
 \subsection{Procedure}
 
-Both topics followed the same procedure, carried out through the user interface, within a single 30-day retention window:
+Both topics followed the same procedure, through the same HTTP endpoints the interface uses and inspected in the interface, within a single 30-day retention window. Each run was limited to 15 videos, 15 top-level comments per video and 3 replies per comment, which keeps it far below the daily quota:
 
 \begin{enumerate}
     \item Create one research project per topic.
@@ -22,14 +22,45 @@ Only aggregate results are reported: counts, quota consumption, processing repor
 
 \subsection{Results}
 
-% TODO(US-039): one table per topic, or one table with a column per topic, with:
-% - the natural-language request, the generated parameters, the validation findings and the researcher's corrections;
-% - requests and quota units per endpoint, from the request log;
-% - videos discovered, skipped and collected, channels, comments and replies;
-% - the normalization report (inputs, written, errors and the rules applied);
-% - the sentiment model and version and the count per label;
-% - any failed or skipped request and its reason.
-% Then the sentiment chart of each topic as a figure.
+Table~\ref{tab:validation_results} reports the aggregate results of both runs.
+
+\begingroup
+\setstretch{1.0}
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \caption{Aggregate results of the two validation runs}
+    \label{tab:validation_results}
+    \begin{tabularx}
+        {\textwidth}{>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
+        \toprule
+        \textbf{Item}                                                   & \textbf{MIO mass transit (Cali)}                                                                                                                                   & \textbf{2021 National Strike (Cali)}                                                                                                                               \\
+        \midrule
+        Request (summary)                                               & Spanish videos about the MIO published in 2025, most viewed, about 15                                                                                              & Videos about the strike in Cali between April 28 and July 31, 2021, in Spanish, most relevant, about 15                                                            \\
+        \midrule
+        Generated parameters                                            & \texttt{q=MIO Cali transporte masivo}, published from January 1, 2025 to January 1, 2026, \texttt{relevanceLanguage=es}, \texttt{order=viewCount}, 15 videos       & \texttt{q=Paro Nacional 2021 Cali}, published from April 28 to August 1, 2021, \texttt{relevanceLanguage=es}, \texttt{order=relevance}, 15 videos                  \\
+        \midrule
+        Confidence and findings                                         & 0.99; no validation findings                                                                                                                                       & 0.99; no validation findings                                                                                                                                       \\
+        \midrule
+        Researcher's corrections                                        & none to the draft; comment and reply limits added by hand                                                                                                          & none to the draft; comment and reply limits added by hand                                                                                                          \\
+        \midrule
+        Requests and quota                                              & 28 requests, 127 units: \texttt{search.list} 1 (100), \texttt{videos.list} 1, \texttt{channels.list} 1, \texttt{commentThreads.list} 15, \texttt{comments.list} 10 & 37 requests, 136 units: \texttt{search.list} 1 (100), \texttt{videos.list} 1, \texttt{channels.list} 1, \texttt{commentThreads.list} 15, \texttt{comments.list} 19 \\
+        \midrule
+        Videos, channels                                                & 15 discovered, 0 skipped, 15 collected; 13 channels                                                                                                                & 15 discovered, 0 skipped, 15 collected; 8 channels                                                                                                                 \\
+        \midrule
+        Comments and replies                                            & 114 top-level comments, 14 replies                                                                                                                                 & 202 top-level comments, 33 replies                                                                                                                                 \\
+        \midrule
+        Normalization report                                            & 128 inputs, 128 written, 0 errors; rule 3 changed 9 comments, rule 5 changed 17                                                                                    & 235 inputs, 235 written, 0 errors; rule 3 changed 14, rule 4 changed 1, rule 5 changed 40                                                                          \\
+        \midrule
+        Sentiment (\texttt{gpt-6-luna}, \texttt{avispa-polarity-en-v1}) & 128 classified: 74 negative, 36 neutral, 18 positive, 0 unknown                                                                                                    & 235 classified: 189 negative, 22 neutral, 24 positive, 0 unknown                                                                                                   \\
+        \midrule
+        Failed or skipped requests                                      & none                                                                                                                                                               & none                                                                                                                                                               \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\endgroup
+
+% TODO(screenshots): add the Results section of one topic as a figure.
 
 \subsection{Validation against the requirements}
 
@@ -45,31 +76,31 @@ Table~\ref{tab:validation_requirements} checks the outcome of both validation ru
     \begin{tabularx}
         {\textwidth}{>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{6.2cm}X}
         \toprule
-        \textbf{Objective}                                                  & \textbf{Requirement}                                                                                                        & \textbf{Evidence and result} \\
+        \textbf{Objective}                                                  & \textbf{Requirement}                                                                                                        & \textbf{Evidence and result}                                                                                                         \\
         \midrule
-        Objective~\ref{obj:implement_collection}                            & A natural-language request becomes validated, researcher-approved parameters without writing API syntax.                    &                              % TODO(US-039)
+        Objective~\ref{obj:implement_collection}                            & A natural-language request becomes validated, researcher-approved parameters without writing API syntax.                    & Met: both prompts became drafts with no validation findings, applied without correction (Table~\ref{tab:validation_results}).
         \\
         \midrule
-        Objective~\ref{obj:implement_collection}                            & Each run records its effective parameters, request log, quota cost, counts, timestamps and errors.                          &                              % TODO(US-039)
+        Objective~\ref{obj:implement_collection}                            & Each run records its effective parameters, request log, quota cost, counts, timestamps and errors.                          & Met: both runs stored their parameter snapshot, 28 and 37 logged requests with their quota cost, counters, timestamps and no errors.
         \\
         \midrule
-        Objective~\ref{obj:implement_collection}                            & Videos, channels, comments and replies are collected within the requested limits and the daily quota.                       &                              % TODO(US-039)
+        Objective~\ref{obj:implement_collection}                            & Videos, channels, comments and replies are collected within the requested limits and the daily quota.                       & Met: 15 videos, 13 and 8 channels, 114 and 202 comments and 14 and 33 replies, within the limits; 127 and 136 quota units.
         \\
         \midrule
-        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Comment text is normalized and every processing run reports its inputs, outputs and errors.                                 &                              % TODO(US-039)
+        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Comment text is normalized and every processing run reports its inputs, outputs and errors.                                 & Met: 128 and 235 comments normalized with 0 errors; each report lists inputs, outputs and the comments each rule changed.
         \\
         \midrule
-        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Comments are labeled by one pre-trained sentiment model whose name and version are stored with every result.                &                              % TODO(US-039)
+        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Comments are labeled by one pre-trained sentiment model whose name and version are stored with every result.                & Met: every label stores \texttt{gpt-6-luna}, its served snapshot and the prompt version \texttt{avispa-polarity-en-v1}.
         \\
         \midrule
-        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Results are readable as a summary, a sentiment chart and filters, and exportable as CSV and JSON with their deletion dates. &                              % TODO(US-039)
+        Objective~\ref{obj:implement_processing_analysis_and_visualization} & Results are readable as a summary, a sentiment chart and filters, and exportable as CSV and JSON with their deletion dates. & Met: the summary, the sentiment chart, the channel and date filters and the CSV and JSON exports were read for both projects.
         \\
         \midrule
-        Objective~\ref{obj:test}                                            & The complete workflow runs from a natural-language request to a chart and an export on real data.                           &                              % TODO(US-039)
+        Objective~\ref{obj:test}                                            & The complete workflow runs from a natural-language request to a chart and an export on real data.                           & Met: both runs went from a natural-language request to a chart and an export with the live YouTube Data API and OpenAI models.
         \\
         \bottomrule
     \end{tabularx}
 \end{table}
 \endgroup
 
-% TODO(US-039): one paragraph on what the validation showed that the synthetic test could not, e.g. real quota use, videos removed between search and details, disabled comments, and how stable the draft parameters were.
+The validation showed what the synthetic test could not. The quota cost of a real run was dominated by the single \texttt{search.list} request (100 of 127 and 136 units), as anticipated in Activity~\ref{act:1.2}, so a researcher can collect comments for several topics a day within the default quota. No discovered video disappeared between the search and the details request, no video had its comments disabled and no request failed, so the skip and error paths, which only the synthetic tests exercise, were not needed. The model translated both requests with the expected search terms, inclusive date windows, language and ordering, and with no validation findings; the only manual step was setting the comment and reply limits, which the model never drafts by design. The sentiment step classified every comment with a known label, with no \texttt{unknown} answers.
