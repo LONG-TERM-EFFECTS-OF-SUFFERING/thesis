@@ -14,7 +14,7 @@ Ground rules: the stack versions in `AGENTS.md`, no new dependency without a sta
 | 6 | Keep the zero-width joiner between emoji | optional; the document now defends the current rule | S | probably skip |
 | 7 | Presentation smoke tests (US-037) | already in the backlog; 8.11.3 says they are pending | M | backlog |
 | 8 | Explain each query field in the form | a researcher cannot tell what `order`, `closedCaption` or "Max videos" mean | S | done: US-047, `src/ui` PRs #25 and #26 |
-| 9 | Edit and archive projects in the UI | advisor: projects have no edit or delete | S | to plan |
+| 9 | Edit and archive projects in the UI | advisor: projects have no edit or delete | S | done: US-049, `api` PR #46, `ui` PR #28 |
 | 10 | Edit a saved query until its first run | advisor: queries should be editable, at least before a search | S | to plan |
 | 11 | Configurable retention period, or no purge | advisor: deletion should be configurable for future policy changes | S | done: US-048, `api` PR #45, `ui` PR #27 |
 | 12 | Richer Results: authors, sentiment by channel, channel filter, tag cloud | advisor: the visualization is very basic | M–L | to plan |
