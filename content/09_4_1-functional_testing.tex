@@ -1,4 +1,4 @@
-This activity covers user stories US-033 to US-036; the presentation smoke tests of US-037 are pending. Each component was tested on its own with controlled data, and the tests are part of the source code, so any reader can run them again: \texttt{python manage.py test} for the backend and \texttt{npm test} for the frontend.
+This activity covers user stories US-033 to US-036; the presentation smoke tests of US-037 were not completed. Each component was tested on its own with controlled data, and the tests are part of the source code, so any reader can run them again: \texttt{python manage.py test} for the backend and \texttt{npm test} for the frontend.
 
 \subsection{Test design}
 
@@ -56,6 +56,5 @@ The tests also found defects in code that had already been reviewed. The collect
 
 The frontend suite contains 148 tests, run with Node.js's built-in test runner. They cover the logic that the interface depends on, extracted into plain TypeScript modules: building the saved-query request from the form, applying a draft and converting dates between UTC and local time, under a fixed non-UTC time zone so that a confusion between the two cannot pass; merging and discarding responses for the active project; sentiment formatting and distribution; filter parsing; the detection of active and finished runs that drives the automatic reload; the login requests; navigation, theme and interface language, including a check that every Spanish translation keeps the placeholders of its English text. The API client functions are tested with a stubbed \texttt{fetch}, including the runtime checks that reject a response whose shape differs from the expected one.
 
-The components themselves are not rendered by any test, because the project has no browser test environment; the forms, tables and chart were verified manually during each story. This gap is the subject of US-037, planned for the last sprint.
+The components themselves are not rendered by any test, because the project has no browser test environment; the forms, tables and chart were verified manually during each story and, on the real validation data, in a headless browser (Appendix~\ref{chap:annex_screens}). Automated rendering tests, planned as US-037, were not completed and remain future work.
 
-% TODO(US-037): add the presentation smoke tests and their results.
