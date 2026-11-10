@@ -1,4 +1,4 @@
-This activity covers user stories US-014, US-016, US-026, US-028 to US-032, US-044 and US-045. The presentation layer is a React single-page application that consumes the backend's REST API.
+This activity covers user stories US-014, US-016, US-026, US-028 to US-032, US-044, US-045 and US-051. The presentation layer is a React single-page application that consumes the backend's REST API.
 
 \subsection{Structure of the interface}
 
@@ -20,9 +20,11 @@ The \emph{Runs} section lists the collection runs of the active project with the
 
 \subsection{Results}
 
-The \emph{Results} section summarizes the active project with the descriptive metrics of Activity~\ref{act:3.3} and a sentiment distribution chart. Two filters narrow every count: a range of YouTube publication dates, interpreted as whole days in UTC with both ends included, and a single video, listed by title and publication date because channels often reuse titles. Invalid filters are rejected by the backend instead of being guessed, and the sentence that describes the active filters is built from the filters the server reports it applied, not from what was typed in the form, so it cannot contradict the numbers.
+The \emph{Results} section summarizes the active project with the descriptive metrics of Activity~\ref{act:3.3}, a sentiment distribution chart, a table of sentiment by channel and two word clouds. Three filters narrow every figure: a range of YouTube publication dates, interpreted as whole days in UTC with both ends included, a single channel and a single video, listed by title and publication date because channels often reuse titles. Invalid filters are rejected by the backend instead of being guessed, and the sentence that describes the active filters is built from the filters the server reports it applied, not from what was typed in the form, so it cannot contradict the numbers.
 
 The sentiment chart shows, for each label, a horizontal bar together with the count and the percentage written as text, so the information does not depend on color or bar length, and the bars are hidden from screen readers. It counts only the latest sentiment pass of each run, each comment once and only the rows of the model named by that pass. If the project's runs used different models, one chart is drawn per model, because a label from one model is not the same measurement as a label from another. Each chart states the period in which the counted comments were collected.
+
+The table of sentiment by channel lists, for each model, the fifteen channels with the most classified comments, each with a stacked bar and the count and percentage of every label written as text. The two word clouds show the thirty most frequent tags of the collected videos and the thirty most frequent words of the normalized comment text, after removing a short list of Spanish and English function words; the size of each word grows with its count, and the count is written next to it. To keep the response fast, the comment words are counted over at most the 5,000 most recently collected comments, and the page says when that limit applied. Like every other figure, the table and the clouds are computed from the project's own runs when the page is opened and are never stored.
 
 % TODO(US-039): add screenshots of the run detail and the Results section, taken on the real-topic validation data.
 
