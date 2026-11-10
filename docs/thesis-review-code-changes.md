@@ -6,14 +6,19 @@ Ground rules: the stack versions in `AGENTS.md`, no new dependency without a sta
 
 | # | Change | Why | Size | Status |
 | :-: | :-- | :-- | :-: | :-- |
-| 1 | API keys and model chosen in the app | the reviewer asked for it; today every account spends the operator's keys | L | to plan |
+| 1 | API keys and model chosen in the app | the reviewer and the advisor (2026-11) asked for it; today every account spends the operator's keys | L | to plan |
 | 2 | Region code from a list, validated for existence | removes the "form, not existence" limitation | S | to plan |
 | 3 | Mark a stuck run as failed from the admin | today only the Django shell can unblock the hourly purge | XS | to plan |
-| 4 | Local sentiment model as default, plus a comparison | the advisor asked for it in October 2026 | M | not now: future work (decided 2026-11-09) |
+| 4 | Local sentiment model as default, plus a comparison | the advisor asked again in his review of `753a97d`; it "did not work" for him | M | not now: OpenAI stays the default (re-decided 2026-11-09 after the advisor's review); local stays future work |
 | 5 | Pseudonymize authors in the dataset export | only if you want the stronger privacy claim | S | decide first |
 | 6 | Keep the zero-width joiner between emoji | optional; the document now defends the current rule | S | probably skip |
 | 7 | Presentation smoke tests (US-037) | already in the backlog; 8.11.3 says they are pending | M | backlog |
 | 8 | Explain each query field in the form | a researcher cannot tell what `order`, `closedCaption` or "Max videos" mean | S | done: US-047, `src/ui` PRs #25 and #26 |
+| 9 | Edit and archive projects in the UI | advisor: projects have no edit or delete | S | to plan |
+| 10 | Edit a saved query until its first run | advisor: queries should be editable, at least before a search | S | to plan |
+| 11 | Configurable retention period, or no purge | advisor: deletion should be configurable for future policy changes | S | done: US-048, `api` PR #45, `ui` PR #27 |
+| 12 | Richer Results: authors, sentiment by channel, channel filter, tag cloud | advisor: the visualization is very basic | M–L | to plan |
+| 13 | Screenshots in the thesis, plus an annex | advisor: no evidence of what was built; add a figure for 8.5.1 | M | after 9–12 |
 
 Not on this list on purpose: engagement metrics (views per like and similar). Clause III.E.4.h of the YouTube developer policies forbids creating new or derived metrics from API data, and the statistics snapshots are already stored and exported for anyone who needs them.
 
@@ -123,4 +128,82 @@ Requested 2026-11-09: hovering or focusing a field says what it means. Today onl
 - Test: a node test that every field name in the form has a hint, so a new field without one fails.
 
 **Document follow-up:** `09_3_5` Saved queries: one sentence saying every field shows a short explanation of what it sends to YouTube.
+
+## Advisor review of `753a97d` (2026-11)
+
+The advisor reviewed `main.pdf` and the app at thesis commit `753a97d` (2026-11-02). Items 9–13 come from that review, and items 1 and 4 got stronger support from it. The document's em dash, his only point about style, was fixed on 2026-11-09.
+
+## 9. Edit and archive projects in the UI
+
+**Today:** the API can already update a project: `ResearchProjectDetailView` is a `RetrieveUpdateAPIView`, so `PATCH` works. The model's `status` is `active` or `archived`. The Projects section can only create and select projects.
+
+- Add an *Edit* form to the project card for name, description, default language and status, sending `PATCH` through `latestRequest`.
+- For delete, offer **Archive** (`status=archived`) and hide archived projects behind a "Show archived" filter. A real delete would cascade to saved queries, runs and request logs, the methodological record 8.10.1 promises to keep, so it stays in the admin.
+- If the advisor insists on real deletion: add a `DELETE` endpoint behind a typed confirmation (enter the project name), and change 8.10.1.
+
+**Document follow-up:** `09_3_5` 8.10.1, "The API allows projects to be listed, created, read and updated; it does not delete them".
+
+## 10. Edit a saved query until its first run
+
+**Today:** `SavedQueryListCreateView` only lists and creates. 8.10.2 says a changed criterion is saved as a new query.
+
+- Add `PATCH` on a saved query while it has **no collection runs**; once a run exists, answer `409`. Runs already snapshot `effective_params`, so editing after a run would not lose history. Freezing after the first run keeps "the query that started this run" unambiguous, which is the advisor's minimum.
+- Re-validate with `validate_search_parameters`, the same validator used at draft, save and start.
+- UI: an *Edit* button on the card, shown only while the query has no runs, that loads the card into the form. The form gets a *Save changes* mode and keeps the LLM provenance rules: editing the prompt drops the provenance.
+
+**Document follow-up:** `09_3_5` 8.10.2, the paragraph "Saved queries can be created and listed but not edited", and `09_1_3`, the "Collection traceability" sentence.
+
+## 11. Configurable retention period, or no purge
+
+**Today:** `RETENTION_DAYS = 30` is a constant in `core/purge.py`, also used for the exports' `delete_by` dates (`core/views.py`).
+
+- Move it to `settings.py` as `YOUTUBE_RETENTION_DAYS`, read with the env helpers: default 30, and `0` means "never purge".
+- Purge and exports read the setting:
+  - With `0`, `purge_youtube_data` prints "Retention disabled" and exits 0.
+  - With `0`, the exports' `delete_by` is empty.
+- Add a Django system-check **warning** when the value is above 30 or 0, because the YouTube developer policies (III.E.4) allow at most 30 days. The setting exists for future policy changes or for data not obtained from the API, not for keeping API data longer.
+- Tests:
+  - 7 days purges after 7 days;
+  - 0 never purges;
+  - the warning appears above 30.
+- The integration test compares against a literal 30 days on purpose, so it should set the value explicitly.
+
+**Document follow-ups:**
+- `09_3_2` 8.7.3 and `07` 6.3.2: "30 days by default, configurable".
+- `06` scope exclusions.
+- `10` limitations or conclusions, if needed.
+
+## 12. Richer Results
+
+**Today** (`core/results.py`, `ResultsSection.tsx`):
+- counts of runs, videos, channels, top-level comments, replies and snapshots, plus the collection period;
+- a date-range filter and a video filter;
+- one sentiment distribution per model.
+
+The channel count the advisor asked for already exists, but it is easy to miss.
+
+Proposed, in order of value for the defense:
+
+1. **Distinct comment authors**: a count of distinct `author_channel_id` through the project's runs. It is aggregate, so no identities are shown.
+2. **Sentiment by channel**: one row per channel with its comment count and its label distribution, as a stacked bar table. Channels are creators, not the private commenters protected in 6.3.2.
+3. **Channel filter**, next to the date and video filters, applied to every count. This also gives the advisor his interactive date-and-channel view.
+4. **Tag cloud** from the collected videos' `tags`, which are already stored, plus the top N terms of normalized comment text with a small stopword list for Spanish and English. Render it as a sized-word list in CSS, with no chart library.
+
+Every new figure is computed on request, like the existing ones (8.3.1), so the purge needs no new rule. A word cloud of comment text is derived from API data; 6.3.2 should mention it next to sentiment, as an aggregate computed on request and never stored.
+
+**Document follow-ups:** `09_3_3` 8.8.1, `09_3_4` 8.9.3, and the US-039 validation table.
+
+## 13. Screenshots in the thesis, plus an annex
+
+The advisor saw no screenshots and asked for an example figure for 8.5.1.
+
+- Take the screenshots **after** items 9–12, so they show the final interface.
+- Real data is better evidence: run US-039 with a real `YOUTUBE_API_KEY` and `LLM_API_KEY` in `src/.env`. There is no `.env` locally today. Fallback: the `demo_data` command creates a synthetic collected project offline; its screenshots must say "synthetic demo data" in the caption.
+- Capture headless with Playwright from a throwaway environment, so no dependency goes into the repo. Save the images under `figures/` in the thesis repo.
+- Main text (one figure per section):
+  - 8.5.1: the draft panel for a real prompt, with numbered callouts (prompt → typed draft fields → built parameters → validation findings → *Use these parameters*), next to a small TikZ flow diagram;
+  - 8.9.2: the run detail;
+  - 8.9.3: Results;
+  - 8.10: Projects and Queries.
+- Annex: the login screen, the field hints, the advanced filters, a saved-query card, the request log, the exports and the Spanish/English toggle.
 
