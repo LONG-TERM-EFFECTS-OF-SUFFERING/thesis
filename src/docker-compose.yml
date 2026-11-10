@@ -17,7 +17,8 @@ x-api-env: &api-env
   LLM_API_KEY: ${LLM_API_KEY:-}
   # No literal default here: settings.py owns it, so the model id lives in one place.
   LLM_MODEL: ${LLM_MODEL:-}
-  SENTIMENT_MODEL: ${SENTIMENT_MODEL:-}
+  # Unset means "llm" (on); set blank to turn sentiment off.
+  SENTIMENT_MODEL: ${SENTIMENT_MODEL-llm}
   SENTIMENT_LLM_URL: ${SENTIMENT_LLM_URL:-}
   SENTIMENT_LLM_MODEL: ${SENTIMENT_LLM_MODEL:-}
   # Blank means 30 days; settings.py owns the default (US-048).
