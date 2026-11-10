@@ -6,6 +6,7 @@ erDiagram
     AUTH_USER ||--o{ RESEARCH_PROJECTS : owns
     AUTH_USER ||--o{ SAVED_QUERIES : creates
     AUTH_USER |o--o{ COLLECTION_RUNS : initiates
+    AUTH_USER ||--o| RESEARCHER_SETTINGS : configures
 
     RESEARCH_PROJECTS ||--o{ SAVED_QUERIES : contains
     RESEARCH_PROJECTS ||--o{ COLLECTION_RUNS : contains
@@ -228,4 +229,15 @@ erDiagram
         VARCHAR language_code
         JSONB raw_payload
         TIMESTAMPTZ created_at
+    }
+
+    RESEARCHER_SETTINGS {
+        UUID id PK
+        INTEGER user_id FK, UK
+        VARCHAR youtube_api_key
+        VARCHAR llm_provider
+        VARCHAR llm_api_key
+        VARCHAR query_model
+        VARCHAR sentiment_model
+        TIMESTAMPTZ updated_at
     }

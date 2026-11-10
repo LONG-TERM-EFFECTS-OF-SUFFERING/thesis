@@ -108,6 +108,8 @@ These notes are different from the formal thesis chapters. The thesis explains t
 
 51. [49 - Richer results](49-richer-results.md).
 
+52. [50 - API keys and model per researcher](50-api-keys-and-model-per-researcher.md).
+
 ## Story notes
 
 |                                                file                                                | story  | status |                                                                what it explains                                                                |
@@ -161,6 +163,7 @@ These notes are different from the formal thesis chapters. The thesis explains t
 | [47-edit-and-archive-projects.md](47-edit-and-archive-projects.md) | US-049 |  Done  | Project cards get Edit and Archive/Unarchive over the existing PATCH; archived projects are hidden unless shown, the active one stays in the header; no in-app delete, to keep the record. |
 | [48-edit-a-saved-query-until-its-first-run.md](48-edit-a-saved-query-until-its-first-run.md) | US-050 |  Done  | A saved query is editable, with create's validation, until its first run; then the API answers 409 and the card hides Edit; a changed prompt drops the LLM provenance on the server too. |
 | [49-richer-results.md](49-richer-results.md) | US-051 |  Done  | Results adds a comment-author count, sentiment by channel, a channel filter on every figure and tag and word clouds, all computed on request through the project's own runs. |
+| [50-api-keys-and-model-per-researcher.md](50-api-keys-and-model-per-researcher.md) | US-052 |  Done  | A Settings section stores write-only YouTube and OpenAI keys and models per researcher, with the environment as fallback; runs use their starter's keys; sentiment is on by default. |
 
 ## How to use this folder
 

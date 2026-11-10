@@ -6,7 +6,7 @@ Ground rules: the stack versions in `AGENTS.md`, no new dependency without a sta
 
 | # | Change | Why | Size | Status |
 | :-: | :-- | :-- | :-: | :-- |
-| 1 | API keys and model chosen in the app | the reviewer and the advisor (2026-11) asked for it; today every account spends the operator's keys | L | to plan |
+| 1 | API keys and model chosen in the app | the reviewer and the advisor (2026-11) asked for it; today every account spends the operator's keys | L | done: US-052, `api` PR #49, `ui` PR #31 |
 | 2 | Region code from a list, validated for existence | removes the "form, not existence" limitation | S | to plan |
 | 3 | Mark a stuck run as failed from the admin | today only the Django shell can unblock the hourly purge | XS | to plan |
 | 4 | Local sentiment model as default, plus a comparison | the advisor asked again in his review of `753a97d`; it "did not work" for him | M | not now: OpenAI stays the default (re-decided 2026-11-09 after the advisor's review); local stays future work |
@@ -18,7 +18,7 @@ Ground rules: the stack versions in `AGENTS.md`, no new dependency without a sta
 | 10 | Edit a saved query until its first run | advisor: queries should be editable, at least before a search | S | done: US-050, `api` PR #47, `ui` PR #29 |
 | 11 | Configurable retention period, or no purge | advisor: deletion should be configurable for future policy changes | S | done: US-048, `api` PR #45, `ui` PR #27 |
 | 12 | Richer Results: authors, sentiment by channel, channel filter, tag cloud | advisor: the visualization is very basic | M–L | done: US-051, `api` PR #48, `ui` PR #30 |
-| 13 | Screenshots in the thesis, plus an annex | advisor: no evidence of what was built; add a figure for 8.5.1 | M | after 9–12 |
+| 13 | Screenshots in the thesis, plus an annex | advisor: no evidence of what was built; add a figure for 8.5.1 | M | done 2026-11-10: real-data screenshots in 8.5.3, 8.9.2, 8.9.3 and Appendix A; Figure 8.3 for 8.5.1 |
 
 Not on this list on purpose: engagement metrics (views per like and similar). Clause III.E.4.h of the YouTube developer policies forbids creating new or derived metrics from API data, and the statistics snapshots are already stored and exported for anyone who needs them.
 
