@@ -4,6 +4,52 @@ This activity covers user stories US-006 to US-009 and US-041. The component let
 
 The LLM is not allowed to write YouTube parameters. The request sent to the OpenAI Responses API includes a JSON schema with \texttt{strict} mode enabled \autocite{openai_structured_outputs}, which restricts the answer to the eight typed fields of Table~\ref{tab:llm_draft_fields}. The backend then builds the \texttt{search.\allowbreak list} parameters from those fields: it adds the fixed values \texttt{part=snippet} and \texttt{type=video}, sets \texttt{maxResults}, YouTube's number of results per page, to the number of videos requested but at most 50, the maximum YouTube accepts per page, and leaves out every field the model returned as \texttt{null}. The full number of videos is kept separately as the run's cap, and the collector requests further pages until it is reached (Activity~\ref{act:2.1}). The model therefore cannot invent or misspell a parameter name, and every value it returns is checked again in Python before it is used, because a strict schema guarantees the shape of the answer but not that its values are acceptable to YouTube.
 
+Figure~\ref{fig:translation_example} follows one illustrative request through these steps, from the researcher's prompt to a saved query.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}
+        [
+        node distance=5mm,
+        stage/.style={draw, rounded corners=2pt, align=left, font=\footnotesize, text width=9.6cm, inner sep=5pt},
+        actor/.style={font=\footnotesize\itshape, align=right, text width=2.4cm},
+        flow/.style={-{Stealth[length=2mm]}}
+        ]
+        \node[stage] (prompt) {\textbf{1. Prompt (researcher)}\\
+            \enquote{Most viewed videos about mobility in Cali published in 2025, in Spanish; I need about 120 videos.}};
+        \node[stage, below=of prompt] (draft) {\textbf{2. Typed draft (LLM, strict JSON schema)}\\
+            \texttt{search\_term}: \texttt{movilidad Cali}\\
+            \texttt{published\_after}: \texttt{2025-01-01T00:00:00Z}\\
+            \texttt{published\_before}: \texttt{2025-12-31T23:59:59Z}\\
+            \texttt{max\_videos\_to\_discover}: \texttt{120}\\
+            \texttt{relevance\_language}: \texttt{es}; \texttt{order}: \texttt{viewCount}\\
+            \texttt{region\_code}: \texttt{null}; \texttt{confidence}: \texttt{0.86}};
+        \node[stage, below=of draft] (params) {\textbf{3. Parameters built by the backend}\\
+            \texttt{part=snippet}, \texttt{type=video}, \texttt{q=movilidad Cali}\\
+            \texttt{publishedAfter} and \texttt{publishedBefore} as drafted\\
+            \texttt{maxResults=50} (page size) and a run cap of \texttt{120}\\
+            \texttt{relevanceLanguage=es}, \texttt{order=viewCount}\\
+            \texttt{regionCode} left out because it is \texttt{null}};
+        \node[stage, below=of params] (valid) {\textbf{4. Validation (backend)}\\
+            \texttt{validate\_search\_parameters} reports no findings. An invalid value would be reported, never corrected.};
+        \node[stage, below=of valid] (review) {\textbf{5. Review and save (researcher)}\\
+            \emph{Use these parameters} copies the draft into the form, where the researcher can edit it. On save, the backend validates again and stores the query as \texttt{llm\_generated} with its model, prompt version and confidence.};
+
+        \node[actor, left=4mm of prompt] {browser};
+        \node[actor, left=4mm of draft] {OpenAI (LLM)};
+        \node[actor, left=4mm of params] {Django backend};
+        \node[actor, left=4mm of valid] {Django backend};
+        \node[actor, left=4mm of review] {browser and backend};
+
+        \draw[flow] (prompt) -- (draft);
+        \draw[flow] (draft) -- (params);
+        \draw[flow] (params) -- (valid);
+        \draw[flow] (valid) -- (review);
+    \end{tikzpicture}
+    \caption[Example of the natural-language translation]{Example of the natural-language translation. The values are illustrative: they show the shape of each step, not a recorded response. The model only fills the typed fields of step~2; the backend builds the API parameters, caps the page size at 50 while keeping the full number as the run's cap, leaves out empty fields and validates the result before the researcher reviews it.}
+    \label{fig:translation_example}
+\end{figure}
+
 \begingroup
 \setstretch{1.0}
 \begin{table}[htbp]
