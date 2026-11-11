@@ -34,14 +34,18 @@ Finally, the development process followed the same principle as the application:
 
 \section{Future work}
 
+Development does not end with this document. The next step is to host the application on a server, so that the research group can use it from a browser without installing it, and to keep improving it along the following lines.
+
 \begin{itemize}
+    \item Improve the charts of the \emph{Results} section, for example with the evolution of engagement over time and interactive views that combine several filters.
+
     \item Encrypt the stored API keys and add rate limiting, so the application can be deployed as a shared service for a research group.
 
     \item Recover runs left \texttt{running} after a crash automatically, and share a lock between the purge and the collector so the two can never overlap.
 
     \item Test a local sentiment model served behind the same kind of endpoint, which the classifier was built to accept, and compare it with the hosted model on the same comments; the data model already supports the comparison because every result records its model and version.
 
-    \item Extend the analysis to the channel level, using the channel metadata already collected, and to the evolution of engagement across runs, using the statistics snapshots each run records.
+    \item Extend the analysis of channels beyond the sentiment-by-channel table, using the channel metadata already collected, and follow the evolution of engagement across runs, using the statistics snapshots each run records.
 
     \item Resolve the open decisions recorded during development, such as preserving emoji composed with the zero-width joiner during normalization.
 \end{itemize}
